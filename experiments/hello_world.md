@@ -1,7 +1,7 @@
 ---
+type: action
+inputs: []
 recipe_version: 1
----
----
 ---
 
 # Description
