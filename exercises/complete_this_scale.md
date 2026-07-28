@@ -1,10 +1,9 @@
 ---
 type: action
-inputs:
-  - guess
+inputs: [guess]
 recipe_version: 3
-source_facet: recipe
-sync_state: stale-python
+source_facet: python
+sync_state: synced
 description_hash: f51de77e96e1b63595cdb853b8678d56857df641dc6c3cda805fd8b543ec285f
 recipe_hash: 07b66cbad20203018bd238f9d8d275338fc8121b30868b19d99e3eadf30f4509
 python_hash: 833dd57f8fb60994f490b5b0352b79215ada1ac609607694c2664fcbf103966e
