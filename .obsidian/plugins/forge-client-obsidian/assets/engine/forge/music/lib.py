@@ -20,7 +20,20 @@ from typing import Union
 # import. Each line is independent; if `tempo` (added in v0.2.166) isn't
 # available, the others still load and the chips that don't need tempo still
 # work.
-from music21 import clef, instrument, key, meter, note, pitch, stream
+#
+# CW-forge-music-lib-defer-music21-imports (drain 2026-07-23-1000) —
+# guarded to match the surrounding tempo/chord/harmony/duration/roman/
+# scale pattern. In pyodide the music21 wheel mounts LATE (after
+# executor-load AND sometimes after first `_domain_globals_for('music')`
+# lazy retry), so this batch that was previously "considered core /
+# guaranteed" also demonstrably fails at module load. Fallback binds
+# each name to None; annotations are lazy strings under `from __future__
+# import annotations` so signatures still parse; StreamLike guard below
+# handles the one module-level runtime use of these names.
+try:
+  from music21 import clef, instrument, key, meter, note, pitch, stream
+except ImportError:
+  clef = instrument = key = meter = note = pitch = stream = None
 try:
   from music21 import tempo
 except ImportError:
@@ -47,13 +60,72 @@ try:
   from music21 import roman
 except ImportError:
   roman = None
+try:
+  from music21 import scale
+except ImportError:
+  scale = None
+# CW-forge-music-lib-hygiene-l531-consolidation-plus-friendly-error
+# (drain 2026-07-23-1310) — consolidated from mid-file (was near
+# _VELOCITY_PROFILES ~L531) into the top-of-file batch alongside
+# sibling guards for consistency.
+try:
+  from music21 import dynamics
+except ImportError:
+  dynamics = None
 
 # Standard-library random — needed by guitar_solo_chorus / vocal_phrase_*
 # library notes (v0.7.0 promotion). Imported under a private alias so
 # the public lib namespace doesn't shadow callers' own `random`.
 import random as _random
 
-StreamLike = Union[stream.Score, stream.Part, stream.Measure, stream.Stream]
+
+# CW-forge-music-lib-hygiene-l531-consolidation-plus-friendly-error
+# (drain 2026-07-23-1310) — friendly runtime error for the transient
+# wheel-mount race window.
+#
+# Post-drain-2026-07-23-1000, `forge.music.lib` is importable even
+# without music21 mounted in pyodide — the sentinel names (note,
+# stream, pitch, ...) are set to None at import time and rebound to
+# real modules when the executor's lazy-retry re-executes the module
+# top-level once the wheel finishes mounting.
+#
+# If a snippet calls a chip function DURING the wheel-mount race
+# window (very small, but observable on cold-start), the chip body
+# dereferences `note.Note(...)` or `stream.Score(...)` on the None
+# sentinels, producing a raw NameError / AttributeError that surfaces
+# to the user as noise. This helper is called at the top of chip
+# functions; if music21 is not yet available, it raises a RuntimeError
+# with an actionable message. Surfaced to the Forge Output panel via
+# the executor's standard error propagation per Diagnostics-in-primary-
+# surface HARD RULE (no console.warn, no Notice toast — the message
+# IS the load-bearing signal).
+def _require_music21():
+  """Raise a friendly RuntimeError if music21 sentinels are None.
+
+  Checked pair: `note` and `stream` (the two most-used submodules).
+  If wheel-mount is in progress, either all seven are None or all
+  seven are real; a partial state persisting past this check is not
+  observed in pyodide and defending against it costs readability.
+  """
+  if note is None or stream is None:
+    raise RuntimeError(
+      "music21 is not yet mounted in this pyodide runtime. "
+      "This usually resolves within a few seconds of plugin startup — "
+      "please wait for the music21 wheel to finish loading and retry."
+    )
+
+# CW-forge-music-lib-defer-music21-imports (drain 2026-07-23-1000) —
+# StreamLike is the ONLY module-level runtime use of the music21 names
+# guarded above (annotation heads at L67, L104, etc are lazy strings
+# under `from __future__ import annotations` so they don't count). With
+# `stream = None` on the ImportError fallback, evaluating
+# `Union[stream.Score, ...]` here fails with `AttributeError: 'NoneType'`.
+# Fallback to `object` for the None case; annotations remain string
+# form + resolve lazily once music21 is available.
+if stream is not None:
+  StreamLike = Union[stream.Score, stream.Part, stream.Measure, stream.Stream]
+else:
+  StreamLike = object
 
 
 def bar(
@@ -71,6 +143,7 @@ def bar(
     Mixed dotted:  duration=0.375 (dotted 8th) + duration=0.125 (16th),
                    repeated fills a beat
   """
+  _require_music21()
   ts = time_signature if time_signature is not None else meter.TimeSignature('4/4')
   bar_ql = ts.barDuration.quarterLength
 
@@ -103,6 +176,7 @@ def voices(
   Parts, anything else contributes one Part. If `instruments` is given, it
   must align with `streams` by index — each name is assigned (via
   instrument.fromString) to every Part contributed by that input."""
+  _require_music21()
   if instruments is not None and len(instruments) != len(streams):
     raise ValueError(
       f"instruments length ({len(instruments)}) must match streams length "
@@ -164,6 +238,7 @@ def sequence(*streams: StreamLike) -> stream.Score:
   ElectricGuitar — with rests where each is inactive. Sections with the
   SAME instrument at a position merge into one stave; sections with
   DIFFERENT instruments at the same position split into separate staves."""
+  _require_music21()
   if not streams:
     return stream.Score()
 
@@ -317,6 +392,7 @@ def voices_canonical(kp, sp=None, chp=None, ohp=None, ltp=None, mtp=None, crp=No
     order. Inactive parts have rest-bars with correct instrument
     metadata.
   """
+  _require_music21()
   if kp is None:
     raise ValueError(
       "voices_canonical: kp (kick part) is required — every "
@@ -369,6 +445,7 @@ def voices_canonical(kp, sp=None, chp=None, ohp=None, ltp=None, mtp=None, crp=No
 def repeat(s: StreamLike, n: int) -> stream.Score:
   """Concatenate `s` with itself `n` times. Returns a Score for type
   uniformity (equivalent to sequence(s, s, ..., s))."""
+  _require_music21()
   if n < 0:
     raise ValueError(f"n must be non-negative, got {n}")
   return sequence(*[copy.deepcopy(s) for _ in range(n)])
@@ -420,6 +497,7 @@ def minor_pentatonic(
   choice so no "mode='minor'" kwarg or defensive English is needed.
 
   `include_blue=True` adds the b5 (the blue note)."""
+  _require_music21()
   intervals = list(_PENTATONIC_INTERVALS['minor'])
   if include_blue:
     intervals.append(6)
@@ -437,9 +515,119 @@ def major_pentatonic(
   pop, hymnody). For blues, prefer `minor_pentatonic(...)` regardless of
   the source key's mode. No `include_blue` kwarg — the blue note is a
   minor-pentatonic ornament, not a major-pentatonic one."""
+  _require_music21()
   return _pentatonic_pitches(
     key_or_tonic, _PENTATONIC_INTERVALS['major'], octave_range,
   )
+
+
+def major_scale(tonic: Union[key.Key, str]) -> list[str]:
+  """Return the 7 pitch-class names of the diatonic major scale for
+  `tonic`, tonic-first ascending.
+
+  Contract:
+    - Returns `list[str]` of pitch-class names — no octave designations
+      (e.g. `["C", "D", "E", "F", "G", "A", "B"]` for tonic="C").
+    - Accidentals follow music21's `.name` convention verbatim: flats
+      as `-` (e.g. `"B-"` for B-flat), sharps as `#` (e.g. `"F#"` for
+      F-sharp). This matches `music21.scale.MajorScale(tonic).getPitches
+      (...)` byte-for-byte, so composers can round-trip strings through
+      music21 without normalizing.
+    - `tonic` accepts anything `music21.scale.MajorScale(tonic)` accepts:
+      bare pitch names (`"C"`, `"F#"`, `"B-"`) or a `music21.key.Key`
+      object.
+
+  Correctness reference: `music21.scale.MajorScale`. This function is a
+  thin adapter — it does NOT hand-roll interval math. If music21's
+  MajorScale changes convention, this function follows it.
+
+  Companion to `major_pentatonic` / `minor_pentatonic` — those return
+  `list[pitch.Pitch]` (pitches with octaves) because they're consumed
+  by melodic line builders; `major_scale` returns pitch-class names
+  because its common use is naming, mode inspection, and text-level
+  composition helpers.
+  """
+  _require_music21()
+  if scale is None:
+    # Matches the pattern of the other music21-optional lib entries:
+    # a missing submodule shouldn't blow up import.
+    raise RuntimeError(
+      "music21.scale is unavailable in this environment; "
+      "major_scale requires the full music21 install."
+    )
+  if isinstance(tonic, key.Key):
+    tonic_name = tonic.tonic.name
+  else:
+    tonic_name = str(tonic)
+  ms = scale.MajorScale(tonic_name)
+  # getPitches returns 8 pitches (tonic..tonic+octave inclusive); drop
+  # the octave-up tonic at position 8 to get 7 pitch classes.
+  pitches = ms.getPitches(f"{tonic_name}4", f"{tonic_name}5")
+  return [p.name for p in pitches[:-1]]
+
+
+def diatonic_scale(
+  tonic: str,
+  mode: str = "major",
+  octave_range: list[int] | None = None,
+) -> list[str]:
+  """Return the diatonic scale for `tonic` in `mode` as ascending pitch
+  names with octave designations.
+
+  CW-forge-music-lib-add-diatonic-scale-chip (drain 2026-07-24-1345).
+
+  Contract:
+    - Returns `list[str]` of `nameWithOctave` strings — e.g.
+      `["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"]` for
+      `diatonic_scale("C", "major")`.
+    - `octave_range=[low, high]` inclusive: e.g. `[4, 5]` spans one
+      octave (tonic4 ascending through tonic5); `[3, 5]` spans two
+      octaves. Defaults to `[4, 5]`.
+    - `mode` accepts `"major"` (default) or `"minor"` (natural minor).
+    - `tonic` is a pitch-class string: `"C"`, `"F#"`, `"B-"` (music21
+      flat convention). Bare `"Bb"` is also accepted by music21.
+    - Accidentals in the return value follow music21's convention
+      verbatim: flats as `-` (e.g. `"B-4"`), sharps as `#`.
+
+  Companion to `major_scale` (which returns 7 pitch-class names, no
+  octaves) and `major_pentatonic` / `minor_pentatonic` (which return
+  5-note `pitch.Pitch` lists). Use `diatonic_scale` when you want
+  7-note diatonic coverage with octave-anchored pitch names — the
+  common building block for scale runs, arpeggio starting points,
+  and melodic-line sketches.
+
+  Musical correctness reference: `music21.scale.MajorScale` /
+  `music21.scale.MinorScale`. Thin adapter — no hand-rolled interval
+  math; follows whatever music21 says the scale is.
+  """
+  _require_music21()
+  if scale is None:
+    raise RuntimeError(
+      "music21.scale is unavailable in this environment; "
+      "diatonic_scale requires the full music21 install."
+    )
+  if octave_range is None:
+    octave_range = [4, 5]
+  if len(octave_range) != 2:
+    raise ValueError(
+      f"octave_range must be a 2-element [low, high] list; "
+      f"got {octave_range!r}"
+    )
+  start_oct, end_oct = octave_range[0], octave_range[1]
+  if start_oct > end_oct:
+    raise ValueError(
+      f"octave_range start ({start_oct}) must be <= end ({end_oct})"
+    )
+  if mode == "major":
+    s = scale.MajorScale(tonic)
+  elif mode == "minor":
+    s = scale.MinorScale(tonic)
+  else:
+    raise ValueError(
+      f"mode must be 'major' or 'minor'; got {mode!r}"
+    )
+  pitches = s.getPitches(f"{tonic}{start_oct}", f"{tonic}{end_oct}")
+  return [p.nameWithOctave for p in pitches]
 
 
 # v0.3.6 — velocity helper for percussion + any rhythmic content. The
@@ -456,7 +644,11 @@ def major_pentatonic(
 # intentionally absent.
 
 import random as _stdlib_random
-from music21 import dynamics
+# CW-forge-music-lib-hygiene-l531-consolidation-plus-friendly-error
+# (drain 2026-07-23-1310): the `from music21 import dynamics` guard
+# that lived here since drain 2026-07-23-1000 is now consolidated
+# into the top-of-file batch (L23-53). `dynamics` is imported as a
+# module-level guarded name; no re-import is needed here.
 
 _VELOCITY_PROFILES = {
   'human':       lambda i, n: 75 + _stdlib_random.randint(-8, 8),
@@ -547,6 +739,7 @@ def with_velocity(notes, pattern, mark_dynamics=False):
                  adding notes to their measures for marks to land.
 
   Returns: notes (same list reference, mutated)."""
+  _require_music21()
   if isinstance(pattern, bool):
     # Python booleans are ints; guard so True/False don't accidentally
     # become uniform velocity 1 / 0.
@@ -642,6 +835,7 @@ def kick():
   """Kick drum (bass drum). GM note 36 (Bass Drum 1) on channel 10.
   music21's default instrumentName for BassDrum is 'Bass Drum'; the
   factory overrides to 'Kick' for kit-conventional labeling."""
+  _require_music21()
   inst = instrument.BassDrum()
   # percMapPitch left at music21's default (35), which serializes to
   # <midi-unpitched>36</midi-unpitched> = GM Bass Drum 1.
@@ -650,6 +844,7 @@ def kick():
 
 def closed_hihat():
   """Closed hi-hat (short "ts" sound). GM note 42 on channel 10."""
+  _require_music21()
   inst = instrument.HiHatCymbal()
   inst.percMapPitch = 42
   return _force_perc_channel(inst, 'Closed Hi-Hat', 'CHH')
@@ -657,6 +852,7 @@ def closed_hihat():
 
 def open_hihat():
   """Open hi-hat (longer "tsh" sound). GM note 46 on channel 10."""
+  _require_music21()
   inst = instrument.HiHatCymbal()
   inst.percMapPitch = 46
   return _force_perc_channel(inst, 'Open Hi-Hat', 'OHH')
@@ -664,6 +860,7 @@ def open_hihat():
 
 def pedal_hihat():
   """Foot-pedal hi-hat (chick). GM note 44 on channel 10."""
+  _require_music21()
   inst = instrument.HiHatCymbal()
   inst.percMapPitch = 44
   return _force_perc_channel(inst, 'Pedal Hi-Hat', 'PHH')
@@ -673,6 +870,7 @@ def low_tom():
   """Low (floor) tom. GM note 41 on channel 10. music21 has one
   TomTom class; the three tom variants in this lib differ only in
   percMapPitch (41 / 47 / 50)."""
+  _require_music21()
   inst = instrument.TomTom()
   inst.percMapPitch = 41
   return _force_perc_channel(inst, 'Low Tom', 'LT')
@@ -680,6 +878,7 @@ def low_tom():
 
 def mid_tom():
   """Mid tom. GM note 47 on channel 10."""
+  _require_music21()
   inst = instrument.TomTom()
   inst.percMapPitch = 47
   return _force_perc_channel(inst, 'Mid Tom', 'MT')
@@ -687,6 +886,7 @@ def mid_tom():
 
 def high_tom():
   """High tom. GM note 50 on channel 10."""
+  _require_music21()
   inst = instrument.TomTom()
   inst.percMapPitch = 50
   return _force_perc_channel(inst, 'High Tom', 'HT')
@@ -694,6 +894,7 @@ def high_tom():
 
 def crash_cymbal():
   """Crash cymbal 1. GM note 49 on channel 10."""
+  _require_music21()
   inst = instrument.CrashCymbals()
   inst.percMapPitch = 49
   return _force_perc_channel(inst, 'Crash Cymbal', 'CR')
@@ -701,6 +902,7 @@ def crash_cymbal():
 
 def ride_cymbal():
   """Ride cymbal 1. GM note 51 on channel 10."""
+  _require_music21()
   inst = instrument.RideCymbals()
   inst.percMapPitch = 51
   return _force_perc_channel(inst, 'Ride Cymbal', 'RD')
@@ -757,6 +959,7 @@ def play_at_beats(instrument, beats):
       with start -1.0 not fitting any measure, and cohort hit a
       traceback they couldn't act on.
   """
+  _require_music21()
   for beat in beats:
     if float(beat) < 1:
       raise ValueError(
@@ -789,6 +992,7 @@ def show_score(score):
   destination orchestration. Returns the input unchanged so cohort
   recipes can write `Let s = build_score. [[show_score]] s. Return s.`
   without losing the value."""
+  _require_music21()
   return score
 
 
@@ -798,6 +1002,7 @@ def sequence_list(sections):
   unpacks the list and forwards to the V1 `sequence` builder. Returns the
   concatenated Score with sequentially-renumbered measures + same-instrument
   staves merged across sections (per sequence's existing contract)."""
+  _require_music21()
   return sequence(*sections)
 
 
@@ -807,6 +1012,7 @@ def voices_list(sections):
   `[[voices_list]] with sections=[s1, s2, ...]` unpacks the list and forwards
   to the V1 `voices` builder. Returns a Score with the input streams overlaid
   in parallel (each stream gets its own staff, durations preserved)."""
+  _require_music21()
   return voices(*sections)
 
 
@@ -820,6 +1026,7 @@ def bar_list(items, time_signature=None, number=None):
 
   See [[bar]] for common item-fill examples across subdivisions
   (quarters, 8ths, 16ths, dotted patterns)."""
+  _require_music21()
   return bar(*items, time_signature=time_signature, number=number)
 
 
@@ -874,6 +1081,7 @@ def play_at_offsets(
     Notes' pitch.midi normalized to instrument.percMapPitch so MIDI
     export lands on the correct channel-10 drum slot (per v0.2.159).
   """
+  _require_music21()
   # Normalize offsets to a per-bar list (list of lists).
   if not offsets:
     bar_patterns = [[]] * bars
@@ -930,6 +1138,7 @@ def snare():
   """Snare drum. GM note 38 (Acoustic Snare) on channel 10. music21's
   default instrumentName for SnareDrum is 'Snare Drum'; factory keeps
   that but forces channel 10 for multi-part percussion scores."""
+  _require_music21()
   inst = instrument.SnareDrum()
   # percMapPitch left at music21's default (38).
   return _force_perc_channel(inst, 'Snare', 'S')
@@ -1334,6 +1543,7 @@ def form(*, key_name="E", mode_name="major", tempo_bpm=70,
   Defaults to E major + the standard 12-bar progression
   (DEFAULT_BLUES_PROGRESSION). Pass `progression=[...]` to override.
   """
+  _require_music21()
   import copy as _copy
   prog = list(progression) if progression is not None else list(DEFAULT_BLUES_PROGRESSION)
   k = key.Key(key_name, mode_name)
@@ -1413,6 +1623,7 @@ def walking_bass_line(harmony, *, style="swing", feel="medium",
     4 notes on the beats. The Part's first element is the specified
     bass instrument.
   """
+  _require_music21()
   if chord is None:
     raise ImportError("music21.chord is required for walking_bass_line")
 
@@ -1644,6 +1855,7 @@ def piano_voicing(harmony, *, style="rootless", register="mid",
     one or more `chord.Chord` voicings on the pattern's rhythm.
     First element is a `Piano` instrument.
   """
+  _require_music21()
   if chord is None:
     raise ImportError("music21.chord is required for piano_voicing")
 
@@ -1845,6 +2057,7 @@ def violin_bowing(harmony, *, style="legato", dynamic="mf",
   Returns:
     A `stream.Part` with one Measure per input measure.
   """
+  _require_music21()
   if chord is None:
     raise ImportError("music21.chord is required for violin_bowing")
 
@@ -2043,6 +2256,7 @@ def vocal_line(harmony, *, voice_type="alto", lyrics="", form="AAB",
   Returns:
     A `stream.Part` with 12 Measures, four notes each.
   """
+  _require_music21()
   if chord is None:
     raise ImportError("music21.chord is required for vocal_line")
 
@@ -2232,6 +2446,7 @@ def drum_chorus(*, profile="standard"):
   `'standard'`, or `'driving'`). Used by `slow_burn.md` to give the
   4-chorus arc audible variety: sparse intro → standard mid → driving
   solo → standard return. 12 bars in 12/8."""
+  _require_music21()
   import copy as _copy
   ts = meter.TimeSignature("12/8")
   bar_ql = ts.barDuration.quarterLength
@@ -2331,6 +2546,7 @@ def drums_shuffle():
   on 2+4, hi-hat on every dotted-quarter beat. The rhythmic backbone
   of a slow blues. Returns a Score with three parts (kick, snare,
   hihat). 12 bars in 12/8."""
+  _require_music21()
   ts = meter.TimeSignature("12/8")
   bar_ql = ts.barDuration.quarterLength
   KICK_BEATS  = [0, 6]
@@ -2372,6 +2588,7 @@ def guitar_solo_chorus():
   `form()`. Minor pentatonic with blue notes; chord-tone-aware bar
   pattern picker that breathes with the underlying progression
   (I/IV/V turnaround). Improvisational within each bar."""
+  _require_music21()
   import copy as _copy
   src = form()
 
@@ -2493,6 +2710,7 @@ def vocal_phrase_a():
   descending line that leans on the flat-7 and settles on the tonic
   — the setup of the lyric, not the punchline. Sparse, with lots of
   rests, sighing through it."""
+  _require_music21()
   src = form()
   found_key = next((el for el in src.flatten() if isinstance(el, key.Key)), None)
   found_ts = next((el for el in src.flatten() if isinstance(el, meter.TimeSignature)), None)
@@ -2562,6 +2780,7 @@ def vocal_phrase_b():
   higher than phrase A (around the octave above tonic), descends
   through pentatonic, touches the blue note, lands on tonic by the
   last bar. More notes, fewer rests than the A line."""
+  _require_music21()
   import copy as _copy
   src = form()
   found_key = next((el for el in src.flatten() if isinstance(el, key.Key)), None)
@@ -2642,6 +2861,7 @@ def phase_cell():
   instance; the shifter calls it per voice), hit positions in eighth-
   units within the cell (Reich's `[0, 1, 2, 4, 5, 7, 9, 10]` — 8 hits
   across 12 positions), and the cell length in eighths (12)."""
+  _require_music21()
   return {
     "instrument": closed_hihat,
     "hits_in_eighths": [0, 1, 2, 4, 5, 7, 9, 10],
@@ -2660,6 +2880,7 @@ def phase_shifter(*, cell, num_voices=4, bars_per_section=4,
   section, 12-eighth cell), voice 4 realigns with voice 1 at section
   4; voice 3 realigns at section 6. Default shape: 12/8 at 96 BPM,
   8 sections × 4 bars/section = 32 bars; eighth-note hits."""
+  _require_music21()
   ts = meter.TimeSignature(ts_str)
   mm = tempo.MetronomeMark(number=bpm)
   eighth_ql = 0.5

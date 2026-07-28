@@ -1,5 +1,14 @@
 ---
 type: action
+english_hash: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+python_hash: 39c45abc8414dcd7e1d052ca6e9f1b0bd6e3615a6989785b580e10fa8439974f
+description_hash: fcca3feecc947060e25081f5d10612d67d6d983f1ee5d5b2f1bd02dda7595a09
+recipe_hash: 6031f26ad28a5126d160cbdfdf346361911a294cabf9e538e0eee1df643dd2a9
+recipe_derived_from_source_hash: fcca3feecc947060e25081f5d10612d67d6d983f1ee5d5b2f1bd02dda7595a09
+python_derived_from_source_hash: fcca3feecc947060e25081f5d10612d67d6d983f1ee5d5b2f1bd02dda7595a09
+source_facet: synced
+recipe_derived_from_description_hash: fcca3feecc947060e25081f5d10612d67d6d983f1ee5d5b2f1bd02dda7595a09
+python_derived_from_recipe_hash: 6031f26ad28a5126d160cbdfdf346361911a294cabf9e538e0eee1df643dd2a9
 ---
 
 # Description
@@ -28,12 +37,11 @@ Return Call [[voices_list]] with sections=[harmony, bass, drums].
 
 ```python
 def compute(context):
-    # form / walking_bass_line / drums_shuffle are library notes in
-    # forge.music.lib; called directly instead of via context.compute.
-    harmony = form(key_name="F", mode_name="major", tempo_bpm=104)
-    bass = walking_bass_line(harmony, style="swing")
-    drums = drums_shuffle()
-    return voices(harmony, bass, drums)
+  harmony = form(key_name='F', mode_name='major', tempo_bpm=104)
+  bass = walking_bass_line(harmony=harmony, style='swing')
+  drums = drums_shuffle()
+  return voices_list(sections=[harmony, bass, drums])
+
 ```
 
 # Dependencies
