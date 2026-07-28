@@ -1,7 +1,9 @@
 ---
 type: action
-inputs: []
-recipe_version: 1
+inputs: [guess]
+recipe_version: 2
+source_facet: python
+sync_state: synced
 ---
 
 # Description
@@ -9,7 +11,6 @@ recipe_version: 1
 Below are the first 4 notes of a mystery scale: **C4, D4, E4, F4**. What are the remaining 4 notes that complete it (through the octave)? Set `guess` to a list like ["G4", "A4", "B4", "C5"]. Then click Forge for feedback.
 
 # Recipe
-
 Let true_tonic = "C".
 Let true_mode = "major".
 Let scale = Call [[diatonic_scale]] with tonic=true_tonic, mode=true_mode.
