@@ -11,58 +11,13 @@
             "id": "daa9d48676ab1fdf",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "f_shuffle/f_shuffle.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "f_shuffle"
-            }
-          },
-          {
-            "id": "0e62c690d5eb469e",
-            "type": "leaf",
-            "state": {
-              "type": "forge-library-note-view",
-              "state": {
-                "chipName": "walking_bass_line",
-                "domain": ""
-              },
-              "icon": "cpu",
-              "title": "Library note: walking_bass_line"
-            }
-          },
-          {
-            "id": "3e374fb966da3e0a",
-            "type": "leaf",
-            "state": {
-              "type": "forge-library-note-view",
-              "state": {
-                "chipName": "diatonic_scale",
-                "domain": ""
-              },
-              "icon": "cpu",
-              "title": "Library note: diatonic_scale"
-            }
-          },
-          {
-            "id": "59989a48ec5f12fd",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "music_theory/scale.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "scale"
+              "title": "New tab"
             }
           }
-        ],
-        "currentTab": 3
+        ]
       }
     ],
     "direction": "vertical"
@@ -244,18 +199,22 @@
       "forge-client-obsidian:Forge: Copy note source with headings": false
     }
   },
-  "active": "59989a48ec5f12fd",
+  "active": "daa9d48676ab1fdf",
   "lastOpenFiles": [
+    "f_shuffle/f_shuffle.md",
+    "_scratch/f_shuffle/f_shuffle.md",
+    "_scratch/f_shuffle",
+    "_scratch",
+    "exercises/probe_inputs_v2.md",
     "exercises/complete_this_scale.md",
     "exercises/name_this_scale.md",
-    "experiments/create_scale.md",
-    "exercises/probe_inputs.md",
     "exercises/Untitled.md",
+    "exercises/probe_inputs.md",
     "music_theory/scale.md",
+    "experiments/create_scale.md",
     "exercises",
     "music_theory",
     "experiments/major_triad.md",
-    "f_shuffle/f_shuffle.md",
     "experiments/build_scale.md",
     "experiments/create_scale_take_2.md",
     "experiments/hello_world.md",
@@ -272,8 +231,6 @@
     "percussion/phase_shifter.md",
     "percussion/phase_cell.md",
     "percussion_lab/threading.md",
-    "percussion_lab/wake.md",
-    "percussion_lab/peak.md",
-    "percussion_lab/gathering.md"
+    "percussion_lab/wake.md"
   ]
 }
