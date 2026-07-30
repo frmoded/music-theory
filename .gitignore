@@ -2,3 +2,4 @@
 # Scratch/experimental content — not tracked, not shipped to cohorts.
 _scratch/
 .obsidian/plugins/
+.obsidian/workspace.json
