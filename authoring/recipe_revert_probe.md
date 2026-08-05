@@ -1,7 +1,7 @@
 ---
 type: action
 inputs: []
-recipe_version: 1
+recipe_version: 2
 sync_state: synced
 ---
 
@@ -10,5 +10,4 @@ sync_state: synced
 Return v1.
 
 # Recipe
-
-Return "v1".
+Return "v2".
