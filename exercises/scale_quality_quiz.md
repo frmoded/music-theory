@@ -1,8 +1,14 @@
 ---
 type: action
-inputs: [guess]
+inputs:
+  - guess
 input_enums:
-  guess: ["major", "minor", "diminished", "augmented"]
+  guess:
+    - major
+    - minor
+    - diminished
+    - augmented
+sync_state: synced
 ---
 
 # Description
