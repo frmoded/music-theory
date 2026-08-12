@@ -3,7 +3,7 @@ type: snapshot
 caller: authoring/murmuration
 callee: authoring/gathering
 state: live
-captured_at: '2026-08-03T18:31:15Z'
+captured_at: '2026-08-07T00:30:47Z'
 content_type: musicxml
 ---
 
@@ -18,7 +18,7 @@ content_type: musicxml
   <identification>
     <creator type="composer" />
     <encoding>
-      <encoding-date>2026-08-03</encoding-date>
+      <encoding-date>2026-08-06</encoding-date>
     </encoding>
   </identification>
   <defaults>
@@ -28,93 +28,93 @@ content_type: musicxml
     </scaling>
   </defaults>
   <part-list>
-    <score-part id="P5f97712a1052b68faddb62736b559944">
+    <score-part id="P551d8529750ecd0a8d121040dfb1b89e">
       <part-name>Kick</part-name>
       <part-abbreviation>K</part-abbreviation>
-      <score-instrument id="Ib0eec810fd1b4c1ed055c43ae515e501">
+      <score-instrument id="If02174ff714e305bd992a8b4152af00a">
         <instrument-name>Kick</instrument-name>
         <instrument-abbreviation>K</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="Ib0eec810fd1b4c1ed055c43ae515e501">
+      <midi-instrument id="If02174ff714e305bd992a8b4152af00a">
         <midi-channel>10</midi-channel>
         <midi-unpitched>36</midi-unpitched>
       </midi-instrument>
     </score-part>
-    <score-part id="P53179a69107d1d7c77bfbfebd9532ffd">
+    <score-part id="P168131d71695dcccc305af2b454885f3">
       <part-name>Snare</part-name>
       <part-abbreviation>S</part-abbreviation>
-      <score-instrument id="I9a7020c22cdfd537d446337ed2ca9958">
+      <score-instrument id="Iaa5a45d08443c69564b03e15161ec5c4">
         <instrument-name>Snare</instrument-name>
         <instrument-abbreviation>S</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I9a7020c22cdfd537d446337ed2ca9958">
+      <midi-instrument id="Iaa5a45d08443c69564b03e15161ec5c4">
         <midi-channel>10</midi-channel>
         <midi-unpitched>39</midi-unpitched>
       </midi-instrument>
     </score-part>
-    <score-part id="Pfa6c8fb6dbb0a0674f41b936ecf678b5">
+    <score-part id="Pa3613da0946b4850a95463ca88552d18">
       <part-name>Closed Hi-Hat</part-name>
       <part-abbreviation>CHH</part-abbreviation>
-      <score-instrument id="I0dd76272db6c2ced29b8a2f7f42e4bc1">
+      <score-instrument id="Ia1f51bc8bf8d55e5da05453e11ba23f1">
         <instrument-name>Closed Hi-Hat</instrument-name>
         <instrument-abbreviation>CHH</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I0dd76272db6c2ced29b8a2f7f42e4bc1">
+      <midi-instrument id="Ia1f51bc8bf8d55e5da05453e11ba23f1">
         <midi-channel>10</midi-channel>
         <midi-unpitched>43</midi-unpitched>
       </midi-instrument>
     </score-part>
-    <score-part id="Pd74fef82bb2af176306e747392ff9e34">
+    <score-part id="Pb99b311501b1912e5866bba7a7a1c5ce">
       <part-name>Open Hi-Hat</part-name>
       <part-abbreviation>OHH</part-abbreviation>
-      <score-instrument id="I926020e51164d18290d27477b47f579c">
+      <score-instrument id="Ie7178e906dc433be4e87215caf30874e">
         <instrument-name>Open Hi-Hat</instrument-name>
         <instrument-abbreviation>OHH</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I926020e51164d18290d27477b47f579c">
+      <midi-instrument id="Ie7178e906dc433be4e87215caf30874e">
         <midi-channel>10</midi-channel>
         <midi-unpitched>47</midi-unpitched>
       </midi-instrument>
     </score-part>
-    <score-part id="P82b794dd5a8f7947e6623c6bd607c275">
+    <score-part id="Pe687ad12310caaff9e6c63232848a353">
       <part-name>Low Tom</part-name>
       <part-abbreviation>LT</part-abbreviation>
-      <score-instrument id="I678936e80029376b114855be8b3e9f56">
+      <score-instrument id="I43643cff78df986a99f3870a4509bbba">
         <instrument-name>Low Tom</instrument-name>
         <instrument-abbreviation>LT</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I678936e80029376b114855be8b3e9f56">
+      <midi-instrument id="I43643cff78df986a99f3870a4509bbba">
         <midi-channel>10</midi-channel>
         <midi-unpitched>42</midi-unpitched>
       </midi-instrument>
     </score-part>
-    <score-part id="P0e4f19012697477c8d418cbd4c5d7ec4">
+    <score-part id="Pf0b53ab29c9fb1b67474a466d9ebff1f">
       <part-name>Mid Tom</part-name>
       <part-abbreviation>MT</part-abbreviation>
-      <score-instrument id="Id4aeb2d6700a55cb6a4f19f5036edbac">
+      <score-instrument id="Ieb5e68a4316bdede67ca74f26066943d">
         <instrument-name>Mid Tom</instrument-name>
         <instrument-abbreviation>MT</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="Id4aeb2d6700a55cb6a4f19f5036edbac">
+      <midi-instrument id="Ieb5e68a4316bdede67ca74f26066943d">
         <midi-channel>10</midi-channel>
         <midi-unpitched>48</midi-unpitched>
       </midi-instrument>
     </score-part>
-    <score-part id="P2cb668e47684640d5a589ab239be173e">
+    <score-part id="Pc350917d57e1afc71489bf1e6194403f">
       <part-name>Crash Cymbal</part-name>
       <part-abbreviation>CR</part-abbreviation>
-      <score-instrument id="I63912e128c16b5dd4477bc53d4f83b6f">
+      <score-instrument id="Icf0addeda58a83040838d928c8a50f80">
         <instrument-name>Crash Cymbal</instrument-name>
         <instrument-abbreviation>CR</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I63912e128c16b5dd4477bc53d4f83b6f">
+      <midi-instrument id="Icf0addeda58a83040838d928c8a50f80">
         <midi-channel>10</midi-channel>
         <midi-unpitched>50</midi-unpitched>
       </midi-instrument>
     </score-part>
   </part-list>
   <!--=========================== Part 1 ===========================-->
-  <part id="P5f97712a1052b68faddb62736b559944">
+  <part id="P551d8529750ecd0a8d121040dfb1b89e">
     <!--========================= Measure 1 ==========================-->
     <measure number="1">
       <attributes>
@@ -159,7 +159,7 @@ content_type: musicxml
         <duration>2520</duration>
         <type>16th</type>
       </note>
-      <note dynamics="83.33">
+      <note dynamics="78.89">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -172,7 +172,7 @@ content_type: musicxml
         <duration>2520</duration>
         <type>16th</type>
       </note>
-      <note dynamics="90.00">
+      <note dynamics="81.11">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -190,7 +190,7 @@ content_type: musicxml
     </measure>
     <!--========================= Measure 2 ==========================-->
     <measure number="2">
-      <note dynamics="91.11">
+      <note dynamics="83.33">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -204,55 +204,6 @@ content_type: musicxml
         <type>quarter</type>
         <dot />
         <dot />
-      </note>
-      <note dynamics="84.44">
-        <pitch>
-          <step>F</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note>
-        <rest />
-        <duration>17640</duration>
-        <type>quarter</type>
-        <dot />
-        <dot />
-      </note>
-    </measure>
-    <!--========================= Measure 3 ==========================-->
-    <measure number="3">
-      <note dynamics="85.56">
-        <pitch>
-          <step>F</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note>
-        <rest />
-        <duration>10080</duration>
-        <type>quarter</type>
-      </note>
-      <note>
-        <rest />
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note dynamics="84.44">
-        <pitch>
-          <step>F</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note>
-        <rest />
-        <duration>2520</duration>
-        <type>16th</type>
       </note>
       <note dynamics="92.22">
         <pitch>
@@ -270,24 +221,9 @@ content_type: musicxml
         <dot />
       </note>
     </measure>
-    <!--========================= Measure 4 ==========================-->
-    <measure number="4">
-      <note dynamics="91.11">
-        <pitch>
-          <step>F</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note>
-        <rest />
-        <duration>17640</duration>
-        <type>quarter</type>
-        <dot />
-        <dot />
-      </note>
-      <note dynamics="87.78">
+    <!--========================= Measure 3 ==========================-->
+    <measure number="3">
+      <note dynamics="90.00">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -305,7 +241,71 @@ content_type: musicxml
         <duration>2520</duration>
         <type>16th</type>
       </note>
-      <note dynamics="87.78">
+      <note dynamics="92.22">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note>
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note dynamics="80.00">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note>
+        <rest />
+        <duration>17640</duration>
+        <type>quarter</type>
+        <dot />
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 4 ==========================-->
+    <measure number="4">
+      <note dynamics="76.67">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note>
+        <rest />
+        <duration>17640</duration>
+        <type>quarter</type>
+        <dot />
+        <dot />
+      </note>
+      <note dynamics="74.44">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note>
+        <rest />
+        <duration>10080</duration>
+        <type>quarter</type>
+      </note>
+      <note>
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note dynamics="86.67">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -321,7 +321,7 @@ content_type: musicxml
     </measure>
   </part>
   <!--=========================== Part 2 ===========================-->
-  <part id="P53179a69107d1d7c77bfbfebd9532ffd">
+  <part id="P168131d71695dcccc305af2b454885f3">
     <!--========================= Measure 1 ==========================-->
     <measure number="1">
       <attributes>
@@ -359,7 +359,7 @@ content_type: musicxml
         <type>eighth</type>
         <dot />
       </note>
-      <note dynamics="90.00">
+      <note dynamics="82.22">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -373,7 +373,7 @@ content_type: musicxml
         <type>eighth</type>
         <dot />
       </note>
-      <note dynamics="90.00">
+      <note dynamics="74.44">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -387,7 +387,7 @@ content_type: musicxml
         <type>eighth</type>
         <dot />
       </note>
-      <note dynamics="92.22">
+      <note dynamics="83.33">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -408,7 +408,70 @@ content_type: musicxml
         <duration>5040</duration>
         <type>eighth</type>
       </note>
+      <note dynamics="87.78">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note>
+        <rest />
+        <duration>7560</duration>
+        <type>eighth</type>
+        <dot />
+      </note>
       <note dynamics="83.33">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note>
+        <rest />
+        <duration>7560</duration>
+        <type>eighth</type>
+        <dot />
+      </note>
+      <note dynamics="78.89">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note>
+        <rest />
+        <duration>7560</duration>
+        <type>eighth</type>
+        <dot />
+      </note>
+      <note dynamics="90.00">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note>
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+    </measure>
+    <!--========================= Measure 3 ==========================-->
+    <measure number="3">
+      <note>
+        <rest />
+        <duration>5040</duration>
+        <type>eighth</type>
+      </note>
+      <note dynamics="78.89">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -436,7 +499,7 @@ content_type: musicxml
         <type>eighth</type>
         <dot />
       </note>
-      <note dynamics="90.00">
+      <note dynamics="92.22">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -450,7 +513,7 @@ content_type: musicxml
         <type>eighth</type>
         <dot />
       </note>
-      <note dynamics="84.44">
+      <note dynamics="90.00">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -464,42 +527,14 @@ content_type: musicxml
         <type>16th</type>
       </note>
     </measure>
-    <!--========================= Measure 3 ==========================-->
-    <measure number="3">
+    <!--========================= Measure 4 ==========================-->
+    <measure number="4">
       <note>
         <rest />
         <duration>5040</duration>
         <type>eighth</type>
       </note>
       <note dynamics="88.89">
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note>
-        <rest />
-        <duration>7560</duration>
-        <type>eighth</type>
-        <dot />
-      </note>
-      <note dynamics="85.56">
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note>
-        <rest />
-        <duration>7560</duration>
-        <type>eighth</type>
-        <dot />
-      </note>
-      <note dynamics="85.56">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -523,27 +558,6 @@ content_type: musicxml
       </note>
       <note>
         <rest />
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-    </measure>
-    <!--========================= Measure 4 ==========================-->
-    <measure number="4">
-      <note>
-        <rest />
-        <duration>5040</duration>
-        <type>eighth</type>
-      </note>
-      <note dynamics="81.11">
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note>
-        <rest />
         <duration>7560</duration>
         <type>eighth</type>
         <dot />
@@ -562,21 +576,7 @@ content_type: musicxml
         <type>eighth</type>
         <dot />
       </note>
-      <note dynamics="88.89">
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note>
-        <rest />
-        <duration>7560</duration>
-        <type>eighth</type>
-        <dot />
-      </note>
-      <note dynamics="85.56">
+      <note dynamics="81.11">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -592,7 +592,7 @@ content_type: musicxml
     </measure>
   </part>
   <!--=========================== Part 3 ===========================-->
-  <part id="Pfa6c8fb6dbb0a0674f41b936ecf678b5">
+  <part id="Pa3613da0946b4850a95463ca88552d18">
     <!--========================= Measure 1 ==========================-->
     <measure number="1">
       <attributes>
@@ -611,33 +611,7 @@ content_type: musicxml
         </direction-type>
         <sound tempo="96" />
       </direction>
-      <note dynamics="77.78">
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note>
-        <rest />
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note dynamics="84.44">
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note>
-        <rest />
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note dynamics="80.00">
+      <note dynamics="92.22">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -663,7 +637,33 @@ content_type: musicxml
         <duration>2520</duration>
         <type>16th</type>
       </note>
-      <note dynamics="86.67">
+      <note dynamics="74.44">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note>
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note dynamics="91.11">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note>
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note dynamics="85.56">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -689,7 +689,7 @@ content_type: musicxml
         <duration>2520</duration>
         <type>16th</type>
       </note>
-      <note dynamics="75.56">
+      <note dynamics="91.11">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -702,7 +702,7 @@ content_type: musicxml
         <duration>2520</duration>
         <type>16th</type>
       </note>
-      <note dynamics="84.44">
+      <note dynamics="83.33">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -718,7 +718,7 @@ content_type: musicxml
     </measure>
     <!--========================= Measure 2 ==========================-->
     <measure number="2">
-      <note dynamics="80.00">
+      <note dynamics="74.44">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -731,7 +731,7 @@ content_type: musicxml
         <duration>2520</duration>
         <type>16th</type>
       </note>
-      <note dynamics="76.67">
+      <note dynamics="91.11">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -744,7 +744,7 @@ content_type: musicxml
         <duration>2520</duration>
         <type>16th</type>
       </note>
-      <note dynamics="88.89">
+      <note dynamics="85.56">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -770,7 +770,7 @@ content_type: musicxml
         <duration>2520</duration>
         <type>16th</type>
       </note>
-      <note dynamics="80.00">
+      <note dynamics="82.22">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -783,7 +783,75 @@ content_type: musicxml
         <duration>2520</duration>
         <type>16th</type>
       </note>
-      <note dynamics="76.67">
+      <note dynamics="82.22">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note>
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note dynamics="84.44">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note>
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note dynamics="75.56">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note>
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+    </measure>
+    <!--========================= Measure 3 ==========================-->
+    <measure number="3">
+      <note dynamics="84.44">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note>
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note dynamics="75.56">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note>
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note dynamics="74.44">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -809,6 +877,19 @@ content_type: musicxml
         <duration>2520</duration>
         <type>16th</type>
       </note>
+      <note dynamics="76.67">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note>
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
       <note dynamics="81.11">
         <pitch>
           <step>G</step>
@@ -822,10 +903,7 @@ content_type: musicxml
         <duration>2520</duration>
         <type>16th</type>
       </note>
-    </measure>
-    <!--========================= Measure 3 ==========================-->
-    <measure number="3">
-      <note dynamics="80.00">
+      <note dynamics="74.44">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -851,32 +929,9 @@ content_type: musicxml
         <duration>2520</duration>
         <type>16th</type>
       </note>
-      <note dynamics="91.11">
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note>
-        <rest />
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note dynamics="82.22">
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note>
-        <rest />
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
+    </measure>
+    <!--========================= Measure 4 ==========================-->
+    <measure number="4">
       <note dynamics="81.11">
         <pitch>
           <step>G</step>
@@ -890,49 +945,7 @@ content_type: musicxml
         <duration>2520</duration>
         <type>16th</type>
       </note>
-      <note dynamics="75.56">
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note>
-        <rest />
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note dynamics="75.56">
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note>
-        <rest />
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note dynamics="85.56">
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note>
-        <rest />
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-    </measure>
-    <!--========================= Measure 4 ==========================-->
-    <measure number="4">
-      <note dynamics="88.89">
+      <note dynamics="77.78">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -958,7 +971,7 @@ content_type: musicxml
         <duration>2520</duration>
         <type>16th</type>
       </note>
-      <note dynamics="83.33">
+      <note dynamics="74.44">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -971,7 +984,20 @@ content_type: musicxml
         <duration>2520</duration>
         <type>16th</type>
       </note>
-      <note dynamics="75.56">
+      <note dynamics="74.44">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note>
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note dynamics="74.44">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -997,33 +1023,7 @@ content_type: musicxml
         <duration>2520</duration>
         <type>16th</type>
       </note>
-      <note dynamics="91.11">
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note>
-        <rest />
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note dynamics="91.11">
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note>
-        <rest />
-        <duration>2520</duration>
-        <type>16th</type>
-      </note>
-      <note dynamics="86.67">
+      <note dynamics="84.44">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -1039,7 +1039,7 @@ content_type: musicxml
     </measure>
   </part>
   <!--=========================== Part 4 ===========================-->
-  <part id="Pd74fef82bb2af176306e747392ff9e34">
+  <part id="Pb99b311501b1912e5866bba7a7a1c5ce">
     <!--========================= Measure 1 ==========================-->
     <measure number="1">
       <attributes>
@@ -1077,7 +1077,7 @@ content_type: musicxml
     </measure>
   </part>
   <!--=========================== Part 5 ===========================-->
-  <part id="P82b794dd5a8f7947e6623c6bd607c275">
+  <part id="Pe687ad12310caaff9e6c63232848a353">
     <!--========================= Measure 1 ==========================-->
     <measure number="1">
       <attributes>
@@ -1115,7 +1115,7 @@ content_type: musicxml
     </measure>
   </part>
   <!--=========================== Part 6 ===========================-->
-  <part id="P0e4f19012697477c8d418cbd4c5d7ec4">
+  <part id="Pf0b53ab29c9fb1b67474a466d9ebff1f">
     <!--========================= Measure 1 ==========================-->
     <measure number="1">
       <attributes>
@@ -1153,7 +1153,7 @@ content_type: musicxml
     </measure>
   </part>
   <!--=========================== Part 7 ===========================-->
-  <part id="P2cb668e47684640d5a589ab239be173e">
+  <part id="Pc350917d57e1afc71489bf1e6194403f">
     <!--========================= Measure 1 ==========================-->
     <measure number="1">
       <attributes>

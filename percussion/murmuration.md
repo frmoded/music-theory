@@ -5,11 +5,11 @@ recipe_hash: 75c96c6e0dce690bca1f92aae2e0001a677560ee8aba953bb4f8c207338bfbe1
 python_hash: 7beb7ce3b9e0c63d30a18c1ff88b9449a68b019a70255277165a8e535c6509df
 recipe_derived_from_source_hash: 98d697e37b7f417a500c61622dfc5e278a5a5cff4796c5d0626846f210ceed1d
 python_derived_from_source_hash: 75c96c6e0dce690bca1f92aae2e0001a677560ee8aba953bb4f8c207338bfbe1
-source_facet: recipe
+source_facet: description
 recipe_derived_from_description_hash: 98d697e37b7f417a500c61622dfc5e278a5a5cff4796c5d0626846f210ceed1d
 python_derived_from_recipe_hash: 75c96c6e0dce690bca1f92aae2e0001a677560ee8aba953bb4f8c207338bfbe1
 recipe_version: 4
-sync_state: stale-python
+sync_state: stale-both
 ---
 
 # Description
@@ -27,8 +27,8 @@ with kick alone again. The arc is the piece.
 
 Velocity carries the dynamic story: quiet at the edges, loud at the peak.
 Articulation distinguishes closed-hi-hat calm from open-hi-hat punch. The 8
-section notes live in `percussion_lab/`; other pieces reuse them with
-different proportions.
+section notes live in `music-core/percussion_lab/` (imported cross-vault);
+other pieces reuse them with different proportions.
 
 ## Inputs
 

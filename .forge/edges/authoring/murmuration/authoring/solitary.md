@@ -3,7 +3,7 @@ type: snapshot
 caller: authoring/murmuration
 callee: authoring/solitary
 state: live
-captured_at: '2026-08-03T18:31:15Z'
+captured_at: '2026-08-07T00:30:47Z'
 content_type: musicxml
 ---
 
@@ -18,7 +18,7 @@ content_type: musicxml
   <identification>
     <creator type="composer" />
     <encoding>
-      <encoding-date>2026-08-03</encoding-date>
+      <encoding-date>2026-08-06</encoding-date>
     </encoding>
   </identification>
   <defaults>
@@ -28,93 +28,93 @@ content_type: musicxml
     </scaling>
   </defaults>
   <part-list>
-    <score-part id="P164602525ffa4a4356869f751a15e7f8">
+    <score-part id="Pa2ddc74b14edf335b595e66e71284172">
       <part-name>Kick</part-name>
       <part-abbreviation>K</part-abbreviation>
-      <score-instrument id="I335c5e41ffd444475ed501013a2dacff">
+      <score-instrument id="Ie0b44455405ab8a05b2e9d4c52176dd8">
         <instrument-name>Kick</instrument-name>
         <instrument-abbreviation>K</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I335c5e41ffd444475ed501013a2dacff">
+      <midi-instrument id="Ie0b44455405ab8a05b2e9d4c52176dd8">
         <midi-channel>10</midi-channel>
         <midi-unpitched>36</midi-unpitched>
       </midi-instrument>
     </score-part>
-    <score-part id="Ped18273019ad6a48294ccf76c74788c6">
+    <score-part id="P2bc0fb25e326dcec75ea50aba72606f1">
       <part-name>Snare</part-name>
       <part-abbreviation>S</part-abbreviation>
-      <score-instrument id="If07fd26e3c19475b56a7a9fd0c102276">
+      <score-instrument id="Ib8e3eab42a20e9f7ee56b6ed4398edf0">
         <instrument-name>Snare</instrument-name>
         <instrument-abbreviation>S</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="If07fd26e3c19475b56a7a9fd0c102276">
+      <midi-instrument id="Ib8e3eab42a20e9f7ee56b6ed4398edf0">
         <midi-channel>10</midi-channel>
         <midi-unpitched>39</midi-unpitched>
       </midi-instrument>
     </score-part>
-    <score-part id="Pdcd8fd6705e887a9b7503631775a3464">
+    <score-part id="P35ad5a8e662e6d1707aa01385b57428c">
       <part-name>Closed Hi-Hat</part-name>
       <part-abbreviation>CHH</part-abbreviation>
-      <score-instrument id="I8a78e517703b939600948cef8a3e0cb7">
+      <score-instrument id="I7eb67486ec0213aa209ed32740a8af53">
         <instrument-name>Closed Hi-Hat</instrument-name>
         <instrument-abbreviation>CHH</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I8a78e517703b939600948cef8a3e0cb7">
+      <midi-instrument id="I7eb67486ec0213aa209ed32740a8af53">
         <midi-channel>10</midi-channel>
         <midi-unpitched>43</midi-unpitched>
       </midi-instrument>
     </score-part>
-    <score-part id="Pf081e4cd5036fadb44fbc021f4efdf8b">
+    <score-part id="P6c470e55ed34e8865ada3a6c51a4bffb">
       <part-name>Open Hi-Hat</part-name>
       <part-abbreviation>OHH</part-abbreviation>
-      <score-instrument id="Ib4f4c16a78079c301e6083597cd3890e">
+      <score-instrument id="I9a19414a19bd460c81621e63ce5994c7">
         <instrument-name>Open Hi-Hat</instrument-name>
         <instrument-abbreviation>OHH</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="Ib4f4c16a78079c301e6083597cd3890e">
+      <midi-instrument id="I9a19414a19bd460c81621e63ce5994c7">
         <midi-channel>10</midi-channel>
         <midi-unpitched>47</midi-unpitched>
       </midi-instrument>
     </score-part>
-    <score-part id="Pe36c382b791a66c4f72ebe077c5de9df">
+    <score-part id="Pe01a925053e884bd4d80fcde400744a4">
       <part-name>Low Tom</part-name>
       <part-abbreviation>LT</part-abbreviation>
-      <score-instrument id="I915150d2b065729d5dd3e99f7fb3e86c">
+      <score-instrument id="Ief6fd5e529490e2bae65fab56ec4c73a">
         <instrument-name>Low Tom</instrument-name>
         <instrument-abbreviation>LT</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I915150d2b065729d5dd3e99f7fb3e86c">
+      <midi-instrument id="Ief6fd5e529490e2bae65fab56ec4c73a">
         <midi-channel>10</midi-channel>
         <midi-unpitched>42</midi-unpitched>
       </midi-instrument>
     </score-part>
-    <score-part id="P1d2e6273a3a9a3f81abd04a0fbb45a37">
+    <score-part id="P5f9351e4cf7a856b6b8c8059443ba58b">
       <part-name>Mid Tom</part-name>
       <part-abbreviation>MT</part-abbreviation>
-      <score-instrument id="I9b59302252c21e465c1f3811c6fb47bf">
+      <score-instrument id="Ida0edf6f1146f7bf63456b4a3b6129bd">
         <instrument-name>Mid Tom</instrument-name>
         <instrument-abbreviation>MT</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I9b59302252c21e465c1f3811c6fb47bf">
+      <midi-instrument id="Ida0edf6f1146f7bf63456b4a3b6129bd">
         <midi-channel>10</midi-channel>
         <midi-unpitched>48</midi-unpitched>
       </midi-instrument>
     </score-part>
-    <score-part id="P5ba3472965c81206bc31b30a381316a9">
+    <score-part id="Pbfb978e289106099f5f20107ac393d8a">
       <part-name>Crash Cymbal</part-name>
       <part-abbreviation>CR</part-abbreviation>
-      <score-instrument id="Ie66d94211ff58608d9ca860586a0800c">
+      <score-instrument id="I8c8c180fd8b0dbeac2032dd9bc42ed50">
         <instrument-name>Crash Cymbal</instrument-name>
         <instrument-abbreviation>CR</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="Ie66d94211ff58608d9ca860586a0800c">
+      <midi-instrument id="I8c8c180fd8b0dbeac2032dd9bc42ed50">
         <midi-channel>10</midi-channel>
         <midi-unpitched>50</midi-unpitched>
       </midi-instrument>
     </score-part>
   </part-list>
   <!--=========================== Part 1 ===========================-->
-  <part id="P164602525ffa4a4356869f751a15e7f8">
+  <part id="Pa2ddc74b14edf335b595e66e71284172">
     <!--========================= Measure 1 ==========================-->
     <measure number="1">
       <attributes>
@@ -273,7 +273,7 @@ content_type: musicxml
     </measure>
   </part>
   <!--=========================== Part 2 ===========================-->
-  <part id="Ped18273019ad6a48294ccf76c74788c6">
+  <part id="P2bc0fb25e326dcec75ea50aba72606f1">
     <!--========================= Measure 1 ==========================-->
     <measure number="1">
       <attributes>
@@ -311,7 +311,7 @@ content_type: musicxml
     </measure>
   </part>
   <!--=========================== Part 3 ===========================-->
-  <part id="Pdcd8fd6705e887a9b7503631775a3464">
+  <part id="P35ad5a8e662e6d1707aa01385b57428c">
     <!--========================= Measure 1 ==========================-->
     <measure number="1">
       <attributes>
@@ -349,7 +349,7 @@ content_type: musicxml
     </measure>
   </part>
   <!--=========================== Part 4 ===========================-->
-  <part id="Pf081e4cd5036fadb44fbc021f4efdf8b">
+  <part id="P6c470e55ed34e8865ada3a6c51a4bffb">
     <!--========================= Measure 1 ==========================-->
     <measure number="1">
       <attributes>
@@ -387,7 +387,7 @@ content_type: musicxml
     </measure>
   </part>
   <!--=========================== Part 5 ===========================-->
-  <part id="Pe36c382b791a66c4f72ebe077c5de9df">
+  <part id="Pe01a925053e884bd4d80fcde400744a4">
     <!--========================= Measure 1 ==========================-->
     <measure number="1">
       <attributes>
@@ -425,7 +425,7 @@ content_type: musicxml
     </measure>
   </part>
   <!--=========================== Part 6 ===========================-->
-  <part id="P1d2e6273a3a9a3f81abd04a0fbb45a37">
+  <part id="P5f9351e4cf7a856b6b8c8059443ba58b">
     <!--========================= Measure 1 ==========================-->
     <measure number="1">
       <attributes>
@@ -463,7 +463,7 @@ content_type: musicxml
     </measure>
   </part>
   <!--=========================== Part 7 ===========================-->
-  <part id="P5ba3472965c81206bc31b30a381316a9">
+  <part id="Pbfb978e289106099f5f20107ac393d8a">
     <!--========================= Measure 1 ==========================-->
     <measure number="1">
       <attributes>
