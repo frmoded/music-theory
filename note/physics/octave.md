@@ -16,4 +16,4 @@ The octave is the *period* of the whole naming system: it spans **12 [[semitone|
 
 **Try it:** [[theory_exercises/octave_up]] — enter the note one octave above C4 and get feedback that ties the name, the octave number, and the frequency together.
 
-Part of the [[notation]] of a note.
+Part of the [[physics]] of a note.
