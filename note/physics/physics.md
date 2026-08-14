@@ -6,6 +6,7 @@ The fields:
 
 - [[pitch]] — perceived highness/lowness (the brain's read-out of frequency)
 - [[frequency]] — the physical cause of pitch, in hertz (A4 = 440 Hz)
+- [[octave]] — the 2:1 frequency ratio that repeats the naming system every 12 semitones
 - [[duration]] — how long the note lasts; the raw material of rhythm
 - [[timbre]] — tone color; the overtone spectrum that distinguishes instruments
 - [[loudness]] — perceived intensity (the brain's read-out of amplitude)
