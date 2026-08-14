@@ -14,7 +14,7 @@ And here's where they sit on a piano — same key, three octaves apart:
 
 ![[note/resources/images/pitch_class_piano.svg]]
 
-On guitar the same pitch class turns up at several fret/string positions at once rather than one fixed spot — see [[guitar_note_names]] for the full mapping. (A guitar diagram for this specific example is queued, pending a rendering capability that doesn't exist yet.)
+On guitar, pitch class C shows up at several different fret/string positions rather than one fixed spot — find every C (and every other pitch class) on the full fretboard map in [[guitar_note_names]].
 
 There are exactly **12 pitch classes** — one per [[semitone]] in the octave. This is the cleanest engineer's handle on a note: **pitch = (pitch class, octave)**. The [[note_name|letter]] + [[accidental]] give you the class; the octave number gives you the register. See [[piano_note_names]] and [[guitar_note_names]] for how the 12 pitch classes map onto each instrument.
 
