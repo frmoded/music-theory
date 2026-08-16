@@ -3,7 +3,7 @@ type: snapshot
 caller: authoring/slow_burn
 callee: authoring/chorus
 state: live
-captured_at: '2026-08-03T18:31:09Z'
+captured_at: '2026-08-07T00:30:41Z'
 content_type: musicxml
 ---
 
@@ -18,7 +18,7 @@ content_type: musicxml
   <identification>
     <creator type="composer" />
     <encoding>
-      <encoding-date>2026-08-03</encoding-date>
+      <encoding-date>2026-08-06</encoding-date>
     </encoding>
   </identification>
   <defaults>
@@ -28,33 +28,33 @@ content_type: musicxml
     </scaling>
   </defaults>
   <part-list>
-    <score-part id="Pa06e3fc2f7702799b1278728c9037311">
+    <score-part id="P3851828a18a2a6de1e1d7a3f6632b24f">
       <part-name>Piano</part-name>
       <part-abbreviation>Pno</part-abbreviation>
-      <score-instrument id="I60fbb64d75cd3ce42d69165071f9a4b8">
+      <score-instrument id="If3026720c8d2edc3ed7c63ee0e9c3a32">
         <instrument-name>Piano</instrument-name>
         <instrument-abbreviation>Pno</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I60fbb64d75cd3ce42d69165071f9a4b8">
+      <midi-instrument id="If3026720c8d2edc3ed7c63ee0e9c3a32">
         <midi-channel>1</midi-channel>
         <midi-program>1</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pbe48f5f6caa6f84cd02e7b3a82cd8ed9">
+    <score-part id="P0429bc35b18ad9af828d401de16b60b4">
       <part-name>Voice</part-name>
       <part-abbreviation>V</part-abbreviation>
-      <score-instrument id="Iffdaa425911359db86c2c34efdbe3d8f">
+      <score-instrument id="I32c4baf72202e9567e122d976268ab8a">
         <instrument-name>Voice</instrument-name>
         <instrument-abbreviation>V</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="Iffdaa425911359db86c2c34efdbe3d8f">
+      <midi-instrument id="I32c4baf72202e9567e122d976268ab8a">
         <midi-channel>2</midi-channel>
         <midi-program>54</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
   <!--=========================== Part 1 ===========================-->
-  <part id="Pa06e3fc2f7702799b1278728c9037311">
+  <part id="P3851828a18a2a6de1e1d7a3f6632b24f">
     <!--========================= Measure 1 ==========================-->
     <measure number="1">
       <attributes>
@@ -548,7 +548,7 @@ content_type: musicxml
     </measure>
   </part>
   <!--=========================== Part 2 ===========================-->
-  <part id="Pbe48f5f6caa6f84cd02e7b3a82cd8ed9">
+  <part id="P0429bc35b18ad9af828d401de16b60b4">
     <!--========================= Measure 1 ==========================-->
     <measure number="1">
       <attributes>
