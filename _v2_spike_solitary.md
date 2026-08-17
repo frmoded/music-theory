@@ -8,7 +8,6 @@ python_derived_from_source_hash: 94bc5d899dfad17c9b76062278bc2d4870f92673d3682cc
 source_facet: synced
 recipe_derived_from_description_hash: 94bc5d899dfad17c9b76062278bc2d4870f92673d3682ccaa9d62ebd9d4c3a93
 python_derived_from_recipe_hash: daa610f887eed10e376309a265a42e8eaf4eccddc119841498f013cb05960de8
-sync_state: synced
 ---
 
 # Description
