@@ -22,10 +22,6 @@ Which scale quality is built from the intervals **W‑W‑H‑W‑W‑W‑H** (w
 
 Pick from the dropdown and press **Run**. Concept refresher: [[scales/scale]].
 
-## Inputs
-
-- guess — your answer, picked from a dropdown ("major", "minor", "diminished", "augmented")
-
 # Recipe
 
 Let choices = ["major", "minor", "diminished", "augmented"].
