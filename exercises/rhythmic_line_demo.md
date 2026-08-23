@@ -16,7 +16,6 @@ source_facet: description
 recipe_derived_from_description_hash: c6915a4ae6e51e67dc4d97237b10e6996e54f4b846dd8b61484e7fd2223d5814
 python_derived_from_recipe_hash: b21a7469f8b390aea509329de30e93bf68996149a33459c6c4acd3d46a52959d
 python_derived_from_source_hash: c6915a4ae6e51e67dc4d97237b10e6996e54f4b846dd8b61484e7fd2223d5814
-sync_state: stale-python
 ---
 
 # Description
