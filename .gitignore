@@ -3,3 +3,7 @@
 _scratch/
 .obsidian/plugins/
 .obsidian/workspace.json
+
+# Drain 2026-08-25-0140 — driver adjudication: execution values are
+# local runtime records, not repo content.
+.forge/
