@@ -4,7 +4,7 @@ A Forge vault for composing music with music21 in your Obsidian-based snippet wo
 
 ## What's inside
 
-Two halves. The **theory** half (`notes/`, `scales/`, `chord/`, with practice paired in `theory_exercises/`) is prose-and-practice: what a note, a scale, a chord actually are, each concept note explained so you build or hear it yourself rather than just read about it — a note that doesn't make you press Run at least once has skipped the point. The **composition** half is a library of action and data snippets — currently centered on **Slow Burn**, a fully-worked 12-bar blues in `slow_burn/`, plus a percussion section in `percussion/` (with percussion primitives imported cross-vault from `music-core/percussion_lab/`), plus general widget demos and graded scale-construction practice in `exercises/`. Each snippet is a Forge action that returns a `music21.stream.Score` (or a list of pitches, for the scale helpers); the plugin renders the result via Verovio in the Forge panel.
+Two halves. The **theory** half (`notes/`, `scales/`, `chord/`) is prose-and-practice: what a note, a scale, a chord actually are, each concept note explained so you build or hear it yourself rather than just read about it — a note that doesn't make you press Run at least once has skipped the point. The **composition** half is a library of action and data snippets — currently centered on **Slow Burn**, a fully-worked 12-bar blues in `slow_burn/`, plus a percussion section in `percussion/` (with percussion primitives imported cross-vault from `music-core/percussion_lab/`). Graded practice for the theory concepts and general widget demos both live together in `exercises/`. Each snippet is a Forge action that returns a `music21.stream.Score` (or a list of pitches, for the scale helpers); the plugin renders the result via Verovio in the Forge panel.
 
 Concept navigation, if you're starting from theory:
 
@@ -25,8 +25,7 @@ music-theory/
 ├── notes/              # concept: what a note is (notation + physics)
 ├── scales/             # concept: scales, interval patterns
 ├── chord/              # concept: chords (construction, notation, function)
-├── theory_exercises/   # practice notes paired with the concept notes above
-├── exercises/          # general widget demos + graded scale-construction practice
+├── exercises/          # graded theory practice + general widget demos (see [[exercises/Exercises]])
 ├── percussion/         # percussion notation + fully-worked percussion pieces
 └── slow_burn/
     ├── twelve_bar_blues_progression.md  # I IV I I IV IV I I V IV I V (data)
