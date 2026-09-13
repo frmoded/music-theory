@@ -15,8 +15,6 @@ python_derived_from_recipe_hash: 6d5a52d36c5c94ff001ba213ad153785b5a1e8e83b5a46f
 
 # Description
 
-# Description
-
 Press **Run** to hear the first four notes of a C major scale. Your task: work out the four notes that complete the octave — then check yourself in [[exercises/complete_this_scale_submit]]. New to scales? Start with [[scales/scale]].
 
 # Recipe
