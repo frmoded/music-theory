@@ -21,9 +21,11 @@ python_derived_from_source_hash: 316a6e92b963a162288e2efa764d5bb33a84443632fb133
 
 # Description
 
+# Description
+
 Which scale quality is built from the intervals **W‑W‑H‑W‑W‑W‑H** (whole, whole, half, whole, whole, whole, half)?
 
-Pick from the dropdown and press **Run**. Concept refresher: [[scales/scale]].
+Pick from the dropdown and press **Run**. Concept refresher: [[scales/Scales]].
 
 # Recipe
 Input guess: 'major' | 'minor' | 'diminished' | 'augmented' = "major".
