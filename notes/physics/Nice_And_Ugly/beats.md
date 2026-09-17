@@ -23,5 +23,3 @@ $f_1 = 261.63$ Hz (C4), $f_2 = 277.18$ Hz (D♭4), so $\Delta f \approx 15.55$ H
 ![[notes/resources/images/ugly_combined.svg]]
 
 That pulsing envelope is exactly $2\cos(\pi \Delta f\, t)$ from the derivation above — not an approximation, the literal closed-form shape of the sum.
-
-Part of the [[physics]] of a note.
