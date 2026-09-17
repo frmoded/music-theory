@@ -6,11 +6,17 @@ C4 and C5 — an [[octave]] apart, the cleanest possible ratio. The score:
 
 ![[notes/resources/images/nice_score.svg]]
 
-Hear each note alone, then both together:
+Hear each note alone, then both together as a single chord:
+
+**C4:**
 
 ![[notes/resources/audio/nice_c4.mp3]]
 
+**C5:**
+
 ![[notes/resources/audio/nice_c5.mp3]]
+
+**C4 + C5 together:**
 
 ![[notes/resources/audio/nice_together.mp3]]
 
@@ -24,11 +30,17 @@ C4 and D♭4 — a single [[semitone]] apart. The frequencies are so close they 
 
 ![[notes/resources/images/ugly_score.svg]]
 
-Hear each note alone, then both together:
+Hear each note alone, then both together as a single chord:
+
+**C4:**
 
 ![[notes/resources/audio/ugly_c4.mp3]]
 
+**D♭4:**
+
 ![[notes/resources/audio/ugly_db4.mp3]]
+
+**C4 + D♭4 together:**
 
 ![[notes/resources/audio/ugly_together.mp3]]
 
