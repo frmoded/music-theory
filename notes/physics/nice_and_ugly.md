@@ -24,6 +24,10 @@ The two waves line up cleanly — every second peak of the higher note coincides
 
 ![[notes/resources/images/nice_wave.svg]]
 
+Add the two waves together and the combined signal is just as clean — the same repeating shape every C4 cycle, no beating:
+
+![[notes/resources/images/nice_combined.svg]]
+
 ## Ugly: the minor second
 
 C4 and D♭4 — a single [[semitone]] apart. The frequencies are so close they beat against each other instead of locking together. The score:
@@ -47,5 +51,9 @@ Hear each note alone, then both together as a single chord:
 The two waves drift in and out of alignment instead of locking together — that drift is the beating you hear as roughness:
 
 ![[notes/resources/images/ugly_wave.svg]]
+
+Add the two waves together and the beating becomes visible directly: the combined signal's amplitude swells and fades instead of holding steady — that pulsing envelope is the beat:
+
+![[notes/resources/images/ugly_combined.svg]]
 
 Part of the [[physics]] of a note.
