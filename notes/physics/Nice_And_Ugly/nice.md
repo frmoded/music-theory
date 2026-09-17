@@ -27,5 +27,3 @@ Add the two waves together and the combined signal is just as clean — the same
 ![[notes/resources/images/nice_combined.svg]]
 
 Contrast with [[ugly]], where the frequencies are close enough to beat instead of lock together.
-
-Part of the [[physics]] of a note.
