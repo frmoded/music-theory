@@ -25,5 +25,3 @@ Add the two waves together and the beating becomes visible directly: the combine
 ![[notes/resources/images/ugly_combined.svg]]
 
 See [[beats]] for exactly why summing two close frequencies produces that envelope.
-
-Part of the [[physics]] of a note.
