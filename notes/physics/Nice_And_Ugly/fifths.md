@@ -25,5 +25,3 @@ Two cycles of C4 line up with exactly three cycles of G4 — a longer repeat tha
 ## Stacking fifths: the Pythagorean tuning system
 
 Multiply by 3/2 repeatedly, folding each result back into a single octave, and every new note lands in that same simple, [[nice]] ratio to the one before it: C → G → D → A → E … Twelve fifths stacked this way almost — but not quite — land back on the note you started from: $(3/2)^{12} \approx 129.75$ against $2^7 = 128$, a leftover gap of about 23.5 cents (roughly a quarter of a semitone) called the **Pythagorean comma**. Every tuning system invented since — meantone, well temperament, today's equal temperament — is essentially a different way of hiding that leftover gap. The fifth itself is nice; it's *stacking it forever* that runs into trouble.
-
-Part of the [[physics]] of a note.
