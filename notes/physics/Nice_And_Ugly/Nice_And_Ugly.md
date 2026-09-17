@@ -4,5 +4,3 @@ Why some intervals sound settled and pleasant together, and others tense and cla
 - [[fifths]] — the other classic consonant ratio, 3:2, and the one the Pythagoreans built a whole tuning system on.
 - [[ugly]] — dissonant intervals: frequencies close enough together to beat instead of blending. The minor second.
 - [[beats]] — the math behind that beating, worked out explicitly from sin(α) + sin(α + δ).
-
-Part of the [[physics]] of a note.
