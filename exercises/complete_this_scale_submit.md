@@ -8,7 +8,7 @@ recipe_hash: 2fabe06fc68fda752ae35b0c35abe8f71688d78fe7aaccd834d68abbdb35fb90
 python_hash: 1ec55b539e21947ce1da46444f38099001010980fdf3035e1d320ed5a5632a09
 recipe_derived_from_source_hash: 811c7ef37cb8645ceceb9c36d03ad7f1b4d2326224092d350fc3040fab83bc7f
 python_derived_from_source_hash: 811c7ef37cb8645ceceb9c36d03ad7f1b4d2326224092d350fc3040fab83bc7f
-source_facet: python
+source_facet: description
 recipe_derived_from_description_hash: 811c7ef37cb8645ceceb9c36d03ad7f1b4d2326224092d350fc3040fab83bc7f
 english_hash: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 python_derived_from_recipe_hash: 2fabe06fc68fda752ae35b0c35abe8f71688d78fe7aaccd834d68abbdb35fb90
@@ -16,7 +16,9 @@ python_derived_from_recipe_hash: 2fabe06fc68fda752ae35b0c35abe8f71688d78fe7aaccd
 
 # Description
 
-Complete the C major scale you heard in [[exercises/complete_this_scale_challenge]]. Using the major interval pattern (W‑W‑H‑W‑W‑W‑H), work out the four notes that finish the octave after C‑D‑E‑F and set them as your `guess` — e.g. `["G4", "A4", "B4", "C5"]`. Press **Run** for note-by-note feedback. Concept refresher: [[scales/scale]].
+# Description
+
+Complete the C major scale you heard in [[exercises/complete_this_scale_challenge]]. Using the major interval pattern (W‑W‑H‑W‑W‑W‑H), work out the four notes that finish the octave after C‑D‑E‑F and set them as your `guess` — e.g. `["G4", "A4", "B4", "C5"]`. Press **Run** for note-by-note feedback. Concept refresher: [[scales/Scales]].
 
 ## Inputs
 
