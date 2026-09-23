@@ -1,0 +1,3 @@
+Tuning is the practical question behind every note name: which exact frequency does each pitch get? Because twelve pure fifths never quite close into seven octaves (see [[why_12_notes]]), every instrument has to settle the leftover gap somewhere, and different eras settled it differently. This chapter is the home for that story — the systems, the ratios, and how they sound.
+
+Start with the existing tour in [[Tuning_systems]], then compare the two ends of the spectrum yourself: read [[pythagorean_tuning]] (pure fifths, everything else pays) against [[equal_temperament]] (every step identical, nothing is pure). For the physics of why string length and tension set the pitch, see [[frequency]].
