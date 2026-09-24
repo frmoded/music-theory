@@ -2,13 +2,13 @@ Vincenzo Galilei (1520–1591) — lutenist, music theorist, and Galileo Galilei
 
 ## The problem with frets
 
-A lute's frets are straight bars running across every string at once. On a keyboard, each string can be tuned individually — that's exactly what lets [[meantone]] and [[well_temperament]] spread the [[why_12_notes|comma]] unevenly, favoring some keys over others by ear. A single fret has no such freedom: it sets the same length ratio on all six strings simultaneously, so whatever compromise a fretted instrument makes has to be *one* compromise, applied uniformly, whether or not the mathematics behind it is fully worked out yet.
+A [[lute]]'s frets are straight bars running across every string at once. On a keyboard, each string can be tuned individually — that's exactly what lets [[meantone]] and [[well_temperament]] spread the [[why_12_notes|comma]] unevenly, favoring some keys over others by ear. A single fret has no such freedom: it sets the same length ratio on all six strings simultaneously, so whatever compromise a fretted instrument makes has to be *one* compromise, applied uniformly, whether or not the mathematics behind it is fully worked out yet.
 
 ## The solution
 
 Galilei's answer: place each fret so it sits at **17/18** of the remaining string length from the one before it. No mathematics of irrational roots is needed to build it, just a straightedge and that one ratio, repeated fret after fret.
 
-That's also why it matters here: 17/18 ≈ 1.0588 is a close, rational stand-in for the true equal-tempered semitone, 2^(1/12) ≈ 1.0595 — accurate enough that a lute fretted this way sounds convincingly even across every key, decades before [[equal_temperament]]'s exact irrational ratio was worked out mathematically (Simon Stevin, around the turn of the 17th century). It doesn't solve the fretting problem by giving every key a *perfect* interval the way a keyboard's per-string tuning can chase — it solves it by making every key *equally, uniformly* imperfect, sidestepping the single-fret constraint entirely rather than fighting it. See [[guitar_note_names]] for the same physical constraint on a modern fretted instrument, now solved with the exact irrational ratio instead of Galilei's close rational approximation.
+That's also why it matters here: 17/18 ≈ 1.0588 is a close, rational stand-in for the true equal-tempered semitone, 2^(1/12) ≈ 1.0595 — accurate enough that a lute fretted this way sounds convincingly even across every key, decades before [[equal_temperament]]'s exact irrational ratio was worked out mathematically (Simon Stevin, around the turn of the 17th century). It doesn't solve the fretting problem by giving every key a *perfect* interval the way a keyboard's per-string tuning can chase — it solves it by making every key *equally, uniformly* imperfect, sidestepping the single-fret constraint entirely rather than fighting it. See [[guitar]] for the same physical constraint on a modern fretted instrument, now solved with the exact irrational ratio instead of Galilei's close rational approximation.
 
 ## Micro-frets, the 24 dances, and Bach's Well-Tempered Clavier
 
