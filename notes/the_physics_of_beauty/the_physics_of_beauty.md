@@ -4,7 +4,6 @@ Why some intervals sound settled and pleasant together, and others tense and cla
 - [[nice]] — the other classic consonant ratio, 2:3, worked out in the abstract.
 - [[ugly]] — dissonant intervals: frequencies close enough together to beat instead of blending. The minor second.
 - [[beats]] — the math behind that beating, worked out explicitly from sin(α) + sin(α + δ).
-- [[why_12_notes]] — why twelve repetitions of that ratio is the point the gap becomes unavoidable.
 - [[Tuning]] — how later eras handled that gap: Pythagorean, meantone, well temperament, equal temperament.
 
 ## Nice sounds
@@ -29,6 +28,6 @@ Niceness is also learned. The brain is a prediction machine tuned by a lifetime 
 
 ## History
 
-Pythagoras is credited as the first to notice that pleasing intervals are ratios of small whole numbers, like 2:1 and 3:2. The Pythagoreans read consonance as a sign of the order of the universe — the "music of the spheres" — and dissonance as chaos. Follow the thread in [[why_12_notes]] and [[Tuning]].
+Pythagoras is credited as the first to notice that pleasing intervals are ratios of small whole numbers, like 2:1 and 3:2. The Pythagoreans read consonance as a sign of the order of the universe — the "music of the spheres" — and dissonance as chaos.
 
 Philosophers then argued over whether beauty in sound is a fact or an experience. Kant, in the *Critique of Judgment* (18th century), called music the "play of sensations": pure aesthetic pleasure that needs no concepts, with discord disturbing our inner harmony. Adorno, in *Philosophy of New Music* (20th century), argued that dissonance is socially necessary: sweet sounds let us escape reality, harsh ones make us face its fractures.
