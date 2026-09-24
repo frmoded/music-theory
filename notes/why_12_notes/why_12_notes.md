@@ -31,7 +31,7 @@ Laid out as points along the octave itself:
 
 ![[notes/resources/images/why12_points.svg]]
 
-A guitar makes this same idea mechanical, string by string: each fret is a fixed division point, and pressing a string down at a fret shortens the vibrating length to whatever ratio that fret marks — exactly what a monochord's movable bridge does. See [[guitar_note_names]] for the physical layout, with one real difference from the tables above: modern frets aren't cut at these Pythagorean ratios at all. They're cut for equal temperament (see [[equal_temperament]]), so a guitar's twelve frets per octave are twelve *identical* steps, not twelve unevenly-spaced whole-number ratios.
+A guitar makes this same idea mechanical, string by string: each fret is a fixed division point, and pressing a string down at a fret shortens the vibrating length to whatever ratio that fret marks — exactly what a monochord's movable bridge does. See [[guitar]] for the physical layout, with one real difference from the tables above: modern frets aren't cut at these Pythagorean ratios at all. They're cut for equal temperament (see [[equal_temperament]]), so a guitar's twelve frets per octave are twelve *identical* steps, not twelve unevenly-spaced whole-number ratios.
 
 This note is already getting long — it'll get split up later — but two more views of the same twelve numbers are worth seeing before that happens. Take the log of each normalized length and the twelve points spread out by pitch position instead of by raw ratio, making the drift from a perfectly even scale visible:
 
