@@ -6,3 +6,29 @@ Why some intervals sound settled and pleasant together, and others tense and cla
 - [[beats]] — the math behind that beating, worked out explicitly from sin(α) + sin(α + δ).
 - [[why_12_notes]] — why twelve repetitions of that ratio is the point the gap becomes unavoidable.
 - [[Tuning]] — how later eras handled that gap: Pythagorean, meantone, well temperament, equal temperament.
+
+## Nice sounds
+
+Two tones in a simple whole-number ratio — 2:1, the octave, or 3:2, the fifth — have waveforms that line up again and again, so their sum is a clean, repeating wave. A plucked string does the same on its own: its overtones are exact whole-number multiples (100, 200, 300 Hz), which is why it sounds like one rich tone. Hear it in [[harmony]] and [[nice]].
+
+## Ugly sounds
+
+Two tones a few hertz apart, say 440 and 445 Hz, drift in and out of phase: peaks alternately reinforce and cancel, so the volume pulses. That pulsing is a *beat*. At about 5 Hz it is a gentle throb; at 30–40 Hz the pulses are too fast to count and too slow to fuse into one tone, and you hear roughness. Try it with [[ugly]] and [[beats]].
+
+A screech or a nail on a chalkboard adds a second ingredient: inharmonic overtones, at unrelated frequencies (100, 137.4, 281.9 Hz) with no tidy pattern. Filtering experiments suggest the unbearable part lives between 2,000 and 4,000 Hz.
+
+## Evolution
+
+The ear canal resonates in that same 2,000–4,000 Hz range and boosts it, and human screams and infant cries live there too. One plausible story is that we are built to find an unpatterned, loud sound in that band hard to ignore, because it usually means distress. That is a hypothesis, not settled fact.
+
+## Cognitive
+
+Inside the cochlea, two frequencies that are too close excite overlapping stretches of the same "critical band". The auditory cortex receives that overlap as physical roughness — the beating above, felt as discomfort.
+
+Niceness is also learned. The brain is a prediction machine tuned by a lifetime of your culture's music, and sounds that break its learned patterns can set off a mild alarm response in the amygdala. That is why what counts as "ugly" shifts between cultures and eras.
+
+## History
+
+Pythagoras is credited as the first to notice that pleasing intervals are ratios of small whole numbers, like 2:1 and 3:2. The Pythagoreans read consonance as a sign of the order of the universe — the "music of the spheres" — and dissonance as chaos. Follow the thread in [[why_12_notes]] and [[Tuning]].
+
+Philosophers then argued over whether beauty in sound is a fact or an experience. Kant, in the *Critique of Judgment* (18th century), called music the "play of sensations": pure aesthetic pleasure that needs no concepts, with discord disturbing our inner harmony. Adorno, in *Philosophy of New Music* (20th century), argued that dissonance is socially necessary: sweet sounds let us escape reality, harsh ones make us face its fractures.
