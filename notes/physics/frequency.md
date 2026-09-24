@@ -24,8 +24,4 @@ The tension–frequency relationship has a father-and-son story behind it. **Vin
 
 Those experiments turned up something unexpected. Interval ratios line up neatly with string *lengths* — a perfect fifth is 3:2 — but tension does not work that way. For strings of equal length, the weights had to be in the ratio **9:4** to sound the 3:2 perfect fifth. That is the square-root law in the equation above: tension goes as the *square* of the frequency ratio, since (3/2)² = 9/4. Vincenzo's practical interest in tuning shows up elsewhere in the vault too — see [[rule_of_eighteen]] and [[Tuning_systems]].
 
-Galileo carried the idea into his last book, *Two New Sciences* (1638), where he discusses vibrating strings and suggests that not just the length of the string matters for pitch, but also its tension and its weight. The result is named for **Marin Mersenne**, who set out these relationships in *Harmonie universelle* (1636) and, according to Wikipedia, checked them by experiment — something Galileo had considered impossible to do.
-
-**Was a monochord used?** Not by Vincenzo, as far as the sources say: the apparatus described is weighted lute strings, not a monochord. A [[monochord]] varies the vibrating *length* along a single string, which makes it the natural tool for length ratios rather than tension. Wikipedia's account of the monochord does connect it to Mersenne, whose discoveries in the 1630s were made through its use.
-
-*Source: Wikipedia — "Vincenzo Galilei", "Two New Sciences", "Vibrating string", "Mersenne's laws" and "Monochord".*
+Galileo carried the idea into his last book, *Two New Sciences* (1638), where he discusses vibrating strings and suggests that not just the length of the string matters for pitch, but also its tension and its weight. The result is named for **Marin Mersenne**, who set out these relationships in *Harmonie universelle* (1636) and checked them by experiment — something Galileo had considered impossible to do.
