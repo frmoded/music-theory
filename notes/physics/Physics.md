@@ -8,6 +8,6 @@ The fields:
 - [[duration]] — how long the note lasts; the raw material of rhythm
 - [[timbre]] — tone color; the overtone spectrum that distinguishes instruments
 - [[loudness]] — perceived intensity (the brain's read-out of amplitude)
-- [[Nice_And_Ugly]] — why some intervals sound settled together (consonance) and others clash (dissonance): the physics, the math of beats, and the Pythagorean fifth
+- [[nice_and_ugly]] — why some intervals sound settled together (consonance) and others clash (dissonance): the physics, the math of beats, and the Pythagorean fifth
 
 See [[note_notation]] for the names we attach to these sounds, and [[notes]] for the overview.
