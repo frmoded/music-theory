@@ -5,4 +5,4 @@ Why some intervals sound settled and pleasant together, and others tense and cla
 - [[ugly]] — dissonant intervals: frequencies close enough together to beat instead of blending. The minor second.
 - [[beats]] — the math behind that beating, worked out explicitly from sin(α) + sin(α + δ).
 - [[why_12_notes]] — why twelve repetitions of that ratio is the point the gap becomes unavoidable.
-- [[Tuning_systems]] — how later eras handled that gap: Pythagorean, meantone, well temperament, equal temperament.
+- [[Tuning]] — how later eras handled that gap: Pythagorean, meantone, well temperament, equal temperament.
