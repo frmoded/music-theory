@@ -1,7 +1,6 @@
 Why some intervals sound settled and pleasant together, and others tense and clashing — consonance and dissonance, worked out from the physics of the waves themselves rather than taste.
 
-- [[harmony]] — consonant intervals: frequencies in simple whole-number ratios, waves that lock together. The octave, 2:1.
-- [[harmony_by_ratio]] — the same idea in numbers instead of notes: find each consonant ratio by moving the bridge on a monochord.
+- [[harmony]] — consonant intervals as ratios: frequencies in simple whole-number ratios, found by moving the bridge on a monochord.
 - [[nice]] — the other classic consonant ratio, 2:3, worked out in the abstract.
 - [[ugly]] — dissonant intervals: frequencies close enough together to beat instead of blending. The minor second.
 - [[beats]] — the math behind that beating, worked out explicitly from sin(α) + sin(α + δ).
