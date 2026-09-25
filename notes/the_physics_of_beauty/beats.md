@@ -28,7 +28,8 @@ music_instruments/resources/html/monochord.html
 Try it: drag the bridge a little to the right of the middle and pluck both segments. With the full string tuned to 110 Hz, the beat rate is $\Delta f = f_{right} - f_{left}$, and the further the readout gets from 1 : 1, the faster the throb.
 
 **Table 1 — Length ratios just off 1 : 1 make the segments beat.** *The beat rate is the difference between the two segment frequencies, with the full string tuned to 110 Hz.*
-| Readout (left : right) | Bridge position | Left segment (Hz) | Right segment (Hz) | Beat rate (Hz) |
+
+| Ratio (L:R) | Bridge pos. | Left (Hz) | Right (Hz) | Beat (Hz) |
 |---|---:|---:|---:|---:|
 | 85 : 83 | 0.506 | 217.4 | 222.7 | 5.2 |
 | 61 : 59 | 0.508 | 216.4 | 223.7 | 7.3 |
