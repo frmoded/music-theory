@@ -26,4 +26,4 @@ Add the two waves together and the combined signal is just as clean — the same
 
 ![[notes/resources/images/nice_combined.svg]]
 
-Contrast with [[ugly]], where the frequencies are close enough to beat instead of lock together.
+Contrast with [[ugly]], where the frequencies are close enough to beat instead of lock together. Prefer numbers to notes? See [[harmony_by_ratio]], the same idea worked out with ratios and string lengths on a monochord.
