@@ -1,6 +1,7 @@
 Put the question the way the Pythagorean tradition is supposed to have posed it: if lengthening a string by 3/2 gives one good, consonant interval — the pitch dropping by that same simple ratio — what happens if you keep doing it, continuously? Lengthen the new string by 3/2 again. And the next one. And the next. Try it yourself on the [[monochord]]: every step multiplies the length by 1.5.
 
 **Table 1 — Raw string lengths, in build order.** *Twelve successive 3/2 lengthenings, before folding into an octave.*
+
 | Note # | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | Length | 1.0000 | 1.5000 | 2.2500 | 3.3750 | 5.0625 | 7.5938 | 11.3906 | 17.0859 | 25.6289 | 38.4434 | 57.6650 | 86.4976 |
@@ -10,6 +11,7 @@ There's a second piece of understanding this needs: halve a string's length and 
 Sort that folded data by its normalized length instead of by build order, and name each string by its pitch class, and the twelve notes lay themselves out as the chromatic scale — nothing was arranged to make that happen, it falls out of the ratios on its own:
 
 **Table 2 — Folded lengths, sorted, with pitch names.** *The same twelve strings, normalized into one octave and sorted by length — the chromatic scale falls out on its own.*
+
 | Note # | Normalized length | Note name |
 |---:|---:|---|
 | 1 | 1.0000 | C |
