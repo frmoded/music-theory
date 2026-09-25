@@ -4,6 +4,11 @@ A **monochord** is the simplest possible instrument for turning music into arith
 
 Move the bridge to the exact halfway point and the shorter segment sounds an octave above the open string — length ratio 1:2. Move it to two-thirds of the way along and the longer segment sounds a fifth above the open string — length ratio 2:3. Every simple-ratio interval has its own marked point on the string; a monochord is, literally, a ruler for consonance.
 
+```html-embed
+music_instruments/resources/html/monochord.html
+300
+```
+
 Instruments built this way — sometimes with a graduated scale marked directly under the string, sometimes with several strings so more than one ratio can sound at once — were standard equipment for music theorists for roughly two thousand years, right up through the Renaissance, precisely because they let a claim about ratios be checked by ear on the spot rather than taken on faith.
 
 A fretted instrument is a monochord whose bridge positions are marked in advance: on the [[lute]], each tied gut fret is a fixed stopping point along the string, and moving a fret changes the tuning — see [[the_fret_problem]]. And Les Paul's [[railroad_guitar]] — one string over a piece of railroad steel — is a monochord too, only with a body built to stay silent instead of to sound.
