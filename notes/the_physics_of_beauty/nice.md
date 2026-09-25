@@ -17,4 +17,4 @@ Add them together and the combined signal repeats cleanly too — a longer repea
 
 ![[notes/resources/images/twothirds_combined.svg]]
 
-Contrast with [[ugly]], where the ratio isn't simple and the combined signal never quite closes — that's a beat, not a repeat. See [[harmony_by_ratio]] for the 2:1 ratio and a table of the other simple ratios, and [[why_12_notes]] for what happens if you apply this same 2:3 relationship again.
+Contrast with [[ugly]], where the ratio isn't simple and the combined signal never quite closes — that's a beat, not a repeat. See [[harmony]] for the 2:1 ratio and a table of the other simple ratios, and [[why_12_notes]] for what happens if you apply this same 2:3 relationship again.
