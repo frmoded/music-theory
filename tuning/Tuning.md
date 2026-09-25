@@ -15,6 +15,7 @@ This chapter covers how different eras handled the [[pythagorean_comma|Pythagore
 For [[pythagorean_tuning]] and [[meantone]] the table below uses each system's own well-known conventional cent values (built from the nearest fifths in either direction), not the deliberately one-directional twelve-fifth chain from [[why_12_notes]] — that chain exists specifically to expose the comma, not to represent how either tuning is actually built in practice, and mixing the two would compare different things under the same name. Rows and columns are in chronological order, as in the timeline under History.
 
 **Table 1 — How far apart the tuning systems sit.** *RMS difference between two systems' twelve-note tunings, in cents: smaller means more alike.*
+
 | | Pythagorean | Meantone | Rule of 18 | Well temp. | Equal |
 |---|---:|---:|---:|---:|---:|
 | **Pythagorean** | — | 22.9¢ | 13.3¢ | 15.1¢ | 8.3¢ |
@@ -28,6 +29,7 @@ A few things worth reading off the table: [[well_temperament|well temperament]] 
 ## History
 
 **Table 2 — When each system entered use.** *In roughly chronological order.*
+
 | System | When | Notes |
 |---|---|---|
 | [[pythagorean_tuning\|Pythagorean tuning]] | Legendary origin ~6th century BCE; rigorously formalized by Euclid's *Sectio Canonis*, c. 300 BCE | Dominant through the medieval period |
