@@ -9,14 +9,14 @@ Try it: drag the bridge until the readout says **3 : 2**, then pluck the left se
 
 **Table 1 — Consonant ratios on the monochord.** *Where to put the bridge, and what each segment sounds, from the simplest ratio to the most complex.*
 
-| Freq. ratio | Ratio (L:R) | Bridge pos. | Left (Hz) | Right (Hz) |
+| Length (L:R) | Freq. (L:R) | Bridge pos. | Left (Hz) | Right (Hz) |
 |---|---|---:|---:|---:|
 | 1 : 1 | 1 : 1 | 0.500 | 220.0 | 220.0 |
-| 2 : 1 | 2 : 1 | 0.667 | 165.0 | 330.0 |
-| 3 : 2 | 3 : 2 | 0.600 | 183.3 | 275.0 |
-| 4 : 3 | 4 : 3 | 0.571 | 192.5 | 256.7 |
-| 5 : 4 | 5 : 4 | 0.556 | 198.0 | 247.5 |
-| 6 : 5 | 6 : 5 | 0.545 | 201.7 | 242.0 |
+| 2 : 1 | 1 : 2 | 0.667 | 165.0 | 330.0 |
+| 3 : 2 | 2 : 3 | 0.600 | 183.3 | 275.0 |
+| 4 : 3 | 3 : 4 | 0.571 | 192.5 | 256.7 |
+| 5 : 4 | 4 : 5 | 0.556 | 198.0 | 247.5 |
+| 6 : 5 | 5 : 6 | 0.545 | 201.7 | 242.0 |
 
 The readout shows the *length* ratio; the frequency ratio is the same two numbers the other way round, because the shorter segment sounds higher. Now look at the simplest non-trivial row in detail.
 
