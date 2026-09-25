@@ -31,7 +31,7 @@ A few things worth reading off the table: [[well_temperament|well temperament]] 
 | System | When | Notes |
 |---|---|---|
 | [[pythagorean_tuning\|Pythagorean tuning]] | Legendary origin ~6th century BCE; rigorously formalized by Euclid's *Sectio Canonis*, c. 300 BCE | Dominant through the medieval period |
-| [[meantone]] | Spreading from the late 15th century; standard through the 16th–17th centuries | |
+| [[meantone]] | Spreading from the late 15th century; standard through the 16th–17th centuries | — |
 | [[rule_of_eighteen\|Rule of Eighteen]] | c. 1581 (Vincenzo Galilei) | For fretted instruments specifically |
-| [[well_temperament]] | Flourished 17th–18th centuries; Werckmeister's schemes published 1691, Bach's *Well-Tempered Clavier* 1722 | |
-| [[equal_temperament]] | Mathematically derived by Simon Stevin, c. 1585–1608; the de facto keyboard standard by the 19th century, universal by the 20th | |
+| [[well_temperament]] | Flourished 17th–18th centuries; Werckmeister's schemes published 1691, Bach's *Well-Tempered Clavier* 1722 | — |
+| [[equal_temperament]] | Mathematically derived by Simon Stevin, c. 1585–1608; the de facto keyboard standard by the 19th century, universal by the 20th | — |
