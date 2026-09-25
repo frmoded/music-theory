@@ -26,14 +26,57 @@ Try it: drag the bridge until the readout says **3 : 2**, then pluck the left se
   margin:2px 0 10px;
 ">Where to put the bridge, and what each segment sounds, from the simplest ratio to the most complex.</div>
 
-| Length (L:R) | Freq. (L:R) | Bridge pos. | Left (Hz) | Right (Hz) |
-|---|---|---:|---:|---:|
-| 1 : 1 | 1 : 1 | 0.500 | 220.0 | 220.0 |
-| 2 : 1 | 1 : 2 | 0.667 | 165.0 | 330.0 |
-| 3 : 2 | 2 : 3 | 0.600 | 183.3 | 275.0 |
-| 4 : 3 | 3 : 4 | 0.571 | 192.5 | 256.7 |
-| 5 : 4 | 4 : 5 | 0.556 | 198.0 | 247.5 |
-| 6 : 5 | 5 : 6 | 0.545 | 201.7 | 242.0 |
+<table style="width:100%; border-collapse:collapse;">
+<tr>
+  <th style="text-align:left; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Length (L:R)</th>
+  <th style="text-align:left; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Freq. (L:R)</th>
+  <th style="text-align:right; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Bridge pos.</th>
+  <th style="text-align:right; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Left (Hz)</th>
+  <th style="text-align:right; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Right (Hz)</th>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;">1 : 1</td>
+  <td style="padding:4px 8px; color:#555555;">1 : 1</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">0.500</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">220.0</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">220.0</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;">2 : 1</td>
+  <td style="padding:4px 8px; color:#555555;">1 : 2</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">0.667</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">165.0</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">330.0</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;">3 : 2</td>
+  <td style="padding:4px 8px; color:#555555;">2 : 3</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">0.600</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">183.3</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">275.0</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;">4 : 3</td>
+  <td style="padding:4px 8px; color:#555555;">3 : 4</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">0.571</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">192.5</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">256.7</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;">5 : 4</td>
+  <td style="padding:4px 8px; color:#555555;">4 : 5</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">0.556</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">198.0</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">247.5</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;">6 : 5</td>
+  <td style="padding:4px 8px; color:#555555;">5 : 6</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">0.545</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">201.7</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">242.0</td>
+</tr>
+</table>
 
 </div>
 
