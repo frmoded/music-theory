@@ -2,7 +2,7 @@ Vincenzo Galilei (1520–1591) — lutenist, music theorist, and Galileo Galilei
 
 ## The problem with frets
 
-A [[lute]]'s frets are straight bars running across every string at once. On a keyboard, each string can be tuned individually — that's exactly what lets [[meantone]] and [[well_temperament]] spread the [[why_12_notes|comma]] unevenly, favoring some keys over others by ear. A single fret has no such freedom: it sets the same length ratio on all six strings simultaneously, so whatever compromise a fretted instrument makes has to be *one* compromise, applied uniformly, whether or not the mathematics behind it is fully worked out yet.
+A [[lute]]'s frets are straight bars running across every string at once. On a keyboard, each string can be tuned individually — that's exactly what lets [[meantone]] and [[well_temperament]] spread the [[pythagorean_comma|comma]] unevenly, favoring some keys over others by ear. A single fret has no such freedom: it sets the same length ratio on all six strings simultaneously, so whatever compromise a fretted instrument makes has to be *one* compromise, applied uniformly, whether or not the mathematics behind it is fully worked out yet.
 
 ## The solution
 
