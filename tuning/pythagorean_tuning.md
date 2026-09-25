@@ -16,7 +16,7 @@ Any two notes exactly one step apart in the chain — C and F, F and B♭, B♭ 
 
 ## The bad
 
-The twelfth relationship — from G back up to C, closing the circle — was never one of the built steps; it's the leftover, and it's badly out of tune, sharp by the full [[why_12_notes|Pythagorean comma]] (traditionally placed between G♯ and E♭ on a 12-note keyboard as the infamous "wolf fifth"). Thirds fare worse still: a third built from four stacked fifths (e.g. C up to E) comes out noticeably wider than a pure 5:4 third — the harsh "Pythagorean third" that later theorists singled out as the system's real weak point, and the specific problem [[meantone]] was invented to fix.
+The twelfth relationship — from G back up to C, closing the circle — was never one of the built steps; it's the leftover, and it's badly out of tune, sharp by the full [[pythagorean_comma|Pythagorean comma]] (traditionally placed between G♯ and E♭ on a 12-note keyboard as the infamous "wolf fifth"). Thirds fare worse still: a third built from four stacked fifths (e.g. C up to E) comes out noticeably wider than a pure 5:4 third — the harsh "Pythagorean third" that later theorists singled out as the system's real weak point, and the specific problem [[meantone]] was invented to fix. See [[thirds_and_fifths]] for the intervals themselves.
 
 ## History
 
