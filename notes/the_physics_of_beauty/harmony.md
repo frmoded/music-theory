@@ -7,7 +7,24 @@ music_instruments/resources/html/monochord.html
 
 Try it: drag the bridge until the readout says **3 : 2**, then pluck the left segment, the right segment, and both together. The full string is tuned to 110 Hz, so the left segment (0.600 of the string) sounds 183.3 Hz and the right (0.400) sounds 275 Hz, and 275 ÷ 183.3 = 1.5. Now try the other rows of the table.
 
-**Table 1 — Consonant ratios on the monochord.** *Where to put the bridge, and what each segment sounds, from the simplest ratio to the most complex.*
+<div style="
+  background:#FDFCFA;
+  border-radius:6px;
+  padding:14px 16px;
+  margin:8px 0;
+">
+
+<div style="
+  font-size:15px;
+  font-weight:600;
+  color:#2B2B2B;
+">Table 1 — Consonant ratios on the monochord.</div>
+
+<div style="
+  font-size:12px;
+  color:#555555;
+  margin:2px 0 10px;
+">Where to put the bridge, and what each segment sounds, from the simplest ratio to the most complex.</div>
 
 | Length (L:R) | Freq. (L:R) | Bridge pos. | Left (Hz) | Right (Hz) |
 |---|---|---:|---:|---:|
@@ -17,6 +34,8 @@ Try it: drag the bridge until the readout says **3 : 2**, then pluck the left se
 | 4 : 3 | 3 : 4 | 0.571 | 192.5 | 256.7 |
 | 5 : 4 | 4 : 5 | 0.556 | 198.0 | 247.5 |
 | 6 : 5 | 5 : 6 | 0.545 | 201.7 | 242.0 |
+
+</div>
 
 The readout shows the *length* ratio; the frequency ratio is the same two numbers the other way round, because the shorter segment sounds higher. Now look at the simplest non-trivial row in detail.
 
