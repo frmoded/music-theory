@@ -1,6 +1,7 @@
 Stack twelve pure fifths and you land close to, but not on, seven pure octaves. That leftover is the **Pythagorean comma**: roughly a quarter of a semitone, about 23.5 cents. [[why_12_notes]] shows how the twelve strings get there; this note is about what is left over.
 
 **Table 1 — Twelve fifths against seven octaves.** *Both paths should end on the same note; they miss by about a quarter of a semitone.*
+
 | Path | Frequency ratio | Cents |
 |---|---:|---:|
 | Twelve pure fifths, (3/2)^12 | 129.7463 | 8423.5 |
