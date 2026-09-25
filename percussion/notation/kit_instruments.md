@@ -2,8 +2,9 @@
 
 The ten percussion factories available to build with, each routed to General MIDI channel 10 (the standard percussion channel) at a fixed GM note number:
 
+**Table 1 — The ten kit instruments.** *Each factory routes to a fixed General MIDI drum slot, listed here in kit order.*
 | Instrument | GM note | Sound |
-|---|---|---|
+|---|---:|---|
 | [[kick]] | 36 | Bass drum |
 | [[snare]] | 38 | Acoustic snare |
 | [[closed_hihat]] | 42 | Hi-hat, closed — short "ts" |
