@@ -25,6 +25,6 @@ That limit has a sharper edge: some notes can never sound together. A string sou
 
 ## History
 
-The word "guitar" comes from the Spanish *guitarra*. By 1200 Spain had two instruments with that name, the *guitarra latina* and the *guitarra morisca*, and the Spanish vihuela of the 15th and 16th centuries was a major influence. The five-course baroque guitar appeared in mid-16th-century Spain and stayed popular in Spain, Italy and France into the mid-18th century. Placing the frets was a tuning problem from the start — see [[the_fret_problem]] and the [[lute]].
+The word "guitar" comes from the Spanish *guitarra*. By 1200 Spain had two instruments with that name, the *guitarra latina* and the *guitarra morisca*, and the Spanish vihuela of the 15th and 16th centuries was a major influence. The five-course baroque guitar appeared in mid-16th-century Spain and stayed popular in Spain, Italy and France into the mid-18th century. Placing the frets was a tuning problem from the start — see [[the_problem_with_frets]] and the [[lute]].
 
 Around 1850 Spanish makers, notably Antonio de Torres, settled the modern form; Torres enlarged the body and introduced fan bracing, which made the guitar much louder. The electric guitar followed: the first were patented in 1937, and solid-body designs came from Gibson (with Les Paul, whose experiments began with the [[railroad_guitar]]) and Leo Fender after the Second World War.
