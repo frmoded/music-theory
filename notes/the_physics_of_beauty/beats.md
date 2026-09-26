@@ -27,15 +27,71 @@ music_instruments/resources/html/monochord.html
 
 Try it: drag the bridge a little to the right of the middle and pluck both segments. With the full string tuned to 110 Hz, the beat rate is $\Delta f = f_{right} - f_{left}$, and the further the readout gets from 1 : 1, the faster the throb.
 
-**Table 1 — Length ratios just off 1 : 1 make the segments beat.** *The beat rate is the difference between the two segment frequencies, with the full string tuned to 110 Hz.*
+<div style="
+  background:#FDFCFA;
+  border-radius:6px;
+  padding:14px 16px;
+  margin:8px 0;
+">
 
-| Ratio (L:R) | Bridge pos. | Left (Hz) | Right (Hz) | Beat (Hz) |
-|---|---:|---:|---:|---:|
-| 85 : 83 | 0.506 | 217.4 | 222.7 | 5.2 |
-| 61 : 59 | 0.508 | 216.4 | 223.7 | 7.3 |
-| 43 : 41 | 0.512 | 214.9 | 225.4 | 10.5 |
-| 31 : 29 | 0.517 | 212.9 | 227.6 | 14.7 |
-| 21 : 19 | 0.525 | 209.5 | 231.6 | 22.1 |
+<div style="
+  font-size:15px;
+  font-weight:600;
+  color:#2B2B2B;
+">Table 1 — Length ratios just off 1 : 1 make the segments beat.</div>
+
+<div style="
+  font-size:12px;
+  color:#555555;
+  margin:2px 0 10px;
+">The beat rate is the difference between the two segment frequencies, with the full string tuned to 110 Hz.</div>
+
+<table style="width:100%; border-collapse:collapse;">
+<tr>
+  <th style="text-align:left; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Ratio (L:R)</th>
+  <th style="text-align:right; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Bridge pos.</th>
+  <th style="text-align:right; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Left (Hz)</th>
+  <th style="text-align:right; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Right (Hz)</th>
+  <th style="text-align:right; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Beat (Hz)</th>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;">85 : 83</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">0.506</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">217.4</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">222.7</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">5.2</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;">61 : 59</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">0.508</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">216.4</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">223.7</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">7.3</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;">43 : 41</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">0.512</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">214.9</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">225.4</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">10.5</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;">31 : 29</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">0.517</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">212.9</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">227.6</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">14.7</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;">21 : 19</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">0.525</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">209.5</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">231.6</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">22.1</td>
+</tr>
+</table>
+
+</div>
 
 At 85 : 83 the beat is a gentle throb about five times a second; by 21 : 19 the pulses run together into roughness. The same length ratio also beats faster at a higher pitch, because the same ratio spans a bigger gap in hertz.
 
