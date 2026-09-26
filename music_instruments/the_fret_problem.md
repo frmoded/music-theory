@@ -1,14 +1,64 @@
 A fret is a straight bar across the neck, so it stops **all** the strings at exactly the same distance from the nut. Each fret leaves the sounding length multiplied by 2^(−1/12) ≈ 0.9439 — one equal-tempered semitone, a shade under 17/18 — on every string alike. That single ratio, repeated, is the whole fretboard.
 
-**Table 1 — Where equal-tempered frets fall.** *The sounding length left after a fret, on any string, beside the simple ratio it nearly matches.*
+<div style="
+  background:#FDFCFA;
+  border-radius:6px;
+  padding:14px 16px;
+  margin:8px 0;
+">
 
-| Fret | Length left | Nearest simple ratio | From nut (mm) |
-|---:|---:|---|---:|
-| 3 | 0.8409 | 5/6 = 0.8333 | 103.4 |
-| 4 | 0.7937 | 4/5 = 0.8000 | 134.1 |
-| 5 | 0.7492 | 3/4 = 0.7500 | 163.1 |
-| 7 | 0.6674 | 2/3 = 0.6667 | 216.2 |
-| 12 | 0.5000 | 1/2 = 0.5000 | 325.0 |
+<div style="
+  font-size:15px;
+  font-weight:600;
+  color:#2B2B2B;
+">Table 1 — Where equal-tempered frets fall.</div>
+
+<div style="
+  font-size:12px;
+  color:#555555;
+  margin:2px 0 10px;
+">The sounding length left after a fret, on any string, beside the simple ratio it nearly matches.</div>
+
+<table style="width:100%; border-collapse:collapse;">
+<tr>
+  <th style="text-align:right; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Fret</th>
+  <th style="text-align:right; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Length left</th>
+  <th style="text-align:left; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Nearest simple ratio</th>
+  <th style="text-align:right; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">From nut (mm)</th>
+</tr>
+<tr>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">3</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">0.8409</td>
+  <td style="padding:4px 8px; color:#555555;">5/6 = 0.8333</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">103.4</td>
+</tr>
+<tr>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">4</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">0.7937</td>
+  <td style="padding:4px 8px; color:#555555;">4/5 = 0.8000</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">134.1</td>
+</tr>
+<tr>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">5</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">0.7492</td>
+  <td style="padding:4px 8px; color:#555555;">3/4 = 0.7500</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">163.1</td>
+</tr>
+<tr>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">7</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">0.6674</td>
+  <td style="padding:4px 8px; color:#555555;">2/3 = 0.6667</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">216.2</td>
+</tr>
+<tr>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">12</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">0.5000</td>
+  <td style="padding:4px 8px; color:#555555;">1/2 = 0.5000</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">325.0</td>
+</tr>
+</table>
+
+</div>
 
 Read the table against the [[monochord]]; distances are for a 650 mm scale length. Fret 12 is exactly half the string, an octave. Frets 5 and 7 land almost on the 3/4 and 2/3 points, the pure fourth and fifth. But fret 4 misses the pure major third (4/5) by enough to sound about 14 cents sharp, and that is the problem: the ratio is fixed, so every string, in every key, gets the same compromise, with no way to make one chord purer at the cost of another. Try it: on the monochord, stop the string at 4/5 and then at fret 4's 0.7937, and listen for the difference. See [[thirds_and_fifths]] for the intervals involved.
 
