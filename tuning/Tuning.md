@@ -14,26 +14,132 @@ This chapter covers how different eras handled the [[pythagorean_comma|Pythagore
 
 For [[pythagorean_tuning]] and [[meantone]] the table below uses each system's own well-known conventional cent values (built from the nearest fifths in either direction), not the deliberately one-directional twelve-fifth chain from [[why_12_notes]] — that chain exists specifically to expose the comma, not to represent how either tuning is actually built in practice, and mixing the two would compare different things under the same name. Rows and columns are in chronological order, as in the timeline under History.
 
-**Table 1 — How far apart the tuning systems sit.** *RMS difference between two systems' twelve-note tunings, in cents: smaller means more alike.*
+<div style="
+  background:#FDFCFA;
+  border-radius:6px;
+  padding:14px 16px;
+  margin:8px 0;
+">
 
-| | Pythagorean | Meantone | Rule of 18 | Well temp. | Equal |
-|---|---:|---:|---:|---:|---:|
-| **Pythagorean** | — | 22.9¢ | 13.3¢ | 15.1¢ | 8.3¢ |
-| **Meantone** | 22.9¢ | — | 12.3¢ | 9.9¢ | 14.6¢ |
-| **Rule of 18** | 13.3¢ | 12.3¢ | — | 4.7¢ | 6.8¢ |
-| **Well temp.** | 15.1¢ | 9.9¢ | 4.7¢ | — | 7.7¢ |
-| **Equal** | 8.3¢ | 14.6¢ | 6.8¢ | 7.7¢ | — |
+<div style="
+  font-size:15px;
+  font-weight:600;
+  color:#2B2B2B;
+">Table 1 — How far apart the tuning systems sit.</div>
+
+<div style="
+  font-size:12px;
+  color:#555555;
+  margin:2px 0 10px;
+">RMS difference between two systems' twelve-note tunings, in cents: smaller means more alike.</div>
+
+<table style="width:100%; border-collapse:collapse;">
+<tr>
+  <th style="text-align:left; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;"></th>
+  <th style="text-align:right; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Pythagorean</th>
+  <th style="text-align:right; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Meantone</th>
+  <th style="text-align:right; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Rule of 18</th>
+  <th style="text-align:right; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Well temp.</th>
+  <th style="text-align:right; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Equal</th>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;"><strong>Pythagorean</strong></td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">—</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">22.9¢</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">13.3¢</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">15.1¢</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">8.3¢</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;"><strong>Meantone</strong></td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">22.9¢</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">—</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">12.3¢</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">9.9¢</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">14.6¢</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;"><strong>Rule of 18</strong></td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">13.3¢</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">12.3¢</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">—</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">4.7¢</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">6.8¢</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;"><strong>Well temp.</strong></td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">15.1¢</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">9.9¢</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">4.7¢</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">—</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">7.7¢</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;"><strong>Equal</strong></td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">8.3¢</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">14.6¢</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">6.8¢</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">7.7¢</td>
+  <td style="text-align:right; padding:4px 8px; color:#555555;">—</td>
+</tr>
+</table>
+
+</div>
 
 A few things worth reading off the table: [[well_temperament|well temperament]] and [[rule_of_eighteen|the Rule of Eighteen]] sit closest to each other (4.7¢) — both were independently built as approximations to universal playability, one by ear and compromise, one by a single repeated ratio. [[pythagorean_tuning|Pythagorean]] and [[meantone]] sit furthest apart (22.9¢) — the two most philosophically opposed choices, pure fifths versus pure-ish thirds. Of the historical systems, [[equal_temperament|equal temperament]] itself sits closest to [[rule_of_eighteen|the Rule of Eighteen]] (6.8¢) — which makes sense, since Galilei's rule was already reaching for exactly what equal temperament later formalized.
 
 ## History
 
-**Table 2 — When each system entered use.** *In roughly chronological order.*
+<div style="
+  background:#FDFCFA;
+  border-radius:6px;
+  padding:14px 16px;
+  margin:8px 0;
+">
 
-| System | When | Notes |
-|---|---|---|
-| [[pythagorean_tuning\|Pythagorean tuning]] | Legendary origin ~6th century BCE; rigorously formalized by Euclid's *Sectio Canonis*, c. 300 BCE | Dominant through the medieval period |
-| [[meantone]] | Spreading from the late 15th century; standard through the 16th–17th centuries | — |
-| [[rule_of_eighteen\|Rule of Eighteen]] | c. 1581 (Vincenzo Galilei) | For fretted instruments specifically |
-| [[well_temperament]] | Flourished 17th–18th centuries; Werckmeister's schemes published 1691, Bach's *Well-Tempered Clavier* 1722 | — |
-| [[equal_temperament]] | Mathematically derived by Simon Stevin, c. 1585–1608; the de facto keyboard standard by the 19th century, universal by the 20th | — |
+<div style="
+  font-size:15px;
+  font-weight:600;
+  color:#2B2B2B;
+">Table 2 — When each system entered use.</div>
+
+<div style="
+  font-size:12px;
+  color:#555555;
+  margin:2px 0 10px;
+">In roughly chronological order.</div>
+
+<table style="width:100%; border-collapse:collapse;">
+<tr>
+  <th style="text-align:left; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">System</th>
+  <th style="text-align:left; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">When</th>
+  <th style="text-align:left; padding:4px 8px; color:#2B2B2B; border-bottom:1px solid #666666;">Notes</th>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;"><a class="internal-link" data-href="pythagorean_tuning" href="pythagorean_tuning">Pythagorean tuning</a></td>
+  <td style="padding:4px 8px; color:#555555;">Legendary origin ~6th century BCE; rigorously formalized by Euclid's <em>Sectio Canonis</em>, c. 300 BCE</td>
+  <td style="padding:4px 8px; color:#555555;">Dominant through the medieval period</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;"><a class="internal-link" data-href="meantone" href="meantone">meantone</a></td>
+  <td style="padding:4px 8px; color:#555555;">Spreading from the late 15th century; standard through the 16th–17th centuries</td>
+  <td style="padding:4px 8px; color:#555555;">—</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;"><a class="internal-link" data-href="rule_of_eighteen" href="rule_of_eighteen">Rule of Eighteen</a></td>
+  <td style="padding:4px 8px; color:#555555;">c. 1581 (Vincenzo Galilei)</td>
+  <td style="padding:4px 8px; color:#555555;">For fretted instruments specifically</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;"><a class="internal-link" data-href="well_temperament" href="well_temperament">well_temperament</a></td>
+  <td style="padding:4px 8px; color:#555555;">Flourished 17th–18th centuries; Werckmeister's schemes published 1691, Bach's <em>Well-Tempered Clavier</em> 1722</td>
+  <td style="padding:4px 8px; color:#555555;">—</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px; color:#555555;"><a class="internal-link" data-href="equal_temperament" href="equal_temperament">equal_temperament</a></td>
+  <td style="padding:4px 8px; color:#555555;">Mathematically derived by Simon Stevin, c. 1585–1608; the de facto keyboard standard by the 19th century, universal by the 20th</td>
+  <td style="padding:4px 8px; color:#555555;">—</td>
+</tr>
+</table>
+
+</div>
