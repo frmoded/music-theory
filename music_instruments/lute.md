@@ -1,6 +1,6 @@
 The **lute** is a plucked string instrument with a deep, pear-shaped body, a neck with **frets**, and strings grouped in pairs called **courses** (the highest is usually a single string). A Renaissance six-course lute is tuned in perfect fourths, except for one major third between the third and fourth courses.
 
-The frets are what make the lute interesting here: they are loops of gut tied around the neck, so a player can slide them and decide where each semitone falls. Every fret is a fixed stopping point on the string, just like the movable bridge of the [[monochord]], and the ratios between fret positions are the tuning (see [[the_fret_problem]]). Try it: stop a monochord string at 17/18 of its length, the step [[rule_of_eighteen]] uses for a lute's frets, and compare it with the exact equal-tempered semitone in [[equal_temperament]]. Compare also the [[guitar]], whose frets are fixed in metal.
+The frets are what make the lute interesting here: they are loops of gut tied around the neck, so a player can slide them and decide where each semitone falls. Every fret is a fixed stopping point on the string, just like the movable bridge of the [[monochord]], and the ratios between fret positions are the tuning (see [[the_problem_with_frets]]). Try it: stop a monochord string at 17/18 of its length, the step [[rule_of_eighteen]] uses for a lute's frets, and compare it with the exact equal-tempered semitone in [[equal_temperament]]. Compare also the [[guitar]], whose frets are fixed in metal.
 
 ## History
 
