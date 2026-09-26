@@ -4,6 +4,13 @@ One octave, C to B, every key labeled:
 
 ![[notes/resources/images/piano_note_names.svg]]
 
+Try it: click keys to hold them, then play them together, up, or down.
+
+```html-embed
+music_instruments/resources/html/piano_keyboard.html
+360
+```
+
 Move one key to the right and the [[pitch_class]] changes by a [[semitone]]; move twelve keys (one full octave) and you land back on the same pitch class, one register up. The pattern is identical in every octave — learn where C is once, and every other note's position follows from the same seven-white/five-black shape.
 
 Contrast with [[guitar]]: a piano has exactly one physical key per pitch class per octave; a guitar has several strings that can each reach the same pitch class at different frets, so the same note can be played in more than one place.
