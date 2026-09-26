@@ -46,6 +46,12 @@
   .key text { pointer-events: none; }
   .key.white text { fill: var(--muted); font-size: 11px; }
   .key.black text { fill: var(--paper); font-size: 8.5px; }
+  select {
+    font: inherit; font-size: 13px; color: var(--ink);
+    background: #fff; border: 1px solid var(--axis); border-radius: 6px;
+    padding: 8px 12px; cursor: pointer; min-height: 40px;
+  }
+  select:hover { border-color: var(--ink); }
   .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 10px; }
   button {
     font: inherit; font-size: 13px; color: var(--ink);
@@ -72,6 +78,10 @@
   <button class="left"  id="bU" title="Held notes one at a time, lowest to highest">Play ascending</button>
   <button class="right" id="bD" title="Held notes one at a time, highest to lowest">Play descending</button>
   <button id="bC" title="Release every held key">Clear</button>
+  <select id="tuning" aria-label="Tuning system" title="Equal temperament: 12 identical semitones. Pythagorean: pure 3:2 fifths from C; the wolf fifth falls between G# and Eb (the D# key is really Eb here).">
+    <option value="equal" selected>Equal temperament</option>
+    <option value="pythagorean">Pythagorean</option>
+  </select>
 </div>
 
 </div>
@@ -86,23 +96,38 @@
   var LOW = 48, HIGH = 72;                       // C3 .. C5 inclusive (MIDI numbers)
   var STAGGER = 0.2;                             // seconds between arpeggio onsets
   var NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-  function midiToHz(m) { return A4_HZ * Math.pow(2, (m - 69) / 12); }
+  // Tuning systems. Both keep A4 = 440 Hz, so switching only moves the other pitch classes.
+  //  - equal: every semitone is exactly 100 cents.
+  //  - pythagorean: pure 3:2 fifths stacked from C. Cents above C for each pitch class
+  //    (the conventional chain E-flat, B-flat, F, C, G, D, A, E, B, F-sharp, C-sharp, G-sharp, so the
+  //    "D#" and "A#" keys carry E-flat 32/27 and B-flat 16/9). Twelve pure fifths do not close into
+  //    seven octaves, so one fifth has to absorb the comma (the "wolf"): here it is G# -> D#, about
+  //    678.5 cents instead of 701.96. That is one legitimate spelling, not THE Pythagorean tuning.
+  var PYTH_CENTS = [0, 113.69, 203.91, 294.13, 407.82, 498.04, 611.73, 701.96, 815.64, 905.87, 996.09, 1109.78];
+  var TUNINGS = ["equal", "pythagorean"];
+  function midiToHz(m, system) {
+    if (system === "pythagorean") {
+      var pc = m % 12, oct = Math.floor(m / 12) - 1;                 // C4 = MIDI 60 -> oct 4
+      return A4_HZ * Math.pow(2, (PYTH_CENTS[pc] - PYTH_CENTS[9]) / 1200 + (oct - 4));
+    }
+    return A4_HZ * Math.pow(2, (m - 69) / 12);
+  }
   function midiToName(m) { return NAMES[m % 12] + (Math.floor(m / 12) - 1); }   // scientific pitch notation
   function isBlack(m) { return NAMES[m % 12].length === 2; }
   function sortedHeld(held) { return Array.from(held).sort(function (a, b) { return a - b; }); }
   // What to sound for a held set: [{midi, hz, when}] with `when` in seconds from
   // the button press. An empty set gives an empty plan, i.e. nothing happens.
-  function planPlay(held, mode) {
+  function planPlay(held, mode, system) {
     var ms = sortedHeld(held);
     if (mode === "down") ms.reverse();
     return ms.map(function (m, i) {
-      return { midi: m, hz: midiToHz(m), when: mode === "together" ? 0 : i * STAGGER };
+      return { midi: m, hz: midiToHz(m, system), when: mode === "together" ? 0 : i * STAGGER };
     });
   }
   // --- end pure math -----------------------------------------------------
 
   if (typeof document === "undefined") {           // node test harness
-    module.exports = { A4_HZ: A4_HZ, LOW: LOW, HIGH: HIGH, STAGGER: STAGGER, midiToHz: midiToHz, midiToName: midiToName, isBlack: isBlack, planPlay: planPlay };
+    module.exports = { A4_HZ: A4_HZ, LOW: LOW, HIGH: HIGH, STAGGER: STAGGER, midiToHz: midiToHz, PYTH_CENTS: PYTH_CENTS, TUNINGS: TUNINGS, midiToName: midiToName, isBlack: isBlack, planPlay: planPlay };
     return;
   }
 
@@ -112,6 +137,7 @@
   var svg = $("svg"), keyEls = {};
   // C3 + C4 start held, so "Play together" gives an octave on load.
   var held = new Set([48, 60]);
+  var tuning = "equal";                          // default: equal temperament, as before
 
   function el(tag, attrs, parent) {
     var n = document.createElementNS(NS, tag);
@@ -185,7 +211,7 @@
     o.start(t0); o.stop(t0 + 4.6);
   }
   function play(mode) {
-    var plan = planPlay(held, mode);
+    var plan = planPlay(held, mode, tuning);   // read at play time, so held keys re-sound in the current tuning
     if (!plan.length) return;                                // nothing held: do nothing
     // Chords stack partials, so scale each voice down to keep the sum from clipping.
     var peak = 0.28 / Math.sqrt(mode === "together" ? plan.length : 1);
@@ -195,6 +221,7 @@
   $("bU").addEventListener("click", function () { play("up"); });
   $("bD").addEventListener("click", function () { play("down"); });
   $("bC").addEventListener("click", function () { held.clear(); render(); });
+  $("tuning").addEventListener("change", function (e) { tuning = e.target.value; });
 
   render();
 })();
