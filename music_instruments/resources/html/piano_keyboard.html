@@ -57,8 +57,6 @@
   button.left  { border-color: var(--left);  color: var(--left); }
   button.right { border-color: var(--right); color: var(--right-text); }
   button.both  { border-color: var(--derived); color: var(--derived); font-weight: 600; }
-  .held-line { border-top: 2px solid var(--grid); padding-top: 6px; font-size: 13px; color: var(--muted); min-height: 30px; }
-  .held-line b { color: var(--ink); font-variant-numeric: tabular-nums; }
 </style>
 </head>
 <body>
@@ -72,8 +70,6 @@
   <button class="right" id="bD" title="Held notes one at a time, highest to lowest">Play descending</button>
   <button id="bC" title="Release every held key">Clear</button>
 </div>
-
-<div class="held-line" id="held" aria-live="polite"></div>
 
 </div>
 <script>
@@ -110,7 +106,9 @@
   var NS = "http://www.w3.org/2000/svg";
   var WW = 40, WH = 150, BW = 24, BH = 92, PAD = 2;
   var $ = function (id) { return document.getElementById(id); };
-  var svg = $("svg"), held = new Set(), keyEls = {};
+  var svg = $("svg"), keyEls = {};
+  // C3 + C4 start held, so "Play together" gives an octave on load.
+  var held = new Set([48, 60]);
 
   function el(tag, attrs, parent) {
     var n = document.createElementNS(NS, tag);
@@ -155,10 +153,6 @@
       keyEls[k].classList.toggle("held", on);
       keyEls[k].setAttribute("aria-pressed", on ? "true" : "false");
     }
-    var ms = sortedHeld(held);
-    $("held").innerHTML = ms.length
-      ? "Held (" + ms.length + "): <b>" + ms.map(function (x) { return midiToName(x) + " · " + midiToHz(x).toFixed(1) + " Hz"; }).join("</b>, <b>") + "</b>"
-      : "No keys held. Click keys to hold them, then press a play button.";
   }
 
   // --- Web Audio: OscillatorNode notes ----------------------------------
