@@ -178,7 +178,7 @@ Now take one more step. The thirteenth string, folded back into the octave, has 
 
 The thirteenth string does not land exactly on the first, and it never can: twelve pure fifths overshoot seven octaves by a small gap, about a quarter of a semitone. That leftover is the [[pythagorean_comma]]. Every tuning system since is a different way of living with it — see the [[Tuning]] chapter.
 
-A guitar shows the most common solution, mechanically. Each fret is a fixed division point, and pressing a string down at a fret shortens the vibrating length, exactly what a monochord's movable bridge does. But modern frets are not cut at these Pythagorean ratios: they are cut for equal temperament (see [[equal_temperament]]), so a guitar's twelve frets per octave are twelve *identical* steps, with the gap spread evenly and hidden. See [[guitar]] for the layout and [[the_fret_problem]] for the ratio every fret imposes.
+A guitar shows the most common solution, mechanically. Each fret is a fixed division point, and pressing a string down at a fret shortens the vibrating length, exactly what a monochord's movable bridge does. But modern frets are not cut at these Pythagorean ratios: they are cut for equal temperament (see [[equal_temperament]]), so a guitar's twelve frets per octave are twelve *identical* steps, with the gap spread evenly and hidden. See [[guitar]] for the layout and [[the_problem_with_frets]] for the ratio every fret imposes.
 
 ## History
 
