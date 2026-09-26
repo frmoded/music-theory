@@ -1,17 +1,20 @@
-**Pitch** is the perceived highness or lowness of a note. It's a *perceptual* quantity — your brain's read-out of a sound's [[frequency]]. Everything else in this section refines it: [[frequency]] is its physical cause, [[timbre]] and [[loudness]] are the other qualities your ear reads off the same sound, and [[duration]] places the note in time.
+**Pitch** is how high or low a note *feels* — and the word "feels" is doing real work. Frequency is what the air is actually doing; pitch is what your brain decides to make of it. Same sound, two stories, and only one of them happens inside your head. [[frequency]] is the physical cause, [[timbre]] and [[loudness]] are the other things your ear reads off the same sound, and [[duration]] pins the note down in time.
 
-Look at three C's spread across a keyboard — C3, C4, C5, each one an octave above the last:
+Here's the weird part. Take three C's, C3, C4 and C5, each an octave above the last. The widget starts with C3 and C4 held; click C5 to add it, then press **Play together**, or pick any keys you like.
 
-![[notes/resources/images/pitch_keyboard.svg]]
+```html-embed
+music_instruments/resources/html/piano_keyboard.html
+280
+```
 
-Now listen to the same kind of jump, one octave, A3 up to A4:
+Now the same trick with a single jump, one octave, A3 up to A4:
 
 ![[notes/resources/audio/pitch_octave_a3_a4.mp3]]
 
-Notice both examples do the same thing: they get physically farther apart in *frequency* (each octave doubles it — A3 is 220 Hz, A4 is 440 Hz) while staying the exact same perceptual step apart in *pitch*. That's the core fact of this note: pitch is a perception, not a raw measurement, and it doesn't track frequency in a straight line — doubling the frequency doesn't sound "twice as high," it sounds like the *same note one octave higher*. See [[frequency]] for that (logarithmic) mapping.
+Every octave you climb doubles the frequency: A3 is 220 Hz, A4 is 440 Hz. So you'd expect A4 to sound "twice as high." It doesn't. It sounds like the *same note*, just up a floor. Physics counts in multiplication; your ear counts in steps. That's the whole trick of pitch: it isn't a raw measurement, it's a logarithm your head runs for free. See [[frequency]] for the mapping.
 
-Curious what a single pitch actually looks like as a physical wave, rather than just a label? Here's A4 (440 Hz) as a wave packet — the dashed envelope is the note starting and stopping, not going on forever:
+Want to see what one pitch looks like as an actual wave, not just a label? Here's A4, 440 Hz, as a wave packet. The dashed envelope is the note starting and stopping. Real notes don't go on forever, whatever the textbooks draw.
 
 ![[notes/resources/images/pitch_wave_packet.svg]]
 
-**Try it:** [[exercises/octave_up]] — enter the note one octave above C4 and get feedback that ties the name, the octave number, and the frequency together.
+**Try it:** [[exercises/octave_up]] — name the note one octave above C4 and get told how its name, its octave number and its frequency fit together.
