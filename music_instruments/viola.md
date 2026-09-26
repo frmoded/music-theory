@@ -6,7 +6,7 @@ Unlike the guitar, the viola has no frets. Nothing on the neck marks where a [[s
 
 ## Frets and microtones
 
-A fret fixes the ratio for every string at once (see [[the_fret_problem]]); the viola leaves that choice to the player's ear. The drawing shows the equal-tempered spots, but a fingertip can land anywhere between them. That freedom is what makes **microtones** possible: notes smaller than a semitone, such as the quarter tones of some contemporary and non-Western music, or the tiny adjustments, a few cents each (a cent is 1/100 of a semitone), that string players make all the time, like playing a fifth pure rather than tempered.
+A fret fixes the ratio for every string at once (see [[the_problem_with_frets]]); the viola leaves that choice to the player's ear. The drawing shows the equal-tempered spots, but a fingertip can land anywhere between them. That freedom is what makes **microtones** possible: notes smaller than a semitone, such as the quarter tones of some contemporary and non-Western music, or the tiny adjustments, a few cents each (a cent is 1/100 of a semitone), that string players make all the time, like playing a fifth pure rather than tempered.
 
 The price is that nothing tells the hand where to go. Notice how the dots crowd together toward the bridge: the fingers must keep shrinking their spacing as the hand moves up, and beginners often stick tape marks on the fingerboard as stand-in frets. Players also tune the strings by ear, listening for the [[beats]] between two neighbouring strings and adjusting until they slow and disappear.
 
