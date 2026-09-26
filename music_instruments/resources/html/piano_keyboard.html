@@ -55,8 +55,11 @@
   button:hover { border-color: var(--ink); }
   button:active { background: var(--grid); }
   button.left  { border-color: var(--left);  color: var(--left); }
-  button.right { border-color: var(--right); color: var(--right-text); }
-  button.both  { border-color: var(--derived); color: var(--derived); font-weight: 600; }
+  /* Role shows in COLOR only: same border weight, radius and text weight on every button.
+     The Secondary-Signal tan (--right) is a line/fill color and is only 2.9:1 against white as a
+     1px border, so it read as a thinner, washed-out border; use its text-safe darker shade. */
+  button.right { border-color: var(--right-text); color: var(--right-text); }
+  button.both  { border-color: var(--derived); color: var(--derived); }
 </style>
 </head>
 <body>
