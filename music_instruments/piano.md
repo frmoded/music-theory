@@ -1,13 +1,9 @@
 A piano keyboard repeats the same 12-key pattern — 7 white keys, 5 black keys — once per [[octave]]. The white keys are the seven [[note_name|naturals]] (C D E F G A B); the black keys fill the five gaps with [[accidental|sharps and flats]] (C♯/D♭, D♯/E♭, F♯/G♭, G♯/A♭, A♯/B♭). Two of the naturals — E→F and B→C — sit right next to each other with no black key between them; that's the same "missing semitone" the [[accidental]] note describes, just visible directly on the keys instead of on the staff.
 
-One octave, C to B, every key labeled:
-
-![[notes/resources/images/piano_note_names.svg]]
-
-Try it: click keys to hold them, then play them together, up, or down.
+Every key, C3 to C5, is labeled below. C3 and C4 start out held, so press **Play together** to hear the octave; click other keys to hold or release them, then play them together, up, or down.
 
 ```html-embed
-music_instruments/resources/html/piano_keyboard.html
+music_instruments/resources/html/piano_keyboard_c3_c4.html
 360
 ```
 
