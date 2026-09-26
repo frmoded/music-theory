@@ -4,7 +4,7 @@ The Pythagoreans asked a simple question — what happens if you keep doing the 
 
 *What happens if you do it again?*
 
-Stop a string at two thirds of its length and it sounds a fifth above the open string: a settled, consonant interval (its frequency ratio is 3:2). That is one good interval. So ask the natural question: what if you take the new, shorter string and shorten it by two thirds again? And again? On the [[monochord]] you can hear the first step: drag the bridge to 0.667 of the string, pluck the open string, then pluck the left segment. The open string sounds 110 Hz and the left segment 165 Hz, a ratio of 3:2.
+Stop a string at two thirds of its length and it sounds a fifth above the open string: a settled, consonant interval (its frequency ratio is 3:2). That is a heck of a [[nice]] interval. So ask the natural question: what if you take the new, shorter string and shorten it by two thirds again? And again? On the [[monochord]] you can hear the first step: drag the bridge to 0.667 of the string, pluck the open string, then pluck the left segment. The open string sounds 110 Hz and the left segment 165 Hz, a ratio of 3:2.
 
 ```html-embed
 music_instruments/resources/html/monochord.html
