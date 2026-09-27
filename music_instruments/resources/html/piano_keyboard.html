@@ -78,9 +78,11 @@
   <button class="left"  id="bU" title="Held notes one at a time, lowest to highest">Play ascending</button>
   <button class="right" id="bD" title="Held notes one at a time, highest to lowest">Play descending</button>
   <button id="bC" title="Release every held key">Clear</button>
-  <select id="tuning" aria-label="Tuning system" title="Equal temperament: 12 identical semitones. Pythagorean: pure 3:2 fifths from C; the wolf fifth falls between G# and Eb (the D# key is really Eb here).">
+  <select id="tuning" aria-label="Tuning system" title="Equal temperament: 12 identical semitones. Pythagorean: pure 3:2 fifths from C; the wolf fifth falls between G# and Eb (the D# key is really Eb here). Meantone: fifths narrowed for pure major thirds. Well temperament (Werckmeister III): four fifths narrowed, the rest pure, so every key is usable but each sounds a little different.">
     <option value="equal" selected>Equal temperament</option>
     <option value="pythagorean">Pythagorean</option>
+    <option value="meantone">Meantone (1/4-comma)</option>
+    <option value="well">Well temperament (Werckmeister III)</option>
   </select>
 </div>
 
@@ -104,13 +106,36 @@
   //    seven octaves, so one fifth has to absorb the comma (the "wolf"): here it is G# -> D#, about
   //    678.5 cents instead of 701.96. That is one legitimate spelling, not THE Pythagorean tuning.
   var PYTH_CENTS = [0, 113.69, 203.91, 294.13, 407.82, 498.04, 611.73, 701.96, 815.64, 905.87, 996.09, 1109.78];
-  var TUNINGS = ["equal", "pythagorean"];
-  function midiToHz(m, system) {
-    if (system === "pythagorean") {
-      var pc = m % 12, oct = Math.floor(m / 12) - 1;                 // C4 = MIDI 60 -> oct 4
-      return A4_HZ * Math.pow(2, (PYTH_CENTS[pc] - PYTH_CENTS[9]) / 1200 + (oct - 4));
+  //  - meantone (quarter-comma): same Eb-Bb-F-C-G-D-A-E-B-F#-C#-G# chain as Pythagorean, but each
+  //    fifth is narrowed by 1/4 of the SYNTONIC comma (~21.5 cents, not the ~23.5-cent Pythagorean
+  //    comma used above) so four stacked fifths land on a pure major third. Computed, not hand-copied,
+  //    from the chain-of-fifths construction, so it cannot drift from the fifth size it is built on.
+  var PURE_FIFTH = 1200 * Math.log2(3 / 2);                 // 701.9550... cents
+  var SYNTONIC_COMMA = 1200 * Math.log2(81 / 80);            // 21.5063... cents
+  var MEANTONE_FIFTH = PURE_FIFTH - SYNTONIC_COMMA / 4;       // ~696.578 cents
+  function fifthChainCents(fifthCents) {
+    // Position i (0..11) is `i - 3` fifths from C, in the chain Eb Bb F C G D A E B F# C# G#;
+    // PC_ORDER maps that chain position to the pitch-class index (0=C .. 11=B) it lands on.
+    var PC_ORDER = [3, 10, 5, 0, 7, 2, 9, 4, 11, 6, 1, 8];
+    var cents = new Array(12);
+    for (var i = 0; i < 12; i++) {
+      var raw = (i - 3) * fifthCents;
+      cents[PC_ORDER[i]] = ((raw % 1200) + 1200) % 1200;
     }
-    return A4_HZ * Math.pow(2, (m - 69) / 12);
+    return cents;
+  }
+  var MEAN_CENTS = fifthChainCents(MEANTONE_FIFTH);
+  //  - well temperament (Werckmeister III, 1691): cents above C, given directly (not a uniform
+  //    chain) — fifths C-G, G-D, D-A and B-F# are each narrowed by 1/4 Pythagorean comma, the other
+  //    eight fifths are left pure, so every key is usable but no two keys sound quite alike.
+  var WERCK_CENTS = [0, 90.225, 192.180, 294.135, 390.225, 498.045, 588.270, 696.090, 792.180, 888.270, 996.090, 1092.180];
+  var TUNING_TABLES = { pythagorean: PYTH_CENTS, meantone: MEAN_CENTS, well: WERCK_CENTS };
+  var TUNINGS = ["equal", "pythagorean", "meantone", "well"];
+  function midiToHz(m, system) {
+    var table = TUNING_TABLES[system];
+    if (!table) return A4_HZ * Math.pow(2, (m - 69) / 12);          // "equal", or no system given
+    var pc = m % 12, oct = Math.floor(m / 12) - 1;                   // C4 = MIDI 60 -> oct 4
+    return A4_HZ * Math.pow(2, (table[pc] - table[9]) / 1200 + (oct - 4));   // anchored at A4 = 440
   }
   function midiToName(m) { return NAMES[m % 12] + (Math.floor(m / 12) - 1); }   // scientific pitch notation
   function isBlack(m) { return NAMES[m % 12].length === 2; }
@@ -127,7 +152,7 @@
   // --- end pure math -----------------------------------------------------
 
   if (typeof document === "undefined") {           // node test harness
-    module.exports = { A4_HZ: A4_HZ, LOW: LOW, HIGH: HIGH, STAGGER: STAGGER, midiToHz: midiToHz, PYTH_CENTS: PYTH_CENTS, TUNINGS: TUNINGS, midiToName: midiToName, isBlack: isBlack, planPlay: planPlay };
+    module.exports = { A4_HZ: A4_HZ, LOW: LOW, HIGH: HIGH, STAGGER: STAGGER, midiToHz: midiToHz, PYTH_CENTS: PYTH_CENTS, MEAN_CENTS: MEAN_CENTS, WERCK_CENTS: WERCK_CENTS, fifthChainCents: fifthChainCents, PURE_FIFTH: PURE_FIFTH, MEANTONE_FIFTH: MEANTONE_FIFTH, TUNINGS: TUNINGS, midiToName: midiToName, isBlack: isBlack, planPlay: planPlay };
     return;
   }
 
