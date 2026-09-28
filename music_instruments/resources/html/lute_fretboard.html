@@ -18,7 +18,7 @@
     --right-text: #7A644E; /* --right darkened for legible TEXT on the paper background */
     --derived: #64748B; /* Combined / Derived Series */
     --highlight: #F8C54B; /* Highlight: a held position */
-    --accent: #D72027;  /* Primary Accent: keyboard focus, and the true-equal-tempered marker */
+    --accent: #D72027;  /* Primary Accent: keyboard focus */
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; background: var(--paper); }
@@ -50,7 +50,10 @@
   .pt:focus .disc { opacity: 1; stroke: var(--accent); stroke-width: 3; }
   .pt:focus text { opacity: 1; }
   .pt:focus .dot { opacity: 0; }
-  .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 10px; }
+  /* Frets 1-12 (wire + that fret's six clickable points) slide to their new tuning-system
+     position instead of snapping — a lutenist would slide a movable gut fret the same way. */
+  .fret-slot { transition: transform 400ms ease-out; }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 10px; align-items: center; }
   button {
     font: inherit; font-size: 13px; color: var(--ink);
     background: #fff; border: 1px solid var(--axis); border-radius: 6px;
@@ -64,18 +67,30 @@
      1px border, so it read as a thinner, washed-out border; use its text-safe darker shade. */
   button.right { border-color: var(--right-text); color: var(--right-text); }
   button.both  { border-color: var(--derived); color: var(--derived); }
+  select {
+    font: inherit; font-size: 13px; color: var(--ink);
+    background: #fff; border: 1px solid var(--axis); border-radius: 6px;
+    padding: 8px 12px; cursor: pointer; min-height: 40px;
+  }
+  select:hover { border-color: var(--ink); }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-<div class="scroller"><svg id="svg" role="group" aria-label="Lute fretboard, six courses, Rule of Eighteen frets 0 to 12. Click a position to hold it, then play the held notes. Arrow keys move between positions. A dashed line at fret 12 shows where a true equal-tempered octave would sit."></svg></div>
+<div class="scroller"><svg id="svg" role="group" aria-label="Lute fretboard, six courses. Click a position to hold it, then play the held notes. Arrow keys move between positions. Switching the tuning system slides the frets to their new position."></svg></div>
 
 <div class="controls">
   <button class="both"  id="bT" title="All held notes at once, as a chord">Play together</button>
   <button class="left"  id="bU" title="Held notes one at a time, lowest to highest">Play ascending</button>
   <button class="right" id="bD" title="Held notes one at a time, highest to lowest">Play descending</button>
   <button id="bC" title="Release every held position">Clear</button>
+  <select id="tuning" aria-label="Tuning system" title="Rule of Eighteen: the real gut-fret construction Galilei used — fret 12 lands about 12.5 cents flat of a true octave. Equal temperament, Pythagorean and Werckmeister III well temperament are drawn as if a single reference fret (nominally starting at C) could satisfy every course at once, which a real lute's shared frets cannot fully do for a non-equal system across six different open pitches — a simplification, not a historical claim.">
+    <option value="roe" selected>Rule of Eighteen</option>
+    <option value="equal">Equal temperament</option>
+    <option value="pythagorean">Pythagorean</option>
+    <option value="well">Well temperament (Werckmeister III)</option>
+  </select>
 </div>
 
 </div>
@@ -96,25 +111,45 @@
   var NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
   function midiToHz(m) { return A4_HZ * Math.pow(2, (m - 69) / 12); }
   function midiToName(m) { return NAMES[m % 12] + (Math.floor(m / 12) - 1); }   // scientific pitch notation
-  // Galilei's Rule of Eighteen: each fret sits at 1/18 of the REMAINING string length below the
-  // previous fret, so after n frets the fraction of the ORIGINAL open length left to vibrate is
-  // (17/18)^n — iterative, not a single formula reset every 12 frets like 12-TET's 2^(-n/12).
-  var ROE = 17 / 18;
-  function fretFraction(n) { return Math.pow(ROE, n); }               // fraction of open length remaining
-  // Fret n on a course sounds this many cents above the open course: pitch is inversely
-  // proportional to length, so cents = -1200*log2(fraction remaining). NOT n*100 — that's the
-  // whole point of the rule; see fret12DriftCents below for exactly how far off it drifts.
-  function fretCents(n) { return -1200 * Math.log2(fretFraction(n)); }
+
+  // A fret is a single physical bar shared by every course, so it shifts EVERY course's pitch by
+  // the SAME number of cents (shortening all six strings by the same fraction of their own
+  // length). That number-of-cents-per-fret is what differs between tuning systems:
+  //  - "roe" (Galilei's Rule of Eighteen, the real gut-fret construction): each fret sits at 1/18
+  //    of the REMAINING string length below the previous fret, so cumulative cents at fret n is
+  //    n * (cents in one 17/18 step) — iterative, not a formula that resets every 12 frets.
+  //  - "equal": a plain n*100 cents, the same for every course by construction (this is WHY equal
+  //    temperament is the only system a single shared fret can satisfy for every course exactly).
+  //  - "pythagorean" / "well": reuse the exact cents-above-C tables already shipped and driver-
+  //    approved in piano_keyboard.html. A single fret cannot give six different open pitches their
+  //    own correct just interval at once (that's a real, unavoidable limitation of fretted
+  //    instruments in a non-equal system, not a bug), so the fret's cents are taken by nominally
+  //    anchoring fret 0 to C in that table — an arbitrary but reproducible reference, since no
+  //    course here is actually tuned to C. See FEEDBACK for the honest version of this caveat.
+  var ROE_STEP_CENTS = 1200 * Math.log2(18 / 17);            // ~105.7 cents per Rule-of-Eighteen fret
+  var PYTH_CENTS = [0, 113.69, 203.91, 294.13, 407.82, 498.04, 611.73, 701.96, 815.64, 905.87, 996.09, 1109.78];
+  var WERCK_CENTS = [0, 90.225, 192.180, 294.135, 390.225, 498.045, 588.270, 696.090, 792.180, 888.270, 996.090, 1092.180];
+  var SYSTEMS = ["roe", "equal", "pythagorean", "well"];
+  function fretCents(n, system) {
+    if (system === "pythagorean") return PYTH_CENTS[n % 12] + 1200 * Math.floor(n / 12);
+    if (system === "well") return WERCK_CENTS[n % 12] + 1200 * Math.floor(n / 12);
+    if (system === "equal") return n * 100;
+    return n * ROE_STEP_CENTS;                                          // "roe", and the default
+  }
+  function fretFraction(n, system) { return Math.pow(2, -fretCents(n, system) / 1200); }   // remaining length
   // How flat the Rule-of-Eighteen's fret 12 is from a true equal-tempered octave (1200 cents).
-  // Computed, not assumed: this file's own §Testing note originally guessed ~13.6 cents; the
-  // actual construction gives about 12.5 cents. See FEEDBACK for the discrepancy.
-  function fret12DriftCents() { return fretCents(12) - 1200; }
+  // Computed, not assumed: the driver's own prompt guessed ~13.6 cents; the actual construction
+  // gives about 12.5 cents (and Pythagorean/well temperament both land on an EXACT 1200-cent
+  // octave at fret 12, since their tables are built to close after 12 steps — only the Rule of
+  // Eighteen's real gut-fret geometry actually drifts). See FEEDBACK for the discrepancy.
+  function fret12DriftCents() { return fretCents(12, "roe") - 1200; }
   // The label on each fret is the nearest EQUAL-TEMPERED semitone name (open course + n
-  // semitones) — the same naming a guitar fret would get. The SOUND is the real Rule-of-Eighteen
-  // frequency below, which is up to ~12.5 cents flat of that name by fret 12. That gap between
-  // "what the fret is called" and "what it actually sounds" is the whole point of this gadget.
+  // semitones) — the same naming a guitar fret would get — regardless of which system is
+  // sounding. The SOUND (hzAt) is the real pitch under whichever system is selected, which for
+  // "roe"/"pythagorean"/"well" is up to ~12.5 cents away from that label. That gap between "what
+  // the fret is called" and "what it actually sounds" is the whole point of this gadget.
   function midiAt(s, f) { return TUNING[s] + f; }
-  function hzAt(s, f) { return midiToHz(TUNING[s]) * Math.pow(1 / ROE, f); }   // true Rule-of-Eighteen pitch
+  function hzAt(s, f, system) { return midiToHz(TUNING[s]) * Math.pow(2, fretCents(f, system) / 1200); }
   function posKey(s, f) { return s + ":" + f; }
   function parseKey(k) { var p = k.split(":"); return { s: +p[0], f: +p[1] }; }
   // A held position set (keys "string:fret") in ascending pitch order; equal
@@ -126,35 +161,36 @@
   }
   // What to sound for a held set: [{s, f, midi, hz, when}] with `when` in seconds
   // from the button press. An empty set gives an empty plan, i.e. nothing happens.
-  function planPlay(held, mode) {
+  function planPlay(held, mode, system) {
     var ps = sortedHeld(held);
     if (mode === "down") ps.reverse();
     return ps.map(function (p, i) {
-      return { s: p.s, f: p.f, midi: midiAt(p.s, p.f), hz: hzAt(p.s, p.f), when: mode === "together" ? 0 : i * STAGGER };
+      return { s: p.s, f: p.f, midi: midiAt(p.s, p.f), hz: hzAt(p.s, p.f, system), when: mode === "together" ? 0 : i * STAGGER };
     });
   }
   // --- end pure math -----------------------------------------------------
 
   if (typeof document === "undefined") {           // node test harness
-    module.exports = { A4_HZ: A4_HZ, TUNING: TUNING, FRETS: FRETS, STAGGER: STAGGER, ROE: ROE, midiToHz: midiToHz, midiToName: midiToName, fretFraction: fretFraction, fretCents: fretCents, fret12DriftCents: fret12DriftCents, midiAt: midiAt, hzAt: hzAt, posKey: posKey, planPlay: planPlay };
+    module.exports = { A4_HZ: A4_HZ, TUNING: TUNING, FRETS: FRETS, STAGGER: STAGGER, SYSTEMS: SYSTEMS, ROE_STEP_CENTS: ROE_STEP_CENTS, PYTH_CENTS: PYTH_CENTS, WERCK_CENTS: WERCK_CENTS, midiToHz: midiToHz, midiToName: midiToName, fretFraction: fretFraction, fretCents: fretCents, fret12DriftCents: fret12DriftCents, midiAt: midiAt, hzAt: hzAt, posKey: posKey, planPlay: planPlay };
     return;
   }
 
   var NS = "http://www.w3.org/2000/svg";
   var $ = function (id) { return document.getElementById(id); };
-  var svg = $("svg"), held = new Set(), pts = {};
+  var svg = $("svg"), held = new Set(), pts = {}, fretSlots = {};
   var NS_ = TUNING.length;
+  var system = "roe";                            // default: the real gut-fret construction
 
-  // Geometry (viewBox units). Frets are spaced by the REAL Rule-of-Eighteen fraction, not by
-  // 2^(-n/12): fret n sits at NUT + BOARD * (1 - fretFraction(n)), so the drawing itself shows
-  // the drift, not just a number in a tooltip.
+  // Geometry (viewBox units). BASE_SYSTEM fixes the coordinates every element is actually DRAWN
+  // at; switching `system` moves each fret 1..12 (wire + its six clickable points) by a CSS
+  // `transform: translateX`, so the transition animates smoothly regardless of which system is
+  // active — the DOM never rebuilds, only the fret-slot groups' transform changes.
+  var BASE_SYSTEM = "roe";
   var NUT = 72, BOARD = 560, TOP = 40, GAP = 28, W = 650, H = 246;
-  function fretX(n) { return NUT + BOARD * (1 - fretFraction(n)); }
-  // Where a TRUE equal-tempered fret 12 (an exact octave, half the open length) would sit —
-  // drawn as a second, dashed marker so the gap from the real fret 12 is visible, not just stated.
-  var TRUE12_X = NUT + BOARD * 0.5;
-  // The clickable position for fret n: the middle of its cell, or (open string) just left of the nut.
-  function posX(f) { return f === 0 ? NUT - 22 : (fretX(f - 1) + fretX(f)) / 2; }
+  function fretX(n, sys) { return NUT + BOARD * (1 - fretFraction(n, sys)); }
+  // The clickable position for fret n: the middle of its cell (at the BASE geometry), or (open
+  // string) just left of the nut.
+  function posX(f) { return f === 0 ? NUT - 22 : (fretX(f - 1, BASE_SYSTEM) + fretX(f, BASE_SYSTEM)) / 2; }
   function stringY(s) { return TOP + (NS_ - 1 - s) * GAP; }     // high course on top, like tablature
   svg.setAttribute("viewBox", "0 0 " + W + " " + H);
 
@@ -165,7 +201,9 @@
     return n;
   }
 
-  // Static drawing first (under the clickable positions).
+  // Static drawing first (under the clickable positions). Fret-number labels and neck inlays are
+  // physical decorations on the neck — real ones don't move when you retie a gut fret — so they
+  // stay fixed at the BASE_SYSTEM geometry regardless of which system is selected.
   var MARKS = [0, 3, 5, 7, 9, 12];
   MARKS.forEach(function (f) {           // fret numbers, top, in the Axis color
     var t = el("text", { x: posX(f), y: 16, "text-anchor": "middle", "font-size": 11, fill: "#666666" }, svg);
@@ -177,27 +215,12 @@
   [1.5, 3.5].forEach(function (i) {      // double inlay at the octave
     el("circle", { cx: posX(12), cy: TOP + i * GAP, r: 5, fill: "#F2F2EC" }, svg);
   });
-  for (var f = 1; f <= FRETS; f++)       // Rule-of-Eighteen fret wires (gut, tied on — drawn a touch
-    el("line", { x1: fretX(f), y1: TOP - 10, x2: fretX(f), y2: stringY(0) + 10, stroke: "#A69B91", "stroke-width": 1 }, svg);
-  // The true equal-tempered fret-12 marker: dashed, in the accent color, distinct from every
-  // real (gut) fret. It sits closer to the bridge than the real fret 12, because a true octave
-  // is a SHORTER remaining length than the Rule of Eighteen gets you to (i.e. the real fret is flat).
-  el("line", { id: "true12", x1: TRUE12_X, y1: TOP - 14, x2: TRUE12_X, y2: stringY(0) + 14, stroke: "#D72027", "stroke-width": 1.5, "stroke-dasharray": "4 3" }, svg);
   el("line", { id: "nut", x1: NUT, y1: TOP - 10, x2: NUT, y2: stringY(0) + 10, stroke: "#2B2B2B", "stroke-width": 4 }, svg);   // the nut
   for (var s = 0; s < NS_; s++) {        // courses: lower ones are thicker
     el("line", { x1: NUT, y1: stringY(s), x2: NUT + BOARD, y2: stringY(s), stroke: "#666666", "stroke-width": 2.2 - s * 0.28 }, svg);
     var lb = el("text", { x: 34, y: stringY(s) + 4, "text-anchor": "end", "font-size": 11, fill: "#555555" }, svg);
     lb.textContent = midiToName(TUNING[s]);
   }
-  // Legend: what the solid gut frets are vs. the dashed true-octave marker.
-  var legY = stringY(0) + 34;
-  el("line", { x1: NUT, y1: legY, x2: NUT + 18, y2: legY, stroke: "#A69B91", "stroke-width": 1 }, svg);
-  var l1 = el("text", { x: NUT + 24, y: legY + 4, "font-size": 11, fill: "#555555" }, svg);
-  l1.textContent = "Rule of Eighteen fret (what a lutenist ties)";
-  var legX2 = NUT + 260;
-  el("line", { x1: legX2, y1: legY, x2: legX2 + 18, y2: legY, stroke: "#D72027", "stroke-width": 1.5, "stroke-dasharray": "4 3" }, svg);
-  var l2 = el("text", { x: legX2 + 24, y: legY + 4, "font-size": 11, fill: "#555555" }, svg);
-  l2.textContent = "true equal-tempered fret 12 (exact octave)";
 
   // Roving tabindex: 78 Tab stops would be unusable, so the fretboard is a single
   // Tab stop and the arrow keys move between positions.
@@ -209,21 +232,32 @@
     g.setAttribute("tabindex", "0");
     if (focus) { try { g.focus({ preventScroll: false }); } catch (_) {} }
   }
-  function makePoint(s, f) {
+  function makePoint(s, f, parent) {
     var m = midiAt(s, f), x = posX(f), y = stringY(s), key = posKey(s, f);
     var g = el("g", { "class": "pt", tabindex: "-1", role: "button", "aria-pressed": "false",
-                      "aria-label": midiToName(m) + ", course " + (s + 1) + ", fret " + f }, svg);
+                      "aria-label": midiToName(m) + ", course " + (s + 1) + ", fret " + f }, parent);
     el("circle", { "class": "disc", cx: x, cy: y, r: 12 }, g);
     el("circle", { "class": "dot", cx: x, cy: y, r: 3.5 }, g);
     // A generous invisible hit target: the whole fret cell, one course row tall.
-    var half = f === 0 ? 14 : (fretX(f) - fretX(f - 1)) / 2 - 1;
+    var half = f === 0 ? 14 : (fretX(f, BASE_SYSTEM) - fretX(f - 1, BASE_SYSTEM)) / 2 - 1;
     el("rect", { x: x - half, y: y - 13, width: half * 2, height: 26, fill: "transparent" }, g);
     var t = el("text", { x: x, y: y + 3, "text-anchor": "middle" }, g);
     t.textContent = midiToName(m);
     pts[key] = g;
     return g;
   }
-  for (s = 0; s < NS_; s++) for (f = 0; f <= FRETS; f++) makePoint(s, f);
+  // Fret 0 (open strings) never moves — every system agrees an open course is unfretted — so its
+  // six points are drawn directly on the board, outside any fret-slot group.
+  for (s = 0; s < NS_; s++) makePoint(s, 0, svg);
+  // Frets 1..12: each is a "slot" — the wire plus that fret's six clickable points — grouped so a
+  // single `transform` on the slot moves the wire and its points together, keeping every dot
+  // glued to its own fret line no matter which system is showing.
+  for (var f = 1; f <= FRETS; f++) {
+    var slot = el("g", { "class": "fret-slot", "data-fret": f }, svg);
+    el("line", { "class": "wire", x1: fretX(f, BASE_SYSTEM), y1: TOP - 10, x2: fretX(f, BASE_SYSTEM), y2: stringY(0) + 10, stroke: "#A69B91", "stroke-width": 1 }, slot);
+    for (s = 0; s < NS_; s++) makePoint(s, f, slot);
+    fretSlots[f] = slot;
+  }
   Object.keys(pts).forEach(function (key) {
     var p = parseKey(key), g = pts[key];
     g.addEventListener("click", function () { setCur(p.s, p.f, false); toggle(key); try { g.focus({ preventScroll: true }); } catch (_) {} });
@@ -242,6 +276,16 @@
     });
   });
   pts[posKey(0, 0)].setAttribute("tabindex", "0");
+
+  // Slide every fret 1..12 to its position under the newly selected system. `held` (which
+  // positions are toggled on) and `pts`/`fretSlots` (the DOM elements themselves) are untouched —
+  // only each slot's transform changes — so a held note stays held straight through the animation.
+  function updateGeometry(sys) {
+    for (var f = 1; f <= FRETS; f++) {
+      var delta = fretX(f, sys) - fretX(f, BASE_SYSTEM);
+      fretSlots[f].style.transform = "translateX(" + delta + "px)";
+    }
+  }
 
   function toggle(key) {
     if (held.has(key)) held.delete(key); else held.add(key);
@@ -282,8 +326,8 @@
     o.start(t0); o.stop(t0 + 4.6);
   }
   function play(mode) {
-    var plan = planPlay(held, mode);
-    if (!plan.length) return;                                // nothing held: do nothing
+    var plan = planPlay(held, mode, system);                  // reads the CURRENT system at play time
+    if (!plan.length) return;                                 // nothing held: do nothing
     // Chords stack partials, so scale each voice down to keep the sum from clipping.
     var peak = 0.28 / Math.sqrt(mode === "together" ? plan.length : 1);
     plan.forEach(function (n) { pluck(n.hz, n.when, peak); });
@@ -292,6 +336,7 @@
   $("bU").addEventListener("click", function () { play("up"); });
   $("bD").addEventListener("click", function () { play("down"); });
   $("bC").addEventListener("click", function () { held.clear(); render(); });
+  $("tuning").addEventListener("change", function (e) { system = e.target.value; updateGeometry(system); });
 
   render();
 })();
