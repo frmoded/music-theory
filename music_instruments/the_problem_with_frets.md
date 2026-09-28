@@ -1,4 +1,4 @@
-A fret is a straight bar across the neck, so it stops **all** the strings at exactly the same distance from the nut. Each fret leaves the sounding length multiplied by 2^(−1/12) ≈ 0.9439 — one equal-tempered semitone, a shade under 17/18 — on every string alike. That single ratio, repeated, is the whole fretboard.
+A fret is a straight bar, so it stops every string at the same distance from the nut. Equal temperament shortens each string by 2^(−1/12) per fret — one semitone, a shade under 17/18 — the same ratio everywhere.
 
 <div style="
   background:#FDFCFA;
@@ -60,11 +60,13 @@ A fret is a straight bar across the neck, so it stops **all** the strings at exa
 
 </div>
 
-Read the table against the [[monochord]]; distances are for a 650 mm scale length. Fret 12 is exactly half the string, an octave. Frets 5 and 7 land almost on the 3/4 and 2/3 points, the pure fourth and fifth. But fret 4 misses the pure major third (4/5) by enough to sound about 14 cents sharp, and that is the problem: the ratio is fixed, so every string, in every key, gets the same compromise, with no way to make one chord purer at the cost of another. Try it: on the monochord, stop the string at 4/5 and then at fret 4's 0.7937, and listen for the difference. See [[thirds_and_fifths]] for the intervals involved.
+Distances are for a 650 mm scale, read against the [[monochord]]. Fret 12 is the octave; frets 5 and 7 land almost on the pure fourth and fifth. Fret 4 misses the pure major third by about 14 cents — the same fixed compromise on every string, in every key. See [[thirds_and_fifths]].
 
 ## Do The Problem
 
-The [[lute]]'s frets were loops of gut, not soldered metal — retie one under a different rule and it can end up somewhere else entirely. Below is a full six-course lute, starting fretted by the Rule of Eighteen. Switch the dropdown to Equal temperament and every fret stays one straight bar, just slid to a new spot. Switch to Pythagorean or Well temperament and watch the SAME fret break into a zigzag instead — one straight bar can't land in the right place for six strings that don't all open on the same pitch class at once. That zigzag, impossible to actually build, is the problem with frets made visible: a fretted instrument gets exactly one physical compromise per fret, and the moment a tuning stops being perfectly symmetric, that one compromise stops being right for more than one string.
+A straight fret only works because Equal temperament and the [[rule_of_eighteen|Rule of Eighteen]] repeat one ratio identically from every string's own open note. [[pythagorean_comma|Pythagorean tuning]] and well temperament don't — each note sits at its own fixed spot instead, so one straight bar can't fret six differently-tuned strings correctly at once.
+
+Move the dropdown below through all four systems and watch the fret stay straight, then break into a zigzag — that zigzag is the problem, made visible.
 
 ```html-embed
 music_instruments/resources/html/lute_fretboard.html
@@ -73,6 +75,6 @@ music_instruments/resources/html/lute_fretboard.html
 
 ## History
 
-On the [[lute]] the frets were loops of gut tied around the neck, so a player could nudge them to suit a piece. Around 1581 Vincenzo Galilei proposed one fixed rule for all of them, 17/18 of the remaining length per fret — see [[rule_of_eighteen]] — which is only about a cent per fret away from the exact ratio that Simon Stevin worked out, c. 1585–1608, as [[equal_temperament]].
+On the [[lute]] the frets were loops of gut, so a player could nudge them to suit a piece. Around 1581 Vincenzo Galilei proposed one fixed rule for all of them, 17/18 of the remaining length per fret — see [[rule_of_eighteen]] — about a cent per fret away from the exact ratio Simon Stevin worked out, c. 1585–1608, as [[equal_temperament]].
 
 The guitar's fixed metal frets locked that compromise into the instrument. A [[piano]] tuner can still choose how to spread the [[pythagorean_comma|comma]], and a [[viola]] player, with no frets at all, chooses every note by ear.
