@@ -80,17 +80,18 @@
 <body>
 <div class="wrap">
 
-<div class="scroller"><svg id="svg" role="group" aria-label="Lute fretboard, six courses. Click a position to hold it, then play the held notes. Arrow keys move between positions. In Pythagorean or well temperament each fret breaks into a zigzag, a different position per course, because one straight fret cannot be exactly right for six differently-tuned strings at once."></svg></div>
+<div class="scroller"><svg id="svg" role="group" aria-label="Lute fretboard, six courses. Click a position to hold it, then play the held notes. Arrow keys move between positions. In Pythagorean, meantone or well temperament each fret breaks into a zigzag, a different position per course, because one straight fret cannot be exactly right for six differently-tuned strings at once."></svg></div>
 
 <div class="controls">
   <button class="both"  id="bT" title="All held notes at once, as a chord">Play together</button>
   <button class="left"  id="bU" title="Held notes one at a time, lowest to highest">Play ascending</button>
   <button class="right" id="bD" title="Held notes one at a time, highest to lowest">Play descending</button>
   <button id="bC" title="Release every held position">Clear</button>
-  <select id="tuning" aria-label="Tuning system" title="Rule of Eighteen and Equal temperament are rotationally symmetric, so one straight fret is correct for every course. Pythagorean and Werckmeister III well temperament are NOT: each course's own open pitch class determines where ITS fret lands, so the frets break into a zigzag — a real limitation of fretted instruments in a non-equal tuning, not a simplification.">
+  <select id="tuning" aria-label="Tuning system" title="Rule of Eighteen and Equal temperament are rotationally symmetric, so one straight fret is correct for every course. Pythagorean, quarter-comma meantone and Werckmeister III well temperament are NOT: each course's own open pitch class determines where ITS fret lands, so the frets break into a zigzag — a real limitation of fretted instruments in a non-equal tuning, not a simplification.">
     <option value="roe" selected>Rule of Eighteen</option>
     <option value="equal">Equal temperament</option>
     <option value="pythagorean">Pythagorean</option>
+    <option value="meantone">Meantone (1/4-comma)</option>
     <option value="well">Well temperament (Werckmeister III)</option>
   </select>
 </div>
@@ -120,7 +121,7 @@
   // (every semitone the same size no matter which pitch class you start from). Equal temperament
   // and Rule of Eighteen ARE rotationally symmetric (their per-fret cents only depend on the fret
   // number). Pythagorean and well temperament are NOT: their semitone sizes vary by scale degree,
-  // and Pythagorean in particular has a single "wolf" fifth sitting at one fixed ABSOLUTE
+  // and Pythagorean and meantone in particular each have a single "wolf" fifth sitting at one fixed ABSOLUTE
   // pitch-class location (G#->Eb here), not at a fixed fret-distance from wherever a string
   // happens to be open. So for these two, fretCents needs the STRING'S OWN open pitch class
   // (`openPC`) — treating every string as if it were open on C (the earlier version of this file
@@ -129,13 +130,32 @@
   var ROE_STEP_CENTS = 1200 * Math.log2(18 / 17);            // ~105.7 cents per Rule-of-Eighteen fret
   var PYTH_CENTS = [0, 113.69, 203.91, 294.13, 407.82, 498.04, 611.73, 701.96, 815.64, 905.87, 996.09, 1109.78];
   var WERCK_CENTS = [0, 90.225, 192.180, 294.135, 390.225, 498.045, 588.270, 696.090, 792.180, 888.270, 996.090, 1092.180];
-  var SYSTEMS = ["roe", "equal", "pythagorean", "well"];
+  // Quarter-comma meantone: the same Eb-Bb-F-C-G-D-A-E-B-F#-C#-G# chain as Pythagorean, but each
+  // fifth narrowed by 1/4 of the SYNTONIC comma (~696.58 cents), so four fifths land on a pure major
+  // third. Built by the same fifthChainCents helper as piano_keyboard.html's meantone table (same
+  // construction, same numbers), then applied through the per-string fretCents below.
+  var PURE_FIFTH = 1200 * Math.log2(3 / 2);                 // 701.955... cents
+  var SYNTONIC_COMMA = 1200 * Math.log2(81 / 80);            // 21.506... cents
+  var MEANTONE_FIFTH = PURE_FIFTH - SYNTONIC_COMMA / 4;       // ~696.578 cents
+  function fifthChainCents(fifthCents) {
+    // Position i (0..11) is `i - 3` fifths from C in the chain Eb Bb F C G D A E B F# C# G#;
+    // PC_ORDER maps that chain position to the pitch-class index (0=C .. 11=B) it lands on.
+    var PC_ORDER = [3, 10, 5, 0, 7, 2, 9, 4, 11, 6, 1, 8];
+    var cents = new Array(12);
+    for (var i = 0; i < 12; i++) {
+      var raw = (i - 3) * fifthCents;
+      cents[PC_ORDER[i]] = ((raw % 1200) + 1200) % 1200;
+    }
+    return cents;
+  }
+  var MEAN_CENTS = fifthChainCents(MEANTONE_FIFTH);
+  var SYSTEMS = ["roe", "equal", "pythagorean", "meantone", "well"];
   // `openPC` = the fretting course's own open pitch class (0=C .. 11=B). Ignored by "equal" and
   // "roe" (both rotationally symmetric, so the result is the same for every openPC — asserted as
   // an equivalence test, not just assumed) but load-bearing for "pythagorean"/"well".
   function fretCents(n, system, openPC) {
-    if (system === "pythagorean" || system === "well") {
-      var table = system === "pythagorean" ? PYTH_CENTS : WERCK_CENTS;
+    if (system === "pythagorean" || system === "meantone" || system === "well") {
+      var table = system === "pythagorean" ? PYTH_CENTS : system === "meantone" ? MEAN_CENTS : WERCK_CENTS;
       var p = openPC % 12;
       var targetPC = (p + n) % 12;
       var octaves = Math.floor((p + n) / 12);
@@ -176,7 +196,7 @@
   // --- end pure math -----------------------------------------------------
 
   if (typeof document === "undefined") {           // node test harness
-    module.exports = { A4_HZ: A4_HZ, TUNING: TUNING, FRETS: FRETS, STAGGER: STAGGER, SYSTEMS: SYSTEMS, ROE_STEP_CENTS: ROE_STEP_CENTS, PYTH_CENTS: PYTH_CENTS, WERCK_CENTS: WERCK_CENTS, midiToHz: midiToHz, midiToName: midiToName, fretFraction: fretFraction, fretCents: fretCents, fret12DriftCents: fret12DriftCents, midiAt: midiAt, hzAt: hzAt, posKey: posKey, planPlay: planPlay };
+    module.exports = { A4_HZ: A4_HZ, TUNING: TUNING, FRETS: FRETS, STAGGER: STAGGER, SYSTEMS: SYSTEMS, ROE_STEP_CENTS: ROE_STEP_CENTS, PYTH_CENTS: PYTH_CENTS, MEAN_CENTS: MEAN_CENTS, WERCK_CENTS: WERCK_CENTS, fifthChainCents: fifthChainCents, PURE_FIFTH: PURE_FIFTH, MEANTONE_FIFTH: MEANTONE_FIFTH, midiToHz: midiToHz, midiToName: midiToName, fretFraction: fretFraction, fretCents: fretCents, fret12DriftCents: fret12DriftCents, midiAt: midiAt, hzAt: hzAt, posKey: posKey, planPlay: planPlay };
     return;
   }
 
