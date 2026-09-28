@@ -64,11 +64,11 @@ Read the table against the [[monochord]]; distances are for a 650 mm scale lengt
 
 ## Do The Problem
 
-The [[lute]]'s frets were loops of gut, movable — so imagine you could choose the rule your frets are cut by, instead of inheriting whichever one won. The neck below holds twelve frets on one string; the dashed marks are always the pure Pythagorean fifths, and the solid, clickable ones move to whichever rule the dropdown picks. Move between Pythagorean, Rule of Eighteen and Equal and watch the gap between the two rows open and close: pick Pythagorean and every fret locks onto its dashed twin exactly; pick either of the other two and most frets drift off by several cents. That drift — on every string, in every key, all the time — is the problem with frets: a bar of metal or gut can commit to exactly one compromise, and whichever one it picks, most of the twelve tones end up a little wrong.
+The [[lute]]'s frets were loops of gut, not soldered metal — retie one under a different rule and it can end up somewhere else entirely. Below is a full six-course lute, starting fretted by the Rule of Eighteen. Switch the dropdown to Equal temperament and every fret stays one straight bar, just slid to a new spot. Switch to Pythagorean or Well temperament and watch the SAME fret break into a zigzag instead — one straight bar can't land in the right place for six strings that don't all open on the same pitch class at once. That zigzag, impossible to actually build, is the problem with frets made visible: a fretted instrument gets exactly one physical compromise per fret, and the moment a tuning stops being perfectly symmetric, that one compromise stops being right for more than one string.
 
 ```html-embed
 music_instruments/resources/html/lute_fretboard.html
-340
+380
 ```
 
 ## History
