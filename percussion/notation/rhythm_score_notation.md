@@ -24,9 +24,13 @@ A **32nd note**:
 
 ![[percussion/notation/resources/images/rhythm_note_32nd.svg]]
 
-A **64th note** — the ladder runs out of easy names before it runs out of flags. There's also a rarer value going the *other* way, twice as long as a whole note: the **double whole note**, a.k.a. the **breve**, which nobody writes anymore but everybody's theory textbook still mentions out of a sense of duty:
+A **64th note** — the ladder runs out of easy names before it runs out of flags:
 
 ![[percussion/notation/resources/images/rhythm_note_64th.svg]]
+
+There's also a rarer value going the *other* way, twice as long as a whole note: the **double whole note**, a.k.a. the **breve**, drawn as a hollow notehead with a vertical bracket on each side, spilling clean across two measures because no single bar can hold it:
+
+![[percussion/notation/resources/images/rhythm_note_breve.svg]]
 
 **Rests** are that same ladder, just quiet about it — one gap in this vault's scores: the renderer behind these images takes pitches, not silence, so a rest can't get an honest picture here the way every sounded value above just did.
 
