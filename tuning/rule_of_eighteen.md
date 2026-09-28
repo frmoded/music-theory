@@ -1,17 +1,28 @@
-Vincenzo Galilei (1520–1591) — lutenist, music theorist, and Galileo Galilei's father — worked out a simple, constructible fretting rule around 1581, arguing directly against his own teacher Gioseffo Zarlino, who favored just-intonation-style pure ratios: the [[pythagorean_tuning|Pythagorean]] and [[meantone]] approach.
+## How it's computed
 
-## The problem with frets
+Vincenzo Galilei — lutenist, music theorist, Galileo's father, and a man with a chip on his shoulder about his own teacher — worked out a fretting rule around 1581 that needed no math beyond a straightedge: place each fret at exactly **17/18** of the remaining string length from the one before it. That's it. No irrational roots, no theory of commas, just one ratio, repeated, fret after fret. He built it arguing directly against Gioseffo Zarlino, who preferred pure, just-intonation ratios — the [[pythagorean_tuning|Pythagorean]] and [[meantone]] road. Galilei bet on something cruder and, it turns out, more durable.
 
-A [[lute]]'s frets are straight bars running across every string at once. On a keyboard, each string can be tuned individually — that's exactly what lets [[meantone]] and [[well_temperament]] spread the [[pythagorean_comma|comma]] unevenly, favoring some keys over others by ear. A single fret has no such freedom: it sets the same length ratio on all six strings simultaneously, so whatever compromise a fretted instrument makes has to be *one* compromise, applied uniformly, whether or not the mathematics behind it is fully worked out yet.
+See [[the_problem_with_frets]] for why this was even a fight worth having: a fret is a straight bar across every string at once, so whatever compromise it makes has to be *one* compromise, applied uniformly, whether the mathematics behind it exists yet or not.
 
-## The solution
+## The tuning
 
-Galilei's answer: place each fret so it sits at **17/18** of the remaining string length from the one before it. No mathematics of irrational roots is needed to build it, just a straightedge and that one ratio, repeated fret after fret.
+17/18 ≈ 1.0588 sits astonishingly close to the true equal-tempered semitone, 2^(1/12) ≈ 1.0595 — a rational stand-in for an irrational number, arrived at decades before anyone could name what it was approximating. Below is a full six-course lute, fretted this way by default. Switch the dropdown between Rule of Eighteen and Equal and listen for the two to sound almost, but not quite, identical.
 
-That's also why it matters here: 17/18 ≈ 1.0588 is a close, rational stand-in for the true equal-tempered semitone, 2^(1/12) ≈ 1.0595 — accurate enough that a lute fretted this way sounds convincingly even across every key, decades before [[equal_temperament]]'s exact irrational ratio was worked out mathematically (Simon Stevin, around the turn of the 17th century). It doesn't solve the fretting problem by giving every key a *perfect* interval the way a keyboard's per-string tuning can chase — it solves it by making every key *equally, uniformly* imperfect, sidestepping the single-fret constraint entirely rather than fighting it. See [[guitar]] for the same physical constraint on a modern fretted instrument, now solved with the exact irrational ratio instead of Galilei's close rational approximation.
+```html-embed
+music_instruments/resources/html/lute_fretboard.html
+380
+```
 
-## Micro-frets, the 24 dances, and Bach's Well-Tempered Clavier
+## Do the good
 
-The 18/17 rule wasn't the only workaround players had. Lute frets in this period weren't fixed metal strips — they were loops of gut tied around the neck, which meant a player could nudge one slightly for a particular piece, or tie in an extra, finer "micro-fret" between two standard positions to reach a pitch neither neighbor quite gave. That's a physical answer to [[#The problem with frets|the single-bar problem]] above that the 18/17 rule itself doesn't need: where a fixed fret forces one compromise onto every string at once, a *tied* fret could be re-seated, string by string, closer to whatever a specific piece actually wanted, at the cost of doing it by hand, piece by piece.
+Here's the good part, and it's a big one: Galilei didn't just claim his rule worked, he went and proved it. In 1584 he composed **24 groups of dances**, written to move through every major and minor key — the same demonstrative shape Bach's *Well-Tempered Clavier* would take on keyboard a century and a half later, and Galilei got there first, on a harder instrument. A harpsichord can be retuned between pieces. A lute, fretted once, cannot. His rule had to just *work*, from the first fret onward, in every key, or the whole argument fell apart. It didn't fall apart.
 
-Galilei also put his own rule to essentially the test Bach would set himself roughly a century and a half later: in 1584 he composed **24 groups of dances**, written to work through the different keys — a set "clearly related to 12 major and 12 minor keys," demonstrating that a lute fretted by his rule could sound convincing in all of them. That's the same demonstrative shape Bach's *Well-Tempered Clavier* (Book 1, 1722) would later take on keyboard — 24 preludes and fugues, one pair in every major and minor key, proving a single [[well_temperament|tempered]] instrument could do the same across an entire collection. Bach's title names the goal directly: *wohltemperirte*, well-tempered, playable everywhere. Galilei was arguing essentially the same case 138 years earlier, on an instrument with a harder constraint — a lute can't be retuned key by key mid-performance the way a harpsichord can be retuned between pieces, so his rule had to simply work, in every key, from the first fret onward.
+## Do the bad
+
+The catch: 17/18 is a close approximation, not the real thing, and approximations drift. Stack twelve of them and you land about 12.5 cents flat of a true octave — small on any one fret, real by the twelfth. Worse, gut frets are one straight bar across every string, so whatever this rule gets slightly wrong, it gets wrong on all six courses simultaneously, all the time — see [[the_problem_with_frets]] for exactly how that plays out with a genuinely non-uniform system.
+
+Players had a workaround, and it's a good one: those frets were tied gut, not soldered metal, so a lutenist could nudge one for a particular piece, or tie in an extra "micro-fret" between two standard positions to reach a pitch neither neighbor quite gave. A fixed compromise, worked around by hand, piece by piece.
+
+## History
+
+Bach's *Well-Tempered Clavier* (Book 1, 1722) is the famous version of this argument — 24 preludes and fugues, one pair in every key, proving a single tempered keyboard could do the job. Galilei was making essentially the same case 138 years earlier, and on the harder instrument. His rule held the fort for decades until Simon Stevin worked out equal temperament's exact irrational ratio around the turn of the 17th century — mathematically inevitable, in hindsight, but Galilei got a lute sounding convincingly even across every key first, with nothing but a straightedge and a stubborn disagreement with his own teacher.
