@@ -64,7 +64,7 @@ Distances are for a 650 mm scale, read against the [[monochord]]. Fret 12 is the
 
 ## Do The Problem
 
-A straight fret only works because Equal temperament and the [[rule_of_eighteen|Rule of Eighteen]] repeat one ratio identically from every string's own open note. [[pythagorean_comma|Pythagorean tuning]] and well temperament don't — each note sits at its own fixed spot instead, so one straight bar can't fret six differently-tuned strings correctly at once.
+A straight fret only works because Equal temperament and the [[rule_of_eighteen|Rule of Eighteen]] repeat one ratio identically from every string's own open note. [[pythagorean_tuning|Pythagorean tuning]] and [[well_temperament]] don't — each note sits at its own fixed spot instead, so one straight bar can't fret six differently-tuned strings correctly at once.
 
 Move the dropdown below through all four systems and watch the fret stay straight, then break into a zigzag — that zigzag is the problem, made visible.
 
