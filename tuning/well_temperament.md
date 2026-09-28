@@ -1,6 +1,17 @@
-Well temperament is a family of 17th–18th-century tuning systems built on top of [[meantone]]'s problem: meantone spreads the [[pythagorean_comma|Pythagorean comma]] evenly across most fifths but dumps the whole leftover onto one unplayable "wolf" interval. Well temperament's objective was to spread that same gap differently — shrink several fifths by small, *uneven* amounts, chosen so that no single interval absorbs the whole comma and no key is left truly unplayable. Every key becomes usable, each with its own faint, characteristic color, rather than eleven clean keys and one ruined one. Bach's *Well-Tempered Clavier* — a full cycle of preludes and fugues in every major and minor key — is usually read as a demonstration that a well-tempered keyboard could play convincingly in all of them, unevenness and all.
+## How it's computed
 
-"Well temperament" is a family, not one tuning, so here is one concrete member: **Werckmeister III**, published by Andreas Werckmeister in 1691. Four fifths (C–G, G–D, D–A and B–F♯) are each narrowed by a quarter of the Pythagorean comma, about 5.9 cents, and the other eight fifths stay pure. Four small cuts add up to the whole comma, and no fifth is left howling.
+Take meantone's problem — one comma, dumped entirely onto one howling wolf — and refuse to accept the trade. Shave four fifths (C–G, G–D, D–A, B–F♯) by a quarter of the Pythagorean comma each, about 5.9 cents apiece, and leave the other eight completely alone. Four small, deliberate cuts add up to exactly the leftover. No fifth left howling. No fifth pretending to be something it isn't, either.
+
+This particular member of the well-temperament family is **Werckmeister III**, published by Andreas Werckmeister in 1691 — "well temperament" is a family, not one tuning, and this is the one everybody actually means when they don't specify.
+
+## The tuning
+
+Below, C3 to C4, naturals only, tuned to Werckmeister III. Press **Play ascending**. Nothing sounds obviously broken. That's the point — every key is usable now. Nothing sounds identical either. That's also the point.
+
+```html-embed
+tuning/resources/html/piano_keyboard_well.html
+280
+```
 
 <div style="
   background:#FDFCFA;
@@ -71,6 +82,26 @@ Well temperament is a family of 17th–18th-century tuning systems built on top 
 
 </div>
 
-Read the second row and you can see the color: every note sits a little flat of equal temperament, by different amounts, so each key gets its own small personality instead of the same one twelve times.
+Read the second row and you can see the color: every note sits a little flat of equal, by a different amount, so each key gets its own personality instead of the same one twelve times over.
 
-See [[equal_temperament]] for the modern strategy: instead of spreading the gap unevenly by ear and taste, spread it with total, mathematical evenness — and give up rational string-length ratios entirely to do it.
+## Do the good
+
+Below, E4 and B4 start held — one of the eight fifths Werckmeister never touched. Play together, then flip to Equal. This one's exactly as pure as Pythagorean's best, because it literally is one of those pure fifths, untouched, hiding in plain sight in a system built to compromise. Every key still gets *something* to stand on.
+
+```html-embed
+tuning/resources/html/piano_keyboard_well_good.html
+280
+```
+
+## Do the bad
+
+Below, D4 and A4 start held instead — one of the four fifths that got shaved. Play together, then flip back to that E4–B4 pair from above. Same instrument, same moment in history, two fifths, two different personalities. That's not a bug. That's the entire idea, and it's also the entire cost: nothing here sounds quite like anything else.
+
+```html-embed
+tuning/resources/html/piano_keyboard_well_bad.html
+280
+```
+
+## History
+
+Werckmeister published his schemes in 1691, and Bach put one to the test the way Galilei had already tested the [[rule_of_eighteen|Rule of Eighteen]] a century earlier: the *Well-Tempered Clavier* (Book 1, 1722), 24 preludes and fugues, one pair in every major and minor key. The title says the whole argument out loud — *wohltemperirte*, well-tempered, playable everywhere. It worked, for about a century and a half, until [[equal_temperament]] offered the same universal playability with none of the color, and color turned out to be easier to give up than everyone expected.
