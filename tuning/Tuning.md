@@ -1,18 +1,18 @@
-Tuning is the practical question behind every note name: which exact frequency does each pitch get? Because twelve pure fifths never quite close into seven octaves (see [[why_12_notes]] and the [[pythagorean_comma]]), every instrument has to settle the leftover gap somewhere, and different eras settled it differently. For the physics of why string length and tension set the pitch, see [[frequency]].
+Every note name is a promise with a catch: it tells you *which* pitch, never the exact frequency to put there. That's tuning's whole job, and it's been unsolved, in the same specific way, since antiquity — because twelve pure fifths never quite close into seven octaves (see [[why_12_notes]] and the [[pythagorean_comma]]), every instrument has to put the leftover gap *somewhere*, and every era has answered that question differently. For the physics of why string length and tension set the pitch in the first place, see [[frequency]].
 
-This chapter covers how different eras handled the [[pythagorean_comma|Pythagorean comma]] once they'd found it — four systems, each choosing a different place to put the same unavoidable gap, plus one practical shortcut invented along the way. Compare the two ends of the spectrum yourself: read [[pythagorean_tuning]] (pure fifths, everything else pays) against [[equal_temperament]] (every step identical, nothing is pure).
+Four systems, one unavoidable gap, four different places to hide it — plus one practical shortcut invented along the way for people who couldn't wait for the math. Read the two extremes back to back: [[pythagorean_tuning]] (pure fifths, everything else pays) against [[equal_temperament]] (nothing is pure, but nothing is punished either).
 
-- [[pythagorean_tuning]] — build every note from stacked pure fifths; simplest, and the one that surfaces the comma in the first place.
-- [[meantone]] — spread the gap evenly across most fifths, at the cost of one unplayable "wolf" interval.
-- [[rule_of_eighteen]] — Vincenzo Galilei's practical 16th-century approximation to equal temperament, built for fretted instruments before the mathematics of equal temperament existed.
-- [[well_temperament]] — spread it unevenly instead, so every key is at least playable.
-- [[equal_temperament]] — spread it with total mathematical evenness, abandoning rational ratios entirely.
+- [[pythagorean_tuning]] — stack pure fifths and fold; simplest, and the one that surfaces the comma in the first place.
+- [[meantone]] — spread the gap evenly across most fifths, and pay for it with one unplayable "wolf."
+- [[rule_of_eighteen]] — Galilei's 16th-century shortcut for fretted instruments, decades ahead of the math it was approximating.
+- [[well_temperament]] — spread the gap unevenly instead, so every key is at least usable.
+- [[equal_temperament]] — spread it with total mathematical evenness, and give up rational ratios entirely to do it.
 
 ## How close is each system to the others?
 
-**Metric:** take each system's twelve chromatic pitches as cents above C (a cent is 1/100 of an equal-tempered semitone), then compute the **root-mean-square (RMS) difference** between two systems' twelve-note vectors — the standard way tuning systems get compared quantitatively. A small RMS means the two systems place their twelve notes almost identically; a large one means real, audible disagreement across the octave.
+**Metric:** take each system's twelve chromatic pitches as cents above C (a cent is 1/100 of an equal-tempered semitone), then compute the **root-mean-square (RMS) difference** between two systems' twelve-note vectors — the standard way to put a number on "how different do these actually sound." Small RMS, same ballpark. Large RMS, real disagreement.
 
-For [[pythagorean_tuning]] and [[meantone]] the table below uses each system's own well-known conventional cent values (built from the nearest fifths in either direction), not the deliberately one-directional twelve-fifth chain from [[why_12_notes]] — that chain exists specifically to expose the comma, not to represent how either tuning is actually built in practice, and mixing the two would compare different things under the same name. Rows and columns are in chronological order, as in the timeline under History.
+For [[pythagorean_tuning]] and [[meantone]] the table below uses each system's own well-known conventional cent values (built from the nearest fifths in either direction), not the deliberately one-directional twelve-fifth chain from [[why_12_notes]] — that chain exists to expose the comma, not to represent how either tuning is actually built, and mixing the two would compare different things under the same name. Rows and columns run in chronological order, matching the timeline under History.
 
 <div style="
   background:#FDFCFA;
@@ -86,7 +86,7 @@ For [[pythagorean_tuning]] and [[meantone]] the table below uses each system's o
 
 </div>
 
-A few things worth reading off the table: [[well_temperament|well temperament]] and [[rule_of_eighteen|the Rule of Eighteen]] sit closest to each other (4.7¢) — both were independently built as approximations to universal playability, one by ear and compromise, one by a single repeated ratio. [[pythagorean_tuning|Pythagorean]] and [[meantone]] sit furthest apart (22.9¢) — the two most philosophically opposed choices, pure fifths versus pure-ish thirds. Of the historical systems, [[equal_temperament|equal temperament]] itself sits closest to [[rule_of_eighteen|the Rule of Eighteen]] (6.8¢) — which makes sense, since Galilei's rule was already reaching for exactly what equal temperament later formalized.
+A few things worth pulling out of that table. [[well_temperament|Well temperament]] and [[rule_of_eighteen|the Rule of Eighteen]] land closest to each other (4.7¢) — not a coincidence, since both were built, independently, to chase the same goal by two totally different routes: one by ear and careful compromise, one by a single repeated ratio and a straightedge. [[pythagorean_tuning|Pythagorean]] and [[meantone]] sit furthest apart (22.9¢) — the two most philosophically opposed choices on this whole page, pure fifths versus pure-ish thirds, and the numbers know it. And [[equal_temperament|equal temperament]] itself sits closest to [[rule_of_eighteen|the Rule of Eighteen]] (6.8¢), which makes total sense once you remember Galilei's rule was already reaching, blind, for exactly what equal temperament would later prove.
 
 ## History
 
