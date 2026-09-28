@@ -21,7 +21,7 @@ tuning/resources/html/piano_keyboard_pythagorean.html
 
 Any two notes one step apart in the chain — C–F, F–B♭, B♭–E♭, ... D–G — are a perfectly pure fifth; eleven of the twelve sit this way, and the octaves are pure too.
 
-Below, C3 and G3 start held. Play together, then switch to Equal and play again: Pythagorean's fifth is exactly pure, Equal's is two cents flat — small, but it's why singers and string players drift toward pure fifths by ear.
+Below, C3 and G3 start held. Play together, then switch to Equal and play again — the interval is the same fifth either way, but only one of them is a true 3:2. It's a subtle difference, and it's why singers and string players who tune by ear keep drifting toward pure fifths instead of tempered ones.
 
 ```html-embed
 tuning/resources/html/piano_keyboard_pythagorean_good.html
@@ -30,9 +30,9 @@ tuning/resources/html/piano_keyboard_pythagorean_good.html
 
 ## Do the bad
 
-The twelfth fifth, G back to C, was never a built step — it's the leftover, sharp by the full [[pythagorean_comma|comma]], the infamous "wolf" (traditionally between G♯ and E♭). Thirds fare worse: one built from four fifths (C to E) comes out noticeably wide, the flaw [[meantone]] was built to fix.
+Here's the part they leave out of the brochure. Stack twelve pure fifths, feel pretty good about yourself, and the last one — the one that's supposed to bring you home — comes in wrong. Not a little wrong. Theorists dumped that ugly leftover between G♯ and E♭ and called it the wolf fifth, because even music theory apparently needs a monster under the bed. The thirds don't get off easy either: stack four fifths to build one (C up to E) and it comes out wide and hot, an interval that's trying too hard — the exact flaw [[meantone]] eventually got invented to fix.
 
-Below, G♯3 and D♯4 start held — the wolf fifth. Play together, then switch to Equal: the same two keys go from sour to ordinary. For the subtler version, try C4, E4 and G4 instead.
+Below, G♯3 and D♯4 start held — that's the wolf, live and unmuzzled. Play together, then flip to Equal: same two keys, completely different animal. Pythagorean sounds like it walked into a door; Equal just shrugs, because Equal sanded every interval down to the same safe, forgettable average. For the subtler gut-punch, try C4, E4 and G4 instead and listen to that third practically vibrate.
 
 ```html-embed
 tuning/resources/html/piano_keyboard_pythagorean_bad.html
