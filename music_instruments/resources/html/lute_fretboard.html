@@ -50,9 +50,11 @@
   .pt:focus .disc { opacity: 1; stroke: var(--accent); stroke-width: 3; }
   .pt:focus text { opacity: 1; }
   .pt:focus .dot { opacity: 0; }
-  /* Frets 1-12 (wire + that fret's six clickable points) slide to their new tuning-system
-     position instead of snapping — a lutenist would slide a movable gut fret the same way. */
-  .fret-slot { transition: transform 400ms ease-out; }
+  /* Every fret-1..12 wire SEGMENT (one per course) and clickable point slides to its own new
+     tuning-system position independently — this is what lets the fret visibly break into a
+     zigzag when the system isn't rotationally symmetric (Pythagorean, well temperament), instead
+     of the whole fret moving as one rigid bar. */
+  .wire-seg, .pt { transition: transform 400ms ease-out; }
   .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 10px; align-items: center; }
   button {
     font: inherit; font-size: 13px; color: var(--ink);
@@ -78,14 +80,14 @@
 <body>
 <div class="wrap">
 
-<div class="scroller"><svg id="svg" role="group" aria-label="Lute fretboard, six courses. Click a position to hold it, then play the held notes. Arrow keys move between positions. Switching the tuning system slides the frets to their new position."></svg></div>
+<div class="scroller"><svg id="svg" role="group" aria-label="Lute fretboard, six courses. Click a position to hold it, then play the held notes. Arrow keys move between positions. In Pythagorean or well temperament each fret breaks into a zigzag, a different position per course, because one straight fret cannot be exactly right for six differently-tuned strings at once."></svg></div>
 
 <div class="controls">
   <button class="both"  id="bT" title="All held notes at once, as a chord">Play together</button>
   <button class="left"  id="bU" title="Held notes one at a time, lowest to highest">Play ascending</button>
   <button class="right" id="bD" title="Held notes one at a time, highest to lowest">Play descending</button>
   <button id="bC" title="Release every held position">Clear</button>
-  <select id="tuning" aria-label="Tuning system" title="Rule of Eighteen: the real gut-fret construction Galilei used — fret 12 lands about 12.5 cents flat of a true octave. Equal temperament, Pythagorean and Werckmeister III well temperament are drawn as if a single reference fret (nominally starting at C) could satisfy every course at once, which a real lute's shared frets cannot fully do for a non-equal system across six different open pitches — a simplification, not a historical claim.">
+  <select id="tuning" aria-label="Tuning system" title="Rule of Eighteen and Equal temperament are rotationally symmetric, so one straight fret is correct for every course. Pythagorean and Werckmeister III well temperament are NOT: each course's own open pitch class determines where ITS fret lands, so the frets break into a zigzag — a real limitation of fretted instruments in a non-equal tuning, not a simplification.">
     <option value="roe" selected>Rule of Eighteen</option>
     <option value="equal">Equal temperament</option>
     <option value="pythagorean">Pythagorean</option>
@@ -112,44 +114,47 @@
   function midiToHz(m) { return A4_HZ * Math.pow(2, (m - 69) / 12); }
   function midiToName(m) { return NAMES[m % 12] + (Math.floor(m / 12) - 1); }   // scientific pitch notation
 
-  // A fret is a single physical bar shared by every course, so it shifts EVERY course's pitch by
-  // the SAME number of cents (shortening all six strings by the same fraction of their own
-  // length). That number-of-cents-per-fret is what differs between tuning systems:
-  //  - "roe" (Galilei's Rule of Eighteen, the real gut-fret construction): each fret sits at 1/18
-  //    of the REMAINING string length below the previous fret, so cumulative cents at fret n is
-  //    n * (cents in one 17/18 step) — iterative, not a formula that resets every 12 frets.
-  //  - "equal": a plain n*100 cents, the same for every course by construction (this is WHY equal
-  //    temperament is the only system a single shared fret can satisfy for every course exactly).
-  //  - "pythagorean" / "well": reuse the exact cents-above-C tables already shipped and driver-
-  //    approved in piano_keyboard.html. A single fret cannot give six different open pitches their
-  //    own correct just interval at once (that's a real, unavoidable limitation of fretted
-  //    instruments in a non-equal system, not a bug), so the fret's cents are taken by nominally
-  //    anchoring fret 0 to C in that table — an arbitrary but reproducible reference, since no
-  //    course here is actually tuned to C. See FEEDBACK for the honest version of this caveat.
+  // A fret is a single physical bar shared by every course, so it shortens all six strings by
+  // the same FRACTION of their own length — but that is NOT the same as landing on the same
+  // number of CENTS above each open pitch, unless the tuning system is rotationally symmetric
+  // (every semitone the same size no matter which pitch class you start from). Equal temperament
+  // and Rule of Eighteen ARE rotationally symmetric (their per-fret cents only depend on the fret
+  // number). Pythagorean and well temperament are NOT: their semitone sizes vary by scale degree,
+  // and Pythagorean in particular has a single "wolf" fifth sitting at one fixed ABSOLUTE
+  // pitch-class location (G#->Eb here), not at a fixed fret-distance from wherever a string
+  // happens to be open. So for these two, fretCents needs the STRING'S OWN open pitch class
+  // (`openPC`) — treating every string as if it were open on C (the earlier version of this file
+  // did exactly that) is a real bug, not a rendering nicety: it silently mis-tunes every course
+  // that isn't open on C. Caught by the driver, not by this file's own tests, on the first ship.
   var ROE_STEP_CENTS = 1200 * Math.log2(18 / 17);            // ~105.7 cents per Rule-of-Eighteen fret
   var PYTH_CENTS = [0, 113.69, 203.91, 294.13, 407.82, 498.04, 611.73, 701.96, 815.64, 905.87, 996.09, 1109.78];
   var WERCK_CENTS = [0, 90.225, 192.180, 294.135, 390.225, 498.045, 588.270, 696.090, 792.180, 888.270, 996.090, 1092.180];
   var SYSTEMS = ["roe", "equal", "pythagorean", "well"];
-  function fretCents(n, system) {
-    if (system === "pythagorean") return PYTH_CENTS[n % 12] + 1200 * Math.floor(n / 12);
-    if (system === "well") return WERCK_CENTS[n % 12] + 1200 * Math.floor(n / 12);
+  // `openPC` = the fretting course's own open pitch class (0=C .. 11=B). Ignored by "equal" and
+  // "roe" (both rotationally symmetric, so the result is the same for every openPC — asserted as
+  // an equivalence test, not just assumed) but load-bearing for "pythagorean"/"well".
+  function fretCents(n, system, openPC) {
+    if (system === "pythagorean" || system === "well") {
+      var table = system === "pythagorean" ? PYTH_CENTS : WERCK_CENTS;
+      var p = openPC % 12;
+      var targetPC = (p + n) % 12;
+      var octaves = Math.floor((p + n) / 12);
+      return table[targetPC] - table[p] + 1200 * octaves;
+    }
     if (system === "equal") return n * 100;
     return n * ROE_STEP_CENTS;                                          // "roe", and the default
   }
-  function fretFraction(n, system) { return Math.pow(2, -fretCents(n, system) / 1200); }   // remaining length
+  function fretFraction(n, system, openPC) { return Math.pow(2, -fretCents(n, system, openPC) / 1200); }   // remaining length
   // How flat the Rule-of-Eighteen's fret 12 is from a true equal-tempered octave (1200 cents).
-  // Computed, not assumed: the driver's own prompt guessed ~13.6 cents; the actual construction
-  // gives about 12.5 cents (and Pythagorean/well temperament both land on an EXACT 1200-cent
-  // octave at fret 12, since their tables are built to close after 12 steps — only the Rule of
-  // Eighteen's real gut-fret geometry actually drifts). See FEEDBACK for the discrepancy.
-  function fret12DriftCents() { return fretCents(12, "roe") - 1200; }
+  // Computed, not assumed. Rotationally symmetric, so openPC does not matter here.
+  function fret12DriftCents() { return fretCents(12, "roe", 0) - 1200; }
   // The label on each fret is the nearest EQUAL-TEMPERED semitone name (open course + n
   // semitones) — the same naming a guitar fret would get — regardless of which system is
-  // sounding. The SOUND (hzAt) is the real pitch under whichever system is selected, which for
-  // "roe"/"pythagorean"/"well" is up to ~12.5 cents away from that label. That gap between "what
-  // the fret is called" and "what it actually sounds" is the whole point of this gadget.
+  // sounding. The SOUND (hzAt) is the real pitch under whichever system is selected. That gap
+  // between "what the fret is called" and "what it actually sounds" is the whole point of this
+  // gadget; the zigzag rendering below makes the same gap visible in the fret's POSITION too.
   function midiAt(s, f) { return TUNING[s] + f; }
-  function hzAt(s, f, system) { return midiToHz(TUNING[s]) * Math.pow(2, fretCents(f, system) / 1200); }
+  function hzAt(s, f, system) { return midiToHz(TUNING[s]) * Math.pow(2, fretCents(f, system, TUNING[s] % 12) / 1200); }
   function posKey(s, f) { return s + ":" + f; }
   function parseKey(k) { var p = k.split(":"); return { s: +p[0], f: +p[1] }; }
   // A held position set (keys "string:fret") in ascending pitch order; equal
@@ -177,20 +182,23 @@
 
   var NS = "http://www.w3.org/2000/svg";
   var $ = function (id) { return document.getElementById(id); };
-  var svg = $("svg"), held = new Set(), pts = {}, fretSlots = {};
+  var svg = $("svg"), held = new Set(), pts = {}, wireSegs = {};
   var NS_ = TUNING.length;
   var system = "roe";                            // default: the real gut-fret construction
 
   // Geometry (viewBox units). BASE_SYSTEM fixes the coordinates every element is actually DRAWN
-  // at; switching `system` moves each fret 1..12 (wire + its six clickable points) by a CSS
-  // `transform: translateX`, so the transition animates smoothly regardless of which system is
-  // active — the DOM never rebuilds, only the fret-slot groups' transform changes.
-  var BASE_SYSTEM = "roe";
+  // at; switching `system` moves each course's own fret 1..12 (its wire segment and its one
+  // clickable point) by a CSS `transform: translateX`, independently per course — so the DOM
+  // never rebuilds, only each element's own transform changes, and a fret can visibly zigzag.
+  var BASE_SYSTEM = "roe";                       // rotationally symmetric: same geometry for every course
   var NUT = 72, BOARD = 560, TOP = 40, GAP = 28, W = 650, H = 246;
-  function fretX(n, sys) { return NUT + BOARD * (1 - fretFraction(n, sys)); }
+  function fretX(n, sys, openPC) { return NUT + BOARD * (1 - fretFraction(n, sys, openPC)); }
+  // Base (undrifted) geometry does not depend on which course, since BASE_SYSTEM is rotationally
+  // symmetric — course 0's openPC is used only as an arbitrary, harmless stand-in.
+  function fretXBase(n) { return fretX(n, BASE_SYSTEM, TUNING[0] % 12); }
   // The clickable position for fret n: the middle of its cell (at the BASE geometry), or (open
   // string) just left of the nut.
-  function posX(f) { return f === 0 ? NUT - 22 : (fretX(f - 1, BASE_SYSTEM) + fretX(f, BASE_SYSTEM)) / 2; }
+  function posX(f) { return f === 0 ? NUT - 22 : (fretXBase(f - 1) + fretXBase(f)) / 2; }
   function stringY(s) { return TOP + (NS_ - 1 - s) * GAP; }     // high course on top, like tablature
   svg.setAttribute("viewBox", "0 0 " + W + " " + H);
 
@@ -232,31 +240,34 @@
     g.setAttribute("tabindex", "0");
     if (focus) { try { g.focus({ preventScroll: false }); } catch (_) {} }
   }
-  function makePoint(s, f, parent) {
+  function makePoint(s, f) {
     var m = midiAt(s, f), x = posX(f), y = stringY(s), key = posKey(s, f);
     var g = el("g", { "class": "pt", tabindex: "-1", role: "button", "aria-pressed": "false",
-                      "aria-label": midiToName(m) + ", course " + (s + 1) + ", fret " + f }, parent);
+                      "aria-label": midiToName(m) + ", course " + (s + 1) + ", fret " + f }, svg);
     el("circle", { "class": "disc", cx: x, cy: y, r: 12 }, g);
     el("circle", { "class": "dot", cx: x, cy: y, r: 3.5 }, g);
     // A generous invisible hit target: the whole fret cell, one course row tall.
-    var half = f === 0 ? 14 : (fretX(f, BASE_SYSTEM) - fretX(f - 1, BASE_SYSTEM)) / 2 - 1;
+    var half = f === 0 ? 14 : (fretXBase(f) - fretXBase(f - 1)) / 2 - 1;
     el("rect", { x: x - half, y: y - 13, width: half * 2, height: 26, fill: "transparent" }, g);
     var t = el("text", { x: x, y: y + 3, "text-anchor": "middle" }, g);
     t.textContent = midiToName(m);
     pts[key] = g;
     return g;
   }
-  // Fret 0 (open strings) never moves — every system agrees an open course is unfretted — so its
-  // six points are drawn directly on the board, outside any fret-slot group.
-  for (s = 0; s < NS_; s++) makePoint(s, 0, svg);
-  // Frets 1..12: each is a "slot" — the wire plus that fret's six clickable points — grouped so a
-  // single `transform` on the slot moves the wire and its points together, keeping every dot
-  // glued to its own fret line no matter which system is showing.
-  for (var f = 1; f <= FRETS; f++) {
-    var slot = el("g", { "class": "fret-slot", "data-fret": f }, svg);
-    el("line", { "class": "wire", x1: fretX(f, BASE_SYSTEM), y1: TOP - 10, x2: fretX(f, BASE_SYSTEM), y2: stringY(0) + 10, stroke: "#A69B91", "stroke-width": 1 }, slot);
-    for (s = 0; s < NS_; s++) makePoint(s, f, slot);
-    fretSlots[f] = slot;
+  for (s = 0; s < NS_; s++) for (var f = 0; f <= FRETS; f++) makePoint(s, f);
+  // Fret wires 1..12: one short SEGMENT per course, at that course's own base x, instead of one
+  // line spanning the whole board — this is what lets frets 1..12 zigzag independently per course
+  // once a non-rotationally-symmetric system moves each segment by its own amount.
+  for (f = 1; f <= FRETS; f++) {
+    wireSegs[f] = [];
+    for (s = 0; s < NS_; s++) {
+      var half2 = GAP / 2 + 3;   // a touch past the midpoint toward the next course, so segments visually meet
+      var wy = stringY(s);
+      var seg = el("line", { "class": "wire-seg", "data-fret": f, "data-string": s,
+                             x1: fretXBase(f), y1: wy - half2, x2: fretXBase(f), y2: wy + half2,
+                             stroke: "#A69B91", "stroke-width": 1 }, svg);
+      wireSegs[f][s] = seg;
+    }
   }
   Object.keys(pts).forEach(function (key) {
     var p = parseKey(key), g = pts[key];
@@ -277,13 +288,19 @@
   });
   pts[posKey(0, 0)].setAttribute("tabindex", "0");
 
-  // Slide every fret 1..12 to its position under the newly selected system. `held` (which
-  // positions are toggled on) and `pts`/`fretSlots` (the DOM elements themselves) are untouched —
-  // only each slot's transform changes — so a held note stays held straight through the animation.
+  // Slide every course's own fret 1..12 (wire segment + clickable point) to its position under
+  // the newly selected system. `held` and the DOM elements themselves are untouched — only each
+  // element's own transform changes, and each course computes its OWN delta from its OWN open
+  // pitch class — so a held note survives a switch, and a rotationally-asymmetric system produces
+  // a genuine per-course zigzag instead of one line moving as a rigid whole.
   function updateGeometry(sys) {
     for (var f = 1; f <= FRETS; f++) {
-      var delta = fretX(f, sys) - fretX(f, BASE_SYSTEM);
-      fretSlots[f].style.transform = "translateX(" + delta + "px)";
+      for (var s = 0; s < NS_; s++) {
+        var openPC = TUNING[s] % 12;
+        var delta = fretX(f, sys, openPC) - fretXBase(f);
+        wireSegs[f][s].style.transform = "translateX(" + delta + "px)";
+        pts[posKey(s, f)].style.transform = "translateX(" + delta + "px)";
+      }
     }
   }
 
