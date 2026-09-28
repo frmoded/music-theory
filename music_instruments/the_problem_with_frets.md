@@ -62,6 +62,15 @@ A fret is a straight bar across the neck, so it stops **all** the strings at exa
 
 Read the table against the [[monochord]]; distances are for a 650 mm scale length. Fret 12 is exactly half the string, an octave. Frets 5 and 7 land almost on the 3/4 and 2/3 points, the pure fourth and fifth. But fret 4 misses the pure major third (4/5) by enough to sound about 14 cents sharp, and that is the problem: the ratio is fixed, so every string, in every key, gets the same compromise, with no way to make one chord purer at the cost of another. Try it: on the monochord, stop the string at 4/5 and then at fret 4's 0.7937, and listen for the difference. See [[thirds_and_fifths]] for the intervals involved.
 
+## Do The Problem
+
+The [[lute]]'s frets were loops of gut, movable — so imagine you could choose the rule your frets are cut by, instead of inheriting whichever one won. The neck below holds twelve frets on one string; the dashed marks are always the pure Pythagorean fifths, and the solid, clickable ones move to whichever rule the dropdown picks. Move between Pythagorean, Rule of Eighteen and Equal and watch the gap between the two rows open and close: pick Pythagorean and every fret locks onto its dashed twin exactly; pick either of the other two and most frets drift off by several cents. That drift — on every string, in every key, all the time — is the problem with frets: a bar of metal or gut can commit to exactly one compromise, and whichever one it picks, most of the twelve tones end up a little wrong.
+
+```html-embed
+music_instruments/resources/html/lute_fretboard.html
+340
+```
+
 ## History
 
 On the [[lute]] the frets were loops of gut tied around the neck, so a player could nudge them to suit a piece. Around 1581 Vincenzo Galilei proposed one fixed rule for all of them, 17/18 of the remaining length per fret — see [[rule_of_eighteen]] — which is only about a cent per fret away from the exact ratio that Simon Stevin worked out, c. 1585–1608, as [[equal_temperament]].
