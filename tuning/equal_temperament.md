@@ -1,7 +1,40 @@
-**Equal temperament**, what nearly every instrument uses today, takes a different strategy from both [[meantone]] and [[well_temperament]]: instead of spreading the [[pythagorean_comma|comma]] unevenly by ear across specific intervals, divide the octave into 12 perfectly identical steps and spread it with total, mathematical evenness. Each equal-tempered semitone is a frequency ratio of exactly 2^(1/12) — and equal temperament is **totally irrational**. Literally: 2^(1/12) is an irrational number, so no fraction of whole numbers ever equals it. That's the real break with everything else in [[the_physics_of_beauty]]: every ratio this vault has worked with so far — the octave's 2:1, the [[nice|2:3 ratio]], all twelve points in [[why_12_notes]]'s tables — is a ratio of whole numbers. 2^(1/12) is not, and cannot be: no rational division of a string length ever lands there exactly. Apart from the octave, not one interval of equal temperament is a simple ratio.
+## How it's computed
 
-That abandonment of rational lengths is exactly what makes the [[monochord]] obsolete as a construction tool. A monochord is only useful because simple ratios mark clean, measurable, repeatable points on a string — that is its entire method. Equal temperament's positions can be measured and approximated on a monochord, but they can no longer be *constructed* from the ratios themselves the way a fifth or a fourth could; the instrument that turned tuning into arithmetic has nothing exact left to demonstrate once the arithmetic itself goes irrational.
+Divide the octave into twelve perfectly identical steps and be done with it. No ear-by-ear compromise, no wolf to hide, no key that gets treated better than another — every semitone is exactly 2^(1/12), the same ratio, twelve times in a row. And here's the part that should bother you a little: 2^(1/12) is irrational. No fraction of whole numbers ever equals it, so no rational division of a string ever lands there exactly. Every ratio this vault has worked with so far — 2:1, 3:2, all twelve points in [[why_12_notes]] — was a ratio of whole numbers. This one, on purpose, is not.
+
+## The tuning
+
+Below, C3 to C4, naturals only, tuned to Equal. Press **Play ascending**. Sounds fine, doesn't it? That's the whole trick.
+
+```html-embed
+tuning/resources/html/piano_keyboard_equal.html
+280
+```
+
+That abandonment of rational lengths is also what makes the [[monochord]] obsolete as a construction tool: it only works because simple ratios mark clean, repeatable points on a string, and equal temperament's positions can be approximated on one but never *constructed* the way a fifth or fourth could.
 
 ![[notes/resources/images/why12_log.svg]]
 
-The tiny, accumulating drift shown above — each pure fifth landing a hair sharp of its equal-tempered slot — is precisely the unevenness [[meantone]] and [[well_temperament]] tried to manage, and equal temperament chose to erase by fiat, at the cost of every interval being very slightly, uniformly, deliberately out of tune.
+That tiny, accumulating drift above — every pure fifth landing a hair sharp of its equal-tempered slot — is exactly the unevenness [[meantone]] and [[well_temperament]] spent two centuries trying to manage. Equal temperament just... erased it. By fiat.
+
+## Do the good
+
+Play the wolf. Actually play it — below, G♯3 and D♯4 start held, tuned to Equal. Press **Play together**, then flip to Pythagorean and play the same two keys again. Hear that? The pair every other system in this chapter treats as a monster is, here, just a fifth. Nothing special, nothing sour, nothing to work around. That's the whole sales pitch: no wolves, anywhere, ever, in any key.
+
+```html-embed
+tuning/resources/html/piano_keyboard_equal_good.html
+280
+```
+
+## Do the bad
+
+Here's the bill for that peace of mind. Below, C3 and G3 start held — the best-case fifth, the one every other system gets exactly right. Play together in Equal, then flip to Pythagorean and play it again. Equal's version is close, but it's not *that* fifth; it's a slightly-flat impression of it. There is no key, no interval, anywhere on this instrument, that is ever actually, truly in tune. Equal temperament didn't solve the problem. It just spread the damage so evenly you stopped noticing it.
+
+```html-embed
+tuning/resources/html/piano_keyboard_equal_bad.html
+280
+```
+
+## History
+
+Simon Stevin worked out the exact mathematics — the 2^(1/12) ratio itself — around the turn of the 17th century, decades after Galilei's [[rule_of_eighteen|practical approximation]] had already been getting fretted instruments most of the way there by feel. The idea took its time catching on: keyboards stuck with [[meantone]] and then [[well_temperament]] well into the 18th century, because a system that makes every key equally mediocre is a hard sell against one that makes most keys genuinely good. Equal temperament won anyway, gradually, as the de facto keyboard standard by the 19th century and universal by the 20th — not because it sounds better, but because it never sounds *worse* in any particular key, which turned out to matter more once music started wandering freely between them.
