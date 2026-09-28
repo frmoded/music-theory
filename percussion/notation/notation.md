@@ -6,5 +6,7 @@ How percussion parts get written and read in this vault's engine — the clef, t
 - [[kit_instruments]] — the ten GM-mapped drum-kit instruments available to build with
 - [[canonical_voice_order]] — the fixed kick/snare/hihat/toms/crash ordering that keeps same-instrument staves merging correctly across sections
 - [[kit_notation_voicing]] — folding a multi-part score onto one staff: stems-up for hands, stems-down for kick
+- [[rhythm_score_notation]] — the general rhythm-notation vocabulary (time signatures, note values, ties, meter, tuplets) any instrument's part uses
+- [[percussion_score_notation]] — the four notes above, folded into one
 
 See it in practice: [[murmuration]] and [[loom]] are built entirely from these instruments.
