@@ -18,3 +18,17 @@ Want to see what one pitch looks like as an actual wave, not just a label? Here'
 ![[notes/resources/images/pitch_wave_packet.svg]]
 
 **Try it:** [[exercises/octave_up]] — name the note one octave above C4 and get told how its name, its octave number and its frequency fit together.
+
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&uarr; <a class="internal-link" data-href="Physics" href="Physics" style="color:#1963D1;">Physics</a></span>
+<span><a class="internal-link" data-href="frequency" href="frequency" style="color:#1963D1;">frequency</a> &rarr;</span>
+</div>
