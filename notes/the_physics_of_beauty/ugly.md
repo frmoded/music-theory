@@ -25,3 +25,17 @@ Add the two waves together and the beating becomes visible directly: the combine
 ![[notes/resources/images/ugly_combined.svg]]
 
 See [[beats]] for exactly why summing two close frequencies produces that envelope.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="nice" href="nice" style="color:#1963D1;">nice</a></span>
+<span>&uarr; <a class="internal-link" data-href="the_physics_of_beauty" href="the_physics_of_beauty" style="color:#1963D1;">the_physics_of_beauty</a></span>
+<span><a class="internal-link" data-href="beats" href="beats" style="color:#1963D1;">beats</a> &rarr;</span>
+</div>
