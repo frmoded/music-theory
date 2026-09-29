@@ -5,3 +5,16 @@ A **slash chord** gives explicit, independent control of the bass, separate from
 Run [[slash_chord]] with `chord_tonic="F4"`, `quality="minor"`, `bass="C4"` to hear Fm/C directly — the F minor triad (F, Ab, C) sitting over a C an octave below everything else. Now hold `bass="C4"` fixed and change `chord_tonic`/`quality` to build a few different triads over the same bass note — that's the exact mechanism behind a "one pedal, shifting triads" effect: the bass stays put while the chord above it moves.
 
 Don't confuse this with [[inversion]], which also changes the bass note — but only ever to another note that's already *in* the chord. A slash chord's bass can be anything.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="roman_numeral" href="roman_numeral" style="color:#1963D1;">roman_numeral</a></span>
+<span>&uarr; <a class="internal-link" data-href="chord/notation/notation" href="chord/notation/notation" style="color:#1963D1;">notation</a></span>
+</div>
