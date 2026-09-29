@@ -3,3 +3,15 @@ Species counterpoint is a textbook example of a teaching tool outliving the styl
 The invention and the fugue are what happens when species discipline meets actual composition rather than exercise: Bach's *Inventions* were explicitly pedagogical too (written for his students, including his own children), while the fugue became the most prestigious contrapuntal FORM in its own right, not just a training exercise — a single subject, developed with the rigor species counterpoint trains for, sustained across an entire piece.
 
 **Listen for it:** in a Bach fugue, track the opening subject the first three or four times it reappears in a different voice — that repeated re-entry, at different pitches and often overlapping itself, is the whole architecture of the form.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&uarr; <a class="internal-link" data-href="Counterpoint" href="Counterpoint" style="color:#1963D1;">Counterpoint</a></span>
+</div>
