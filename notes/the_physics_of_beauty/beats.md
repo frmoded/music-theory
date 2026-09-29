@@ -102,3 +102,17 @@ Take two tones at $f_1 = 261.63$ Hz and $f_2 = 277.18$ Hz, a frequency ratio of 
 ![[notes/resources/images/ugly_combined.svg]]
 
 That pulsing envelope is exactly $2\cos(\pi \Delta f\, t)$ from the derivation above — not an approximation, the literal closed-form shape of the sum.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="ugly" href="ugly" style="color:#1963D1;">ugly</a></span>
+<span>&uarr; <a class="internal-link" data-href="the_physics_of_beauty" href="the_physics_of_beauty" style="color:#1963D1;">the_physics_of_beauty</a></span>
+<span><a class="internal-link" data-href="why_12_notes" href="why_12_notes" style="color:#1963D1;">why_12_notes</a> &rarr;</span>
+</div>
