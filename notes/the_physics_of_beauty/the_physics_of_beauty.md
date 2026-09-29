@@ -33,3 +33,16 @@ Niceness is also learned. The brain is a prediction machine tuned by a lifetime 
 Pythagoras is credited as the first to notice that pleasing intervals are ratios of small whole numbers, like 2:1 and 3:2. The Pythagoreans read consonance as a sign of the order of the universe — the "music of the spheres" — and dissonance as chaos.
 
 Philosophers then argued over whether beauty in sound is a fact or an experience. Kant, in the *Critique of Judgment* (18th century), called music the "play of sensations": pure aesthetic pleasure that needs no concepts, with discord disturbing our inner harmony. Adorno, in *Philosophy of New Music* (20th century), argued that dissonance is socially necessary: sweet sounds let us escape reality, harsh ones make us face its fractures.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="loudness" href="loudness" style="color:#1963D1;">loudness</a></span>
+<span>&uarr; <a class="internal-link" data-href="Physics" href="Physics" style="color:#1963D1;">Physics</a></span>
+</div>
