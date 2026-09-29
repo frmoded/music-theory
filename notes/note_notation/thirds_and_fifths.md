@@ -69,3 +69,17 @@ A **third** and a **fifth** are the two intervals that build almost all of Weste
 Stack a third and a fifth on any note and you have a [[triad]]: the fifth is the sturdy frame, the third decides the color, major or minor (see [[chord_quality]]). The fifth is the strongest consonance after the octave, the 2/3 point of the [[monochord]] string, and twelve of them in a row are what opens the [[pythagorean_comma]] (see [[why_12_notes]]). The third is fussier: four pure fifths stacked give a harsh, wide major third, the "Pythagorean third" of [[pythagorean_tuning]], and [[meantone]] was invented to soften it. On a guitar, [[the_problem_with_frets]] shows why the equal-tempered major third sounds about 14 cents sharp of the pure 5:4.
 
 Try it: click Run on [[build_triad]] with tonic C4 and quality "major", then "minor" — only the third moves. Now try "diminished" and "augmented" and watch the fifth move instead. See [[Intervals]] for the rest of the interval vocabulary.
+
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="enharmonic_equivalence" href="enharmonic_equivalence" style="color:#1963D1;">enharmonic_equivalence</a></span>
+<span>&uarr; <a class="internal-link" data-href="Note_notation" href="Note_notation" style="color:#1963D1;">Note_notation</a></span>
+</div>
