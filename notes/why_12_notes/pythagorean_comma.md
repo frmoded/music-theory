@@ -61,3 +61,17 @@ Every tuning system invented since — [[meantone]], [[well_temperament]], today
 ## History
 
 Ancient Greek theory was not caught off guard by this. Euclid's *Sectio Canonis* (c. 300 BCE) works the same ratio arithmetic through and shows explicitly that a stack of fifths never lands exactly on a stack of octaves — the comma was a proven consequence of Pythagorean number-ratio theory, not a later, embarrassing discovery made once instruments got precise enough to expose it.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="why_12_notes" href="why_12_notes" style="color:#1963D1;">why_12_notes</a></span>
+<span>&uarr; <a class="internal-link" data-href="the_physics_of_beauty" href="the_physics_of_beauty" style="color:#1963D1;">the_physics_of_beauty</a></span>
+<span><a class="internal-link" data-href="Tuning" href="Tuning" style="color:#1963D1;">Tuning</a> &rarr;</span>
+</div>
