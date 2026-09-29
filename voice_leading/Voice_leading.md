@@ -10,3 +10,18 @@ How individual voices move from one chord to the next — which note goes where,
 ## Sources
 
 MT21C §16 Figured Bass, §26–29 Voice Leading.
+
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="Chord" href="Chord" style="color:#1963D1;">Chord</a></span>
+<span>&uarr; <a class="internal-link" data-href="README" href="README" style="color:#1963D1;">README</a></span>
+<span><a class="internal-link" data-href="Form" href="Form" style="color:#1963D1;">Form</a> &rarr;</span>
+</div>
