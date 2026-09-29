@@ -48,6 +48,8 @@
   .step-pos { min-width: 62px; text-align: center; font-variant-numeric: tabular-nums; font-size: 12px; color: var(--muted); }
   .sliders { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 10px; align-items: center; }
   .slider-field { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+  .slider-field-wrap { display: flex; flex-direction: column; gap: 2px; }
+  .swing-caption { margin: 0; font-size: 11px; color: var(--muted); max-width: 320px; }
   .slider-field input[type="range"] { width: 110px; }
   .banks { display: flex; gap: 4px; margin-bottom: 10px; }
   .banks button { min-width: 36px; min-height: 34px; padding: 4px 8px; }
@@ -65,15 +67,25 @@
   .step {
     min-height: 34px; border: 1px solid var(--grid); border-radius: 4px; background: #fff;
     cursor: pointer; padding: 0; position: relative;
+    transition: transform 150ms ease-out;   /* smooths the swing-preview nudge as the slider moves */
   }
   .step:hover { border-color: var(--axis); }
   .step:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   .step.on { background: var(--right); border-color: var(--right-text); }
   .step.beat-start { border-left: 2px solid var(--zero); }
   .step.playing::after {
-    content: ""; position: absolute; inset: -3px; border: 2px solid var(--accent); border-radius: 6px; pointer-events: none;
+    /* Was --accent (#D72027, saturated red) -- driver: "a bit harsh". #F8C54B (the guide's
+       --highlight gold) was tried first since it's the guide's own "active step" vocabulary, but
+       it measures only 1.57:1 contrast against the paper background as a thin border -- nearly
+       invisible, the same class of bug the piano/guitar/lute button-border fix caught earlier
+       this session. This desaturated red keeps "red = position marker" recognizable (distinct
+       from the gold/tan/slate "on" colors below) while dropping saturation, at 5.04:1 contrast. */
+    content: ""; position: absolute; inset: -3px; border: 2px solid #B54A50; border-radius: 6px; pointer-events: none;
   }
-  .step[data-channel="kick"].on { background: var(--left); border-color: var(--ink); }
+  /* Was var(--left) #2B2B2B (near-black, same value as Title Text) -- driver: "same but less so".
+     var(--muted) #555555 (already used for Body Text) is visibly softer while staying clearly
+     "on" against the paper background (7.27:1) and against the other two channels' on-colors. */
+  .step[data-channel="kick"].on { background: var(--muted); border-color: var(--ink); }
   .step[data-channel="hihat"].on { background: var(--derived); border-color: #4b5a70; }
   .bottom-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 </style>
@@ -93,10 +105,13 @@
 </div>
 
 <div class="sliders">
-  <label class="slider-field">Swing
-    <input type="range" id="swing" min="0" max="100" value="0" aria-label="Swing amount">
-    <span id="swingVal">0%</span>
-  </label>
+  <div class="slider-field-wrap">
+    <label class="slider-field">Swing
+      <input type="range" id="swing" min="0" max="100" value="0" aria-label="Swing amount">
+      <span id="swingVal">0%</span>
+    </label>
+    <p class="swing-caption">Delays every off-beat 16th note &mdash; try 50&ndash;100% while playing a steady pattern to hear the shuffle. The off-beat step cells below nudge right as a preview, even while stopped.</p>
+  </div>
   <label class="slider-field">Volume
     <input type="range" id="volume" min="0" max="100" value="80" aria-label="Volume">
     <span id="volumeVal">80%</span>
@@ -224,12 +239,23 @@ function advanceScheduler(state, now, bpm, swingPct, scheduleAheadTime) {
   }
   return { events: events, state: { currentStep: currentStep, nextNoteTime: nextNoteTime } };
 }
+
+// Swing VISUAL preview only — a horizontal nudge (in px) for the off-beat step cells, so the eye
+// can see roughly what the ear will hear before or during playback. Reads swingPct and step
+// parity, same as swingOffsetSeconds, but is a SEPARATE function that never feeds back into
+// advanceScheduler/swingOffsetSeconds — presentation, not timing. (Driver-requested legibility
+// polish; the audio-timing functions above are unchanged by this drain.)
+function swingVisualPx(swingPct, stepIndex) {
+  var pct = Math.max(0, Math.min(100, swingPct));
+  if (stepIndex % 2 === 0) return 0;                  // only the "off" 16th nudges, same convention as swingOffsetSeconds
+  return (pct / 100) * 6;                              // capped at 6px — a preview, not a ruler
+}
 // --- pure math -- END pure-core -------------------------------------------------------------
 
 if (typeof document === "undefined") {           // node test harness
   module.exports = {
     STEPS: STEPS, CHANNELS: CHANNELS, BANKS: BANKS, MIN_BPM: MIN_BPM, MAX_BPM: MAX_BPM,
-    clampBpm: clampBpm, stepSeconds: stepSeconds, swingOffsetSeconds: swingOffsetSeconds,
+    clampBpm: clampBpm, stepSeconds: stepSeconds, swingOffsetSeconds: swingOffsetSeconds, swingVisualPx: swingVisualPx,
     pushTap: pushTap, bpmFromTapHistory: bpmFromTapHistory,
     channelStepWeight: channelStepWeight, randomizePattern: randomizePattern, emptyPattern: emptyPattern,
     isChannelAudible: isChannelAudible, advanceScheduler: advanceScheduler
@@ -320,6 +346,16 @@ if (typeof document === "undefined") {           // node test harness
     });
     $("stepPos").textContent = playing && currentStep >= 0 ? (currentStep + 1) + " / 16" : "-- / 16";
   }
+  // Swing preview: nudge the off-beat step cells sideways by swingVisualPx, independent of
+  // playback state, so the eye can see the delay grow as the slider moves, even while stopped.
+  function renderSwingPreview() {
+    CHANNELS.forEach(function (ch) {
+      for (var s = 0; s < STEPS; s++) {
+        var px = swingVisualPx(swingPct, s);
+        stepEls[ch][s].style.transform = px ? "translateX(" + px + "px)" : "";
+      }
+    });
+  }
 
   // --- transport / bpm / banks ---------------------------------------------------------------
   function setBpm(v) { bpm = clampBpm(v); $("bpmVal").textContent = Math.round(bpm) + " BPM"; }
@@ -330,7 +366,7 @@ if (typeof document === "undefined") {           // node test harness
     var t = bpmFromTapHistory(tapHistory);
     if (t != null) setBpm(t);
   });
-  $("swing").addEventListener("input", function (e) { swingPct = +e.target.value; $("swingVal").textContent = swingPct + "%"; });
+  $("swing").addEventListener("input", function (e) { swingPct = +e.target.value; $("swingVal").textContent = swingPct + "%"; renderSwingPreview(); });
   $("volume").addEventListener("input", function (e) { volume = (+e.target.value) / 100; $("volumeVal").textContent = e.target.value + "%"; });
   Array.prototype.forEach.call(document.querySelectorAll(".banks button"), function (b) {
     b.addEventListener("click", function () {
@@ -424,6 +460,7 @@ if (typeof document === "undefined") {           // node test harness
   renderGrid();
   renderMuteSolo();
   renderPlayhead();
+  renderSwingPreview();
 })();
 }
 </script>
