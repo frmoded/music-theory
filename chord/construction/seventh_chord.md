@@ -11,3 +11,17 @@ Stack one more third on top of a [[triad]] and you get a **seventh chord** — f
 Run [[build_seventh_chord]] with `tonic="C4"` and cycle through all five `quality` values — listen for how much the added note changes the character versus the plain triad in [[chord_quality]].
 
 Keep stacking thirds past the seventh and you're into [[extension]] territory: 9ths, 11ths, 13ths.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="chord_tone" href="chord_tone" style="color:#1963D1;">chord_tone</a></span>
+<span>&uarr; <a class="internal-link" data-href="construction" href="construction" style="color:#1963D1;">construction</a></span>
+<span><a class="internal-link" data-href="extension" href="extension" style="color:#1963D1;">extension</a> &rarr;</span>
+</div>
