@@ -8,7 +8,5 @@ The fields, roughly in build order:
 - [[accidental]] — sharp / flat / natural; how 7 letters reach all 12 classes
 - [[enharmonic_equivalence]] — two names for one pitch (C♯ = D♭)
 - [[thirds_and_fifths]] — the two intervals that build triads: how a third and a fifth are counted and named
-- [[piano]] — where the 12 pitch classes sit on a keyboard
-- [[guitar]] — where the 12 pitch classes sit on a fretted, multi-string instrument
 
-See [[note]] for the overview.
+See [[Music_instruments]] for where these pitch classes actually sit on a real instrument — piano, guitar, and the rest — and [[note]] for the overview.
