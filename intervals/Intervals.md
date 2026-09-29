@@ -9,3 +9,18 @@ An interval measures the distance between two pitches — numeric size (how many
 ## Sources
 
 MT21C §5 Introduction to Intervals.
+
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="Notes" href="Notes" style="color:#1963D1;">Notes</a></span>
+<span>&uarr; <a class="internal-link" data-href="README" href="README" style="color:#1963D1;">README</a></span>
+<span><a class="internal-link" data-href="Rhythm" href="Rhythm" style="color:#1963D1;">Rhythm</a> &rarr;</span>
+</div>
