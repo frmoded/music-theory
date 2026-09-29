@@ -4,8 +4,7 @@ An interval measures the distance between two pitches — numeric size (how many
 - [[interval_quality]] — perfect, major, minor, augmented, diminished: the semitone-count refinement on top of size.
 - [[interval_inversion]] — flip an interval and its size and quality both change in a fixed, predictable way.
 - [[compound_interval]] — an interval larger than an octave, named by reducing it back inside one.
-
-See [[interval_history]] for where this two-part naming scheme actually comes from.
+- [[interval_history]] — where this two-part naming scheme actually comes from.
 
 ## Sources
 
