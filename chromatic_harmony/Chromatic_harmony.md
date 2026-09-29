@@ -9,3 +9,18 @@ Chords borrowed from outside a key's own diatonic set: notes that don't belong t
 ## Sources
 
 MT21C §17–23 Chromatic Harmony and Modulation.
+
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="Texture" href="Texture" style="color:#1963D1;">Texture</a></span>
+<span>&uarr; <a class="internal-link" data-href="README" href="README" style="color:#1963D1;">README</a></span>
+<span><a class="internal-link" data-href="Counterpoint" href="Counterpoint" style="color:#1963D1;">Counterpoint</a> &rarr;</span>
+</div>
