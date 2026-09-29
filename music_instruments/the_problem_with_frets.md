@@ -78,3 +78,17 @@ music_instruments/resources/html/lute_fretboard.html
 On the [[lute]] the frets were loops of gut, so a player could nudge them to suit a piece. Around 1581 Vincenzo Galilei proposed one fixed rule for all of them, 17/18 of the remaining length per fret — see [[rule_of_eighteen]] — about a cent per fret away from the exact ratio Simon Stevin worked out, c. 1585–1608, as [[equal_temperament]].
 
 The guitar's fixed metal frets locked that compromise into the instrument. A [[piano]] tuner can still choose how to spread the [[pythagorean_comma|comma]], and a [[viola]] player, with no frets at all, chooses every note by ear.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="guitar" href="guitar" style="color:#1963D1;">guitar</a></span>
+<span>&uarr; <a class="internal-link" data-href="Music_instruments" href="Music_instruments" style="color:#1963D1;">Music_instruments</a></span>
+<span><a class="internal-link" data-href="piano" href="piano" style="color:#1963D1;">piano</a> &rarr;</span>
+</div>
