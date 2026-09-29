@@ -42,3 +42,16 @@ tuning/resources/html/piano_keyboard_pythagorean_bad.html
 ## History
 
 Legend has it Pythagoras (6th century BCE) noticed a string stopped at 2/3 of its length sounds settled against the open string, and decided that meant something. He wasn't wrong — Euclid's *Sectio Canonis* (c. 300 BCE) works the same arithmetic, cold and rigorous, three centuries later. The system ran Europe's ears for a thousand years, until its own flaws — the wolf, the wide thirds — finally caught up with it and pushed theorists toward [[meantone]], starting in the 15th–16th century. Every good idea eventually meets its own edge case. Did Pythagoras see this one coming? Almost certainly not.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&uarr; <a class="internal-link" data-href="Tuning" href="Tuning" style="color:#1963D1;">Tuning</a></span>
+<span><a class="internal-link" data-href="meantone" href="meantone" style="color:#1963D1;">meantone</a> &rarr;</span>
+</div>
