@@ -7,3 +7,17 @@ Look at what that setup is: one string, two fixed ends, a solid body underneath 
 As a boy in Waukesha, Wisconsin, Les Paul built the Rail from a scrap of rail found on the tracks across the street from his house. Thrilled, he ran to tell his mother. She was unimpressed; the story goes that she said, "That'll be the day you see a cowboy on a horse playing a piece of railroad track!" A railway was not a practical guitar.
 
 He kept the idea and traded the steel for wood. Around 1941, working Sundays at the Epiphone factory in New York, he mounted an Epiphone neck, homemade pickups, a bridge and a Vibrola tailpiece on a four-by-four block of pine: **the Log**. It sustained beautifully, but audiences ignored it until he attached the two halves of a sawed-up Epiphone hollow body as "wings", so it looked like a guitar — his conclusion was that people hear with their eyes. Gibson thought it too odd to sell; the Gibson Les Paul solid body arrived in 1952.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="monochord" href="monochord" style="color:#1963D1;">monochord</a></span>
+<span>&uarr; <a class="internal-link" data-href="Music_instruments" href="Music_instruments" style="color:#1963D1;">Music_instruments</a></span>
+<span><a class="internal-link" data-href="lute" href="lute" style="color:#1963D1;">lute</a> &rarr;</span>
+</div>
