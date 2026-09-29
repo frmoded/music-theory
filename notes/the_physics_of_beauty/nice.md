@@ -18,3 +18,17 @@ Add them together and the combined signal repeats cleanly too — a longer repea
 ![[notes/resources/images/twothirds_combined.svg]]
 
 Contrast with [[ugly]], where the ratio isn't simple and the combined signal never quite closes — that's a beat, not a repeat. See [[harmony]] for the 2:1 ratio and a table of the other simple ratios, and [[why_12_notes]] for what happens if you apply this same 2:3 relationship again.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="harmony" href="harmony" style="color:#1963D1;">harmony</a></span>
+<span>&uarr; <a class="internal-link" data-href="the_physics_of_beauty" href="the_physics_of_beauty" style="color:#1963D1;">the_physics_of_beauty</a></span>
+<span><a class="internal-link" data-href="ugly" href="ugly" style="color:#1963D1;">ugly</a> &rarr;</span>
+</div>
