@@ -14,3 +14,17 @@ music_instruments/resources/html/lute_fretboard.html
 Short-necked lutes from Gandhara are the ancestor of the Islamic, the East Asian and the European lute families. The Persian barbat became the Arab oud, which the Moors brought to Andalusia after 711 and which spread north through Sicily, reaching Germany by the 14th and 15th centuries.
 
 The lute dominated secular music in the Renaissance, with great players such as Francesco Canova da Milano (1497–1543) and John Dowland (1563–1626); Vincenzo Galilei, whose rule for fret placement gave the world [[rule_of_eighteen]], was a lutenist too. In the Baroque era it became an accompanying instrument, and after 1800 it almost fell out of use.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="railroad_guitar" href="railroad_guitar" style="color:#1963D1;">railroad_guitar</a></span>
+<span>&uarr; <a class="internal-link" data-href="Music_instruments" href="Music_instruments" style="color:#1963D1;">Music_instruments</a></span>
+<span><a class="internal-link" data-href="guitar" href="guitar" style="color:#1963D1;">guitar</a> &rarr;</span>
+</div>
