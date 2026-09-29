@@ -9,3 +9,18 @@ New here? Start with [[triad]] — every other concept in this section builds ou
 Press Run on [[build_triad]] right now if you want to hear a chord before reading another word.
 
 Back up to [[README]].
+
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="Melody" href="Melody" style="color:#1963D1;">Melody</a></span>
+<span>&uarr; <a class="internal-link" data-href="README" href="README" style="color:#1963D1;">README</a></span>
+<span><a class="internal-link" data-href="Voice_leading" href="Voice_leading" style="color:#1963D1;">Voice_leading</a> &rarr;</span>
+</div>
