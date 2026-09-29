@@ -5,3 +5,17 @@ A **Roman numeral** names a chord by its function within a key, not by its liter
 Run [[chord_progression]] with `key_name="C"`, `mode_name="major"`, `progression=["I", "IV", "V", "I"]` — then change `key_name` to `"G"` and run it again with the exact same progression list. Same Roman numerals, same *relationship* between the chords, completely different literal pitches — that's the whole point of relative notation.
 
 Contrast with [[chord_symbol]], the absolute, key-independent name for one specific chord. See [[diatonic_chord]] for what the seven numerals I–vii° actually stand for in a given key.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="chord_symbol" href="chord_symbol" style="color:#1963D1;">chord_symbol</a></span>
+<span>&uarr; <a class="internal-link" data-href="chord/notation/notation" href="chord/notation/notation" style="color:#1963D1;">notation</a></span>
+<span><a class="internal-link" data-href="chord/notation/slash_chord" href="chord/notation/slash_chord" style="color:#1963D1;">slash_chord</a> &rarr;</span>
+</div>
