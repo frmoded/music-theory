@@ -5,8 +5,7 @@ How a piece organizes itself above the level of a single phrase: the shapes a me
 - [[binary_ternary_form]] — two-part (AB) and three-part (ABA) sectional forms, the building blocks under most longer pieces.
 - [[sonata_form]] and [[rondo_form]] — the two classic large-scale forms built from those smaller sectional blocks.
 - [[pop_song_form]] — verse/chorus/bridge, the recognizable modern descendant of the same sectional logic.
-
-See [[form_history]] for how these forms took shape.
+- [[form_history]] — how these forms took shape.
 
 ## Sources
 
