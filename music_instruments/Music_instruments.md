@@ -7,3 +7,17 @@ The instruments behind the notes: how real strings and keys turn pitch into some
 - [[the_problem_with_frets]] — the one ratio every fret imposes on every string.
 - [[piano]] — where every pitch class sits on the keys.
 - [[viola]] — a fretless string instrument tuned in fifths, with no fixed steps at all.
+
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="Physics" href="Physics" style="color:#1963D1;">Physics</a></span>
+<span>&uarr; <a class="internal-link" data-href="Notes" href="Notes" style="color:#1963D1;">Notes</a></span>
+</div>
