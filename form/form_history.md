@@ -3,3 +3,15 @@ Large-scale musical form didn't get designed top-down — it emerged bottom-up f
 Today's verse/chorus/bridge pop form descends from the same sectional DNA — a repeating stable section (chorus ≈ refrain), a section that moves the story forward (verse ≈ strophe), and a contrasting departure (bridge ≈ the ABA middle section). The vocabulary changed; the underlying shape barely has.
 
 **Listen for it:** notice the next time a song's bridge arrives — a key change, a new chord pattern, something that reads as "somewhere else" — that's ternary-form logic still doing its job, centuries later.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&uarr; <a class="internal-link" data-href="Form" href="Form" style="color:#1963D1;">Form</a></span>
+</div>
