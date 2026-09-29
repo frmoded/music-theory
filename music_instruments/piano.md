@@ -16,3 +16,17 @@ Contrast with [[guitar]]: a piano has exactly one physical key per pitch class p
 Bartolomeo Cristofori, an instrument maker from Padua working for the Medici family, invented the piano around 1700. He called it "a keyboard with soft and loud capability" (*un cimbalo di cipresso di piano e forte*): unlike a harpsichord, it answered to how hard the player pressed. The three Cristofori pianos that survive date from the 1720s.
 
 The instrument kept changing for two centuries. Sébastien Érard's double escapement (1821) allowed fast repeated notes, and iron frames — a single-piece cast-iron frame for square pianos in 1825, a full iron frame for grands in 1843 — let strings carry far more tension. By the end of the 19th century the piano had its standard 88 keys, A0 to C8, and today it is tuned in [[equal_temperament]].
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="the_problem_with_frets" href="the_problem_with_frets" style="color:#1963D1;">the_problem_with_frets</a></span>
+<span>&uarr; <a class="internal-link" data-href="Music_instruments" href="Music_instruments" style="color:#1963D1;">Music_instruments</a></span>
+<span><a class="internal-link" data-href="viola" href="viola" style="color:#1963D1;">viola</a> &rarr;</span>
+</div>
