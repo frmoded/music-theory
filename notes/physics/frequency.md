@@ -25,3 +25,18 @@ The tension–frequency relationship has a father-and-son story behind it. **Vin
 Those experiments turned up something unexpected. Interval ratios line up neatly with string *lengths* — a perfect fifth is 3:2 — but tension does not work that way. For strings of equal length, the weights had to be in the ratio **9:4** to sound the 3:2 perfect fifth. That is the square-root law in the equation above: tension goes as the *square* of the frequency ratio, since (3/2)² = 9/4. Vincenzo's practical interest in tuning shows up elsewhere in the vault too — see [[rule_of_eighteen]] and [[Tuning]].
 
 Galileo carried the idea into his last book, *Two New Sciences* (1638), where he discusses vibrating strings and suggests that not just the length of the string matters for pitch, but also its tension and its weight. The result is named for **Marin Mersenne**, who set out these relationships in *Harmonie universelle* (1636) and checked them by experiment — something Galileo had considered impossible to do.
+
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="pitch" href="pitch" style="color:#1963D1;">pitch</a></span>
+<span>&uarr; <a class="internal-link" data-href="Physics" href="Physics" style="color:#1963D1;">Physics</a></span>
+<span><a class="internal-link" data-href="octave" href="octave" style="color:#1963D1;">octave</a> &rarr;</span>
+</div>
