@@ -3,3 +3,15 @@ Analyzing melody as a structure of MOTIVES — a small idea, developed, varied, 
 Phrase-and-subphrase language borrows openly from grammar — a period, a sentence, a comma — because 18th- and 19th-century theorists were reaching for exactly that analogy: music, like language, has units that complete a thought and units that merely pause. The analogy has aged well enough that it's still the literal vocabulary MT21C and every other modern textbook teaches.
 
 **Listen for it:** hum the opening four notes of Beethoven's Fifth, then notice how often the rest of the movement echoes just that rhythm at different pitches — a motive being worked, not a coincidence.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&uarr; <a class="internal-link" data-href="Melody" href="Melody" style="color:#1963D1;">Melody</a></span>
+</div>
