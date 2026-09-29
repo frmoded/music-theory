@@ -3,3 +3,15 @@ Every chord in this directory is, in one sense, a controlled violation — a not
 Modulation itself — actually re-centering a piece in a new key — is the technique Baroque and Classical composers used to give a piece harmonic drama across a long span: sonata form (see [[form_history]]) is inseparable from its habit of modulating to a new key for the second theme, then back for the recapitulation. Enharmonic modulation, reinterpreting a chord's spelling to pivot somewhere the original spelling couldn't reach, is the technique's most extreme form — a genuinely ambiguous chord, often a diminished seventh since it's symmetric, used as a hinge between keys with no simple common-chord relationship at all.
 
 **Listen for it:** in a Romantic-era piece, listen for a moment where the harmony suddenly feels like it's "somewhere else" for just a chord or two before snapping back — mode mixture or a secondary dominant, tonal harmony reaching just outside its own key without leaving it.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&uarr; <a class="internal-link" data-href="Chromatic_harmony" href="Chromatic_harmony" style="color:#1963D1;">Chromatic_harmony</a></span>
+</div>
