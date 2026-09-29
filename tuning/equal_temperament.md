@@ -38,3 +38,16 @@ tuning/resources/html/piano_keyboard_equal_bad.html
 ## History
 
 Simon Stevin worked out the exact mathematics — the 2^(1/12) ratio itself — around the turn of the 17th century, decades after Galilei's [[rule_of_eighteen|practical approximation]] had already been getting fretted instruments most of the way there by feel. The idea took its time catching on: keyboards stuck with [[meantone]] and then [[well_temperament]] well into the 18th century, because a system that makes every key equally mediocre is a hard sell against one that makes most keys genuinely good. Equal temperament won anyway, gradually, as the de facto keyboard standard by the 19th century and universal by the 20th — not because it sounds better, but because it never sounds *worse* in any particular key, which turned out to matter more once music started wandering freely between them.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="well_temperament" href="well_temperament" style="color:#1963D1;">well_temperament</a></span>
+<span>&uarr; <a class="internal-link" data-href="Tuning" href="Tuning" style="color:#1963D1;">Tuning</a></span>
+</div>
