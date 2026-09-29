@@ -9,3 +9,18 @@ How music organizes time: how beats group into meter, how note values subdivide 
 ## Sources
 
 MT21C §4 Rhythm and Meter.
+
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="Intervals" href="Intervals" style="color:#1963D1;">Intervals</a></span>
+<span>&uarr; <a class="internal-link" data-href="README" href="README" style="color:#1963D1;">README</a></span>
+<span><a class="internal-link" data-href="Scales" href="Scales" style="color:#1963D1;">Scales</a> &rarr;</span>
+</div>
