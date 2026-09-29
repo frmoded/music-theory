@@ -3,3 +3,15 @@ Voice-leading rules didn't arrive as abstract aesthetics — they're a codificat
 By the time Bach is writing four-part chorales, these conventions have become so internalized they read as inevitable rather than chosen — which is exactly why they're still the default teaching material for the subject 300 years later.
 
 **Listen for it:** play a slow four-voice chorale and try to follow just one inner voice all the way through — it moves by the smallest step available almost every time, which is voice leading working exactly as designed.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&uarr; <a class="internal-link" data-href="Voice_leading" href="Voice_leading" style="color:#1963D1;">Voice_leading</a></span>
+</div>
