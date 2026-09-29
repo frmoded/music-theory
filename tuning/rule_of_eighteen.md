@@ -26,3 +26,17 @@ Players had a workaround, and it's a good one: those frets were tied gut, not so
 ## History
 
 Bach's *Well-Tempered Clavier* (Book 1, 1722) is the famous version of this argument — 24 preludes and fugues, one pair in every key, proving a single tempered keyboard could do the job. Galilei was making essentially the same case 138 years earlier, and on the harder instrument. His rule held the fort for decades until Simon Stevin worked out equal temperament's exact irrational ratio around the turn of the 17th century — mathematically inevitable, in hindsight, but Galilei got a lute sounding convincingly even across every key first, with nothing but a straightedge and a stubborn disagreement with his own teacher.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="meantone" href="meantone" style="color:#1963D1;">meantone</a></span>
+<span>&uarr; <a class="internal-link" data-href="Tuning" href="Tuning" style="color:#1963D1;">Tuning</a></span>
+<span><a class="internal-link" data-href="well_temperament" href="well_temperament" style="color:#1963D1;">well_temperament</a> &rarr;</span>
+</div>
