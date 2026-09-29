@@ -10,3 +10,18 @@ How a piece organizes itself above the level of a single phrase: the shapes a me
 ## Sources
 
 MT21C §12 Popular Song Form, §13 Phrase Structure, §15 Phrase Relationships, §24 Binary and Ternary Forms, §25 Sonata and Rondo Forms.
+
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="Voice_leading" href="Voice_leading" style="color:#1963D1;">Voice_leading</a></span>
+<span>&uarr; <a class="internal-link" data-href="README" href="README" style="color:#1963D1;">README</a></span>
+<span><a class="internal-link" data-href="Texture" href="Texture" style="color:#1963D1;">Texture</a> &rarr;</span>
+</div>
