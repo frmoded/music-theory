@@ -15,3 +15,16 @@ The price is that nothing tells the hand where to go. Notice how the dots crowd 
 The viola comes from the Italian *viola da braccio*, "of the arm"; the Germans call it *Bratsche* and the French *alto*, after its range. It was central in the heyday of five-part harmony, and makers experimented with size, building larger tenor violas and smaller alto violas before the instrument settled, by the 18th century, as the middle voice of the violin family.
 
 Its repertoire grew from accompaniment to solo work. Bach gave it unusual prominence in the Brandenburg Concertos, Mozart wrote for it in his string quintets and the Sinfonia Concertante, and Berlioz built a symphony around it in *Harold en Italie*. In the 20th century Walton and Bartók wrote concertos for it, encouraged by the soloist Lionel Tertis.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="piano" href="piano" style="color:#1963D1;">piano</a></span>
+<span>&uarr; <a class="internal-link" data-href="Music_instruments" href="Music_instruments" style="color:#1963D1;">Music_instruments</a></span>
+</div>
