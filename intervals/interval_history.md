@@ -3,3 +3,15 @@ Interval names carry two independent fossils in one label: a NUMBER (how many le
 That's also why "major second" and "minor third" don't read as one consistent naming scheme — they aren't one scheme. They're two much older ones (a Pythagorean ratio tradition and a hexachord-solmization tradition) fused together as staff notation standardized across Europe.
 
 **Listen for it:** if you ever get the chance, play a justly-tuned perfect fifth against a tempered (piano) one — close enough that the difference is subtle, and that subtlety is the entire reason historical tuning systems are still argued about.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&uarr; <a class="internal-link" data-href="Intervals" href="Intervals" style="color:#1963D1;">Intervals</a></span>
+</div>
