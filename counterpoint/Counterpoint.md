@@ -8,3 +8,18 @@ Writing two or more independent melodic lines that work together — governed by
 ## Sources
 
 MT21C §30 Counterpoint.
+
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="Chromatic_harmony" href="Chromatic_harmony" style="color:#1963D1;">Chromatic_harmony</a></span>
+<span>&uarr; <a class="internal-link" data-href="README" href="README" style="color:#1963D1;">README</a></span>
+<span><a class="internal-link" data-href="Jazz" href="Jazz" style="color:#1963D1;">Jazz</a> &rarr;</span>
+</div>
