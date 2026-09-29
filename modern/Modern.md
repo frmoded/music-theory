@@ -9,3 +9,17 @@ Twentieth-century departures from the tonal system covered everywhere else in th
 ## Sources
 
 MT21C §32–35 Impressionism, Pitch-Class Set Theory, Serialism, Minimalism.
+
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="Jazz" href="Jazz" style="color:#1963D1;">Jazz</a></span>
+<span>&uarr; <a class="internal-link" data-href="README" href="README" style="color:#1963D1;">README</a></span>
+</div>
