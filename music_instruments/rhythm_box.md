@@ -3,6 +3,6 @@ A **step sequencer** turns a bar of music into a grid: time runs left to right i
 Program a pattern by clicking steps for kick, snare and hi-hat, then press Play. Mute (M) and Solo (S) isolate a channel; Swing delays every off-beat 16th for a looser feel; four pattern banks (A–D) let you switch between variations without stopping playback — useful for building up a beat section by section, the same way a real drum machine's pattern-chaining works.
 
 ```html-embed
-music_tools/resources/html/rhythm_box.html
+music_instruments/resources/html/rhythm_box.html
 360
 ```
