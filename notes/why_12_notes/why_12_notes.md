@@ -183,3 +183,17 @@ A guitar shows the most common solution, mechanically. Each fret is a fixed divi
 ## History
 
 Legend has Pythagoras noticing that a string stopped at two thirds of its length sounds remarkably settled against the open string — the observation credited with starting the idea that music is made of numbers — and the Pythagorean tradition asked what happens if you follow that step around again and again. The answer, twelve notes with a gap that never closes, shaped Western tuning for two and a half thousand years: [[pythagorean_tuning]] is the system you get by doing exactly this, and the [[pythagorean_comma]] note tells how the ancient Greeks already knew it would never close.
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="beats" href="beats" style="color:#1963D1;">beats</a></span>
+<span>&uarr; <a class="internal-link" data-href="the_physics_of_beauty" href="the_physics_of_beauty" style="color:#1963D1;">the_physics_of_beauty</a></span>
+<span><a class="internal-link" data-href="pythagorean_comma" href="pythagorean_comma" style="color:#1963D1;">pythagorean_comma</a> &rarr;</span>
+</div>
