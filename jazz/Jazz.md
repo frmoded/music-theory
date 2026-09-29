@@ -9,3 +9,18 @@ How jazz extends and re-notates the chord and scale vocabulary built up elsewher
 ## Sources
 
 MT21C §31 Jazz Theory.
+
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="Counterpoint" href="Counterpoint" style="color:#1963D1;">Counterpoint</a></span>
+<span>&uarr; <a class="internal-link" data-href="README" href="README" style="color:#1963D1;">README</a></span>
+<span><a class="internal-link" data-href="Modern" href="Modern" style="color:#1963D1;">Modern</a> &rarr;</span>
+</div>
