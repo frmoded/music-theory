@@ -18,3 +18,16 @@ A fretted instrument is a monochord whose bridge positions are marked in advance
 The monochord is one of the oldest instruments in music theory. It appears in Sumerian writings, and tradition credits Pythagoras (6th century BCE) with using it to tie intervals to ratios; Euclid's *Sectio Canonis* (c. 300 BCE) works the same arithmetic as a divided string. The movable bridge is attributed to Guido of Arezzo, around 1000 AD.
 
 In the 17th century it moved from the theorist's desk toward the laboratory. Robert Fludd pictured a "mundane monochord" in 1618, one string stretched across the whole cosmos, and Marin Mersenne used the monochord in the 1630s while working out how strings behave — the road to the length and tension laws in [[frequency]].
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&uarr; <a class="internal-link" data-href="Music_instruments" href="Music_instruments" style="color:#1963D1;">Music_instruments</a></span>
+<span><a class="internal-link" data-href="railroad_guitar" href="railroad_guitar" style="color:#1963D1;">railroad_guitar</a> &rarr;</span>
+</div>
