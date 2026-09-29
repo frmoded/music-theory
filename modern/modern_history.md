@@ -5,3 +5,15 @@ Schoenberg's serialism is the opposite move: not a loosening of tonal rules but 
 Minimalism, decades later, is almost a reaction against both: strip harmonic motion down to almost nothing and let repetition, phase, and gradual process carry the piece instead — Steve Reich's phase pieces (the same phase-shifting idea behind this vault's own [[loom]]) are a direct example of process replacing harmonic narrative as music's organizing structure.
 
 **Listen for it:** put a Debussy prelude, a Schoenberg piano piece, and a Steve Reich phase piece back to back — three completely different answers to the same 20th-century question: if tonality is optional, what organizes the piece instead?
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&uarr; <a class="internal-link" data-href="Modern" href="Modern" style="color:#1963D1;">Modern</a></span>
+</div>
