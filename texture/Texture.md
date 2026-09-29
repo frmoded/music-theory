@@ -11,3 +11,18 @@ Related, but a fully-worked piece rather than a concept directory: [[percussion/
 ## Sources
 
 MT21C §14 Accompanimental Textures.
+
+
+<div style="
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666666;
+  border-top:1px solid #F2F2EC;
+  padding:6px 2px;
+  margin:10px 0;
+">
+<span>&larr; <a class="internal-link" data-href="Form" href="Form" style="color:#1963D1;">Form</a></span>
+<span>&uarr; <a class="internal-link" data-href="README" href="README" style="color:#1963D1;">README</a></span>
+<span><a class="internal-link" data-href="Chromatic_harmony" href="Chromatic_harmony" style="color:#1963D1;">Chromatic_harmony</a> &rarr;</span>
+</div>
