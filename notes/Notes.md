@@ -2,3 +2,4 @@ A **note** is the atom of music: a single sound with a definite pitch. This sect
 
 - [[note_notation]] — the **symbolic** side: how we identify, name, and write a note.
 - [[physics]] — the **physical / perceptual** side: what a note is as sound.
+- [[Music_instruments]] — real strings and keys that turn those symbols and physics into something you can touch.
