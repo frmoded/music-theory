@@ -28,5 +28,4 @@ The instrument kept changing for two centuries. Sébastien Érard's double escap
 ">
 <span>&larr; <a class="internal-link" data-href="the_problem_with_frets" href="the_problem_with_frets" style="color:#1963D1;">the_problem_with_frets</a></span>
 <span>&uarr; <a class="internal-link" data-href="Music_instruments" href="Music_instruments" style="color:#1963D1;">Music_instruments</a></span>
-<span><a class="internal-link" data-href="viola" href="viola" style="color:#1963D1;">viola</a> &rarr;</span>
 </div>
