@@ -96,10 +96,24 @@
   .step[data-channel="kick"].on { background: var(--muted); border-color: var(--ink); }
   .step[data-channel="hihat"].on { background: var(--derived); border-color: #4b5a70; }
   .bottom-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; align-items: center; }
+  /* Beat-as-data Phase 5: a cell holding a velocity >= 100 (e.g. from accent_mask) is drawn with a double ring so the accents
+     are visible. Shown on top of the channel colour, so it reads on kick, snare and hi-hat alike. */
+  .step.on.accent { box-shadow: inset 0 0 0 2px #fff, inset 0 0 0 4px var(--ink); }
+  /* Host mode only (the widget was opened by the plugin's "Edit rhythm in Rhythm Box"): note name + Save. Hidden standalone. */
+  .host-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; font-size: 13px; color: var(--ink); }
+  .host-bar .note { font-weight: 600; }
+  #bSave { background: var(--highlight); border-color: var(--ink); font-weight: 600; }
+  .host-msg { font-size: 12px; color: var(--muted); min-height: 16px; }
+  .host-msg.error { color: #B54A50; }
 </style>
 </head>
 <body>
 <div class="wrap">
+
+<div class="host-bar" id="hostBar" hidden>
+  <span>Editing</span> <span class="note" id="hostNote"></span>
+  <span class="host-msg" id="loadMsg" role="status" aria-live="polite"></span>
+</div>
 
 <div class="transport">
   <button class="play" id="bPlay" title="Start or stop the sequencer" aria-pressed="false">Play</button>
@@ -146,6 +160,8 @@
   <button id="bClear" title="Empty the current pattern">Clear</button>
   <button id="bExport" title="Copy this bank's pattern (plus time signature, swing and tempo) as JSON, ready to paste into a data note">Export JSON</button>
   <span class="export-msg" id="exportMsg" role="status" aria-live="polite"></span>
+  <button id="bSave" hidden title="Write this bank's pattern back into the note you opened it from (only the note's json block changes)">Save to note</button>
+  <span class="host-msg" id="saveMsg" role="status" aria-live="polite"></span>
 </div>
 <textarea id="exportFallback" class="export-fallback" readonly hidden aria-label="Pattern JSON (select all and copy)"></textarea>
 
@@ -288,12 +304,25 @@ function swingVisualPx(swingPct, stepIndex) {
 // group_size; swingPct -> swing_pct; bpm -> tempo_bpm; pattern -> channels), so this is a direct
 // serialization, not a reshaping. Channel arrays stay on ONE line each (valid JSON either way) so a
 // pasted note reads like a grid instead of 16 lines per channel.
+// Beat-as-data Phase 5: a cell is false (rest) | true (a hit at the default velocity) | an int 1-127 (a hit at that MIDI
+// velocity, as written by accent_mask / hand-edited rhythm data). The cell used to be coerced with `!!v`, which would have
+// flattened every velocity to `true` on a load -> edit -> save round trip; ints are now preserved untouched.
+var ACCENT_THRESHOLD = 100;                      // mirrors the engine's _RHYTHM_ACCENT_THRESHOLD (forge/music/lib.py)
+function normalizeCell(v) {
+  if (v === true) return true;
+  if (typeof v === "number" && isFinite(v) && Math.floor(v) === v && v >= 1 && v <= 127) return v;
+  return false;                                  // false, 0, null, undefined, anything else: a rest
+}
+function cellOn(v) { return normalizeCell(v) !== false; }
+// A click toggles an int cell to a rest and an empty cell to a PLAIN hit (never an invented velocity).
+function toggleCell(v) { return normalizeCell(v) === false ? true : false; }
+function isAccentedCell(v) { var n = normalizeCell(v); return typeof n === "number" && n >= ACCENT_THRESHOLD; }
 function buildRhythmData(timeSigKey, swingPct, bpm, pattern) {
   var sig = TIME_SIGNATURES[timeSigKey];
   var channels = {};
   CHANNELS.forEach(function (ch) {
     var row = new Array(sig.steps).fill(false);
-    (pattern[ch] || []).slice(0, sig.steps).forEach(function (v, i) { row[i] = !!v; });
+    (pattern[ch] || []).slice(0, sig.steps).forEach(function (v, i) { row[i] = normalizeCell(v); });
     channels[ch] = row;
   });
   return { time_signature: timeSigKey, steps: sig.steps, group_size: sig.groupSize,
@@ -315,6 +344,46 @@ function rhythmDataJson(data) {
   lines.push('  }');
   return '{\n' + lines.join('\n') + '\n}';
 }
+// Validate rhythm data arriving from the host (the plugin's "Edit rhythm in Rhythm Box"). Anything this widget could not SAVE BACK
+// unchanged is refused here with a message, rather than loaded and silently altered on the next Save: an unsupported time
+// signature / grid, a tempo or swing it cannot represent exactly, an unknown channel, a step that is not false/0/true/int 1-127.
+function parseRhythmLoad(data) {
+  function bad(message) { return { ok: false, message: message }; }
+  if (!data || typeof data !== "object" || Array.isArray(data)) return bad("The rhythm data must be an object.");
+  var sigKey = data.time_signature;
+  if (typeof sigKey !== "string" || !Object.prototype.hasOwnProperty.call(TIME_SIGNATURES, sigKey)) {
+    return bad("The Rhythm Box supports " + Object.keys(TIME_SIGNATURES).join(" and ") + ", not " + JSON.stringify(sigKey) + ".");
+  }
+  var sig = TIME_SIGNATURES[sigKey];
+  if (data.steps !== sig.steps || data.group_size !== sig.groupSize) {
+    return bad(sigKey + " here means " + sig.steps + " steps in groups of " + sig.groupSize + "; this pattern has " + data.steps + " steps in groups of " + data.group_size + ".");
+  }
+  var swing = data.swing_pct === undefined ? 0 : data.swing_pct;
+  if (typeof swing !== "number" || Math.floor(swing) !== swing || swing < 0 || swing > 100) {
+    return bad("swing_pct must be a whole number from 0 to 100 (got " + JSON.stringify(data.swing_pct) + ").");
+  }
+  var tempo = data.tempo_bpm;
+  if (typeof tempo !== "number" || Math.floor(tempo) !== tempo || tempo < MIN_BPM || tempo > MAX_BPM) {
+    return bad("tempo_bpm must be a whole number from " + MIN_BPM + " to " + MAX_BPM + " BPM (got " + JSON.stringify(tempo) + ").");
+  }
+  var chans = data.channels;
+  if (!chans || typeof chans !== "object" || Array.isArray(chans)) return bad("channels must be an object.");
+  var pattern = emptyPattern(sig.steps), failure = null;
+  Object.keys(chans).forEach(function (name) {
+    if (failure) return;
+    if (CHANNELS.indexOf(name) < 0) { failure = bad("Unknown channel " + JSON.stringify(name) + " (the Rhythm Box has " + CHANNELS.join(", ") + ")."); return; }
+    var row = chans[name];
+    if (!Array.isArray(row) || row.length !== sig.steps) { failure = bad("Channel " + name + " must be a list of " + sig.steps + " steps."); return; }
+    row.forEach(function (v, i) {
+      if (failure) return;
+      var ok = v === true || v === false || v === 0 || normalizeCell(v) !== false;
+      if (!ok) { failure = bad("Channel " + name + " step " + i + " is " + JSON.stringify(v) + " (expected false, true, or a velocity 1-127)."); return; }
+      pattern[name][i] = normalizeCell(v);
+    });
+  });
+  if (failure) return failure;
+  return { ok: true, state: { timeSig: sigKey, steps: sig.steps, groupSize: sig.groupSize, swingPct: swing, bpm: tempo, pattern: pattern } };
+}
 // --- pure math -- END pure-core -------------------------------------------------------------
 
 if (typeof document === "undefined") {           // node test harness
@@ -325,7 +394,9 @@ if (typeof document === "undefined") {           // node test harness
     pushTap: pushTap, bpmFromTapHistory: bpmFromTapHistory,
     channelStepWeight: channelStepWeight, randomizePattern: randomizePattern, emptyPattern: emptyPattern,
     isChannelAudible: isChannelAudible, advanceScheduler: advanceScheduler,
-    buildRhythmData: buildRhythmData, rhythmDataJson: rhythmDataJson
+    buildRhythmData: buildRhythmData, rhythmDataJson: rhythmDataJson,
+    ACCENT_THRESHOLD: ACCENT_THRESHOLD, normalizeCell: normalizeCell, cellOn: cellOn, toggleCell: toggleCell,
+    isAccentedCell: isAccentedCell, parseRhythmLoad: parseRhythmLoad
   };
 } else {
 (function () {
@@ -396,7 +467,7 @@ if (typeof document === "undefined") {           // node test harness
   buildGrid();
 
   function toggleStep(ch, s) {
-    patterns[bank][ch][s] = !patterns[bank][ch][s];
+    patterns[bank][ch][s] = toggleCell(patterns[bank][ch][s]);     // ints are preserved on untouched cells; a click clears or sets a plain hit
     renderGrid();
   }
   function toggleMute(ch) { if (muted.has(ch)) muted.delete(ch); else muted.add(ch); renderMuteSolo(); }
@@ -412,9 +483,12 @@ if (typeof document === "undefined") {           // node test harness
   function renderGrid() {
     CHANNELS.forEach(function (ch) {
       for (var s = 0; s < steps; s++) {
-        var on = patterns[bank][ch][s];
+        var cell = patterns[bank][ch][s], on = cellOn(cell), accented = isAccentedCell(cell);
         stepEls[ch][s].classList.toggle("on", on);
+        stepEls[ch][s].classList.toggle("accent", accented);
         stepEls[ch][s].setAttribute("aria-pressed", on ? "true" : "false");
+        var vel = typeof normalizeCell(cell) === "number" ? " (velocity " + cell + (accented ? ", accent" : "") + ")" : "";
+        stepEls[ch][s].setAttribute("aria-label", CHANNEL_LABEL[ch] + " step " + (s + 1) + vel);
       }
     });
   }
@@ -573,11 +647,58 @@ if (typeof document === "undefined") {           // node test harness
   }
   $("bPlay").addEventListener("click", function () { if (playing) stop(); else start(); });
 
+  // --- host protocol (Beat-as-data Phase 5): edit a rhythm data NOTE through this widget ------------------------------
+  // Standalone (opened directly, or embedded by an html-embed block) nothing below is visible and behaviour is unchanged. When
+  // the plugin hosts this page it replies to our `ready` with `forge-rhythm-load`; only THEN does Save appear. Messages are
+  // accepted only from the embedding window (e.source === window.parent); the plugin makes the mirror check on its side.
+  var hostNote = "", saveMsgTimer = null;
+  function hostWindow() { return window.parent && window.parent !== window ? window.parent : null; }
+  function postToHost(msg) { var h = hostWindow(); if (h) { try { h.postMessage(msg, "*"); } catch (e) { /* host gone */ } } }
+  function setHostMsg(id, text, isError) {
+    var el = $(id); el.textContent = text; el.classList.toggle("error", !!isError);
+  }
+  function applyLoad(msg) {
+    var r = parseRhythmLoad(msg.data);
+    if (!r.ok) { $("hostBar").hidden = false; setHostMsg("loadMsg", "Could not load this note: " + r.message, true); return; }
+    if (playing) stop();
+    timeSig = r.state.timeSig; steps = r.state.steps; groupSize = r.state.groupSize;
+    $("timeSig").value = timeSig;
+    setBpm(r.state.bpm);
+    swingPct = r.state.swingPct; $("swing").value = swingPct; $("swingVal").textContent = swingPct + "%";
+    BANKS.forEach(function (b) { patterns[b] = emptyPattern(steps); });      // the other banks are cleared, as on a time-signature change
+    patterns["A"] = r.state.pattern;
+    bank = "A";
+    Array.prototype.forEach.call(document.querySelectorAll(".banks button"), function (x) { x.classList.toggle("active", x.getAttribute("data-bank") === "A"); });
+    buildGrid(); renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview();
+    hostNote = typeof msg.noteName === "string" ? msg.noteName : "";
+    $("hostNote").textContent = hostNote;
+    $("hostBar").hidden = false; $("bSave").hidden = false;
+    setHostMsg("loadMsg", "", false); setHostMsg("saveMsg", "", false);
+  }
+  function showSaveResult(msg) {
+    setHostMsg("saveMsg", msg.ok ? "Saved to " + hostNote : String(msg.message || "Not saved"), !msg.ok);
+    clearTimeout(saveMsgTimer);
+    if (msg.ok) saveMsgTimer = setTimeout(function () { setHostMsg("saveMsg", "", false); }, 3000);   // errors stay until the next try
+  }
+  window.addEventListener("message", function (e) {
+    var h = hostWindow();
+    if (!h || e.source !== h) return;
+    var m = e.data;
+    if (!m || typeof m !== "object") return;
+    if (m.type === "forge-rhythm-load") applyLoad(m);
+    else if (m.type === "forge-rhythm-save-result") showSaveResult(m);
+  });
+  $("bSave").addEventListener("click", function () {
+    setHostMsg("saveMsg", "Saving...", false);
+    postToHost({ type: "forge-rhythm-save", data: buildRhythmData(timeSig, swingPct, bpm, patterns[bank]) });
+  });
+
   setBpm(bpm);
   renderGrid();
   renderMuteSolo();
   renderPlayhead();
   renderSwingPreview();
+  postToHost({ type: "forge-rhythm-ready" });
 })();
 }
 </script>
