@@ -99,10 +99,12 @@
   /* Beat-as-data Phase 5: a cell holding a velocity >= 100 (e.g. from accent_mask) is drawn with a double ring so the accents
      are visible. Shown on top of the channel colour, so it reads on kick, snare and hi-hat alike. */
   .step.on.accent { box-shadow: inset 0 0 0 2px #fff, inset 0 0 0 4px var(--ink); }
-  /* Host mode only (the widget was opened by the plugin's "Edit rhythm in Rhythm Box"): note name + Save. Hidden standalone. */
+  /* Host mode only (the widget was opened by the plugin's "Open as Beat Box"): note name + autosave indicator. Hidden standalone. */
   .host-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; font-size: 13px; color: var(--ink); }
   .host-bar .note { font-weight: 600; }
-  #bSave { background: var(--highlight); border-color: var(--ink); font-weight: 600; }
+  #bReload { background: var(--highlight); border-color: var(--ink); font-weight: 600; }
+  .ts-confirm { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 8px; padding: 6px 10px; font-size: 13px; border: 1px solid var(--ink); border-radius: 6px; background: var(--highlight); }
+  .ts-confirm[hidden], #bReload[hidden] { display: none; }
   .host-msg { font-size: 12px; color: var(--muted); min-height: 16px; }
   .host-msg.error { color: #B54A50; }
 </style>
@@ -113,6 +115,13 @@
 <div class="host-bar" id="hostBar" hidden>
   <span>Editing</span> <span class="note" id="hostNote"></span>
   <span class="host-msg" id="loadMsg" role="status" aria-live="polite"></span>
+  <span class="host-msg" id="saveMsg" role="status" aria-live="polite"></span>
+  <button id="bReload" hidden title="Discard what is on screen and load the note as it is on disk now">Reload from note</button>
+</div>
+<div class="ts-confirm" id="tsConfirm" role="alertdialog" aria-label="Confirm time signature change" hidden>
+  <span id="tsConfirmText"></span>
+  <button id="tsChange">Change</button>
+  <button id="tsCancel">Cancel</button>
 </div>
 
 <div class="transport">
@@ -160,8 +169,6 @@
   <button id="bClear" title="Empty the current pattern">Clear</button>
   <button id="bExport" title="Copy this bank's pattern (plus time signature, swing and tempo) as JSON, ready to paste into a data note">Export JSON</button>
   <span class="export-msg" id="exportMsg" role="status" aria-live="polite"></span>
-  <button id="bSave" hidden title="Write this bank's pattern back into the note you opened it from (only the note's json block changes)">Save to note</button>
-  <span class="host-msg" id="saveMsg" role="status" aria-live="polite"></span>
 </div>
 <textarea id="exportFallback" class="export-fallback" readonly hidden aria-label="Pattern JSON (select all and copy)"></textarea>
 
@@ -469,6 +476,7 @@ if (typeof document === "undefined") {           // node test harness
   function toggleStep(ch, s) {
     patterns[bank][ch][s] = toggleCell(patterns[bank][ch][s]);     // ints are preserved on untouched cells; a click clears or sets a plain hit
     renderGrid();
+    commitChange();
   }
   function toggleMute(ch) { if (muted.has(ch)) muted.delete(ch); else muted.add(ch); renderMuteSolo(); }
   function toggleSolo(ch) { if (soloed.has(ch)) soloed.delete(ch); else soloed.add(ch); renderMuteSolo(); }
@@ -511,14 +519,16 @@ if (typeof document === "undefined") {           // node test harness
 
   // --- transport / bpm / banks ---------------------------------------------------------------
   function setBpm(v) { bpm = clampBpm(v); $("bpmVal").textContent = Math.round(bpm) + " BPM"; }
-  $("bBpmUp").addEventListener("click", function () { setBpm(bpm + 1); });
-  $("bBpmDown").addEventListener("click", function () { setBpm(bpm - 1); });
+  // Tempo is pattern data: a button or tap that actually CHANGES it is committed (autosave); one at its limit is not.
+  function changeBpm(v) { var before = bpm; setBpm(v); if (bpm !== before) commitChange(); }
+  $("bBpmUp").addEventListener("click", function () { changeBpm(bpm + 1); });
+  $("bBpmDown").addEventListener("click", function () { changeBpm(bpm - 1); });
   $("bTap").addEventListener("click", function () {
     tapHistory = pushTap(tapHistory, performance.now());
     var t = bpmFromTapHistory(tapHistory);
-    if (t != null) setBpm(t);
+    if (t != null) changeBpm(t);
   });
-  $("swing").addEventListener("input", function (e) { swingPct = +e.target.value; $("swingVal").textContent = swingPct + "%"; renderSwingPreview(); });
+  $("swing").addEventListener("input", function (e) { swingPct = +e.target.value; $("swingVal").textContent = swingPct + "%"; renderSwingPreview(); commitChange(); });
   $("volume").addEventListener("input", function (e) { volume = (+e.target.value) / 100; $("volumeVal").textContent = e.target.value + "%"; });
   Array.prototype.forEach.call(document.querySelectorAll(".banks button"), function (b) {
     b.addEventListener("click", function () {
@@ -527,8 +537,8 @@ if (typeof document === "undefined") {           // node test harness
       renderGrid();                                        // the scheduler keeps reading `patterns[bank]` from the next step it schedules
     });
   });
-  $("bRandom").addEventListener("click", function () { patterns[bank] = randomizePattern(null, steps, groupSize); renderGrid(); });
-  $("bClear").addEventListener("click", function () { patterns[bank] = emptyPattern(steps); renderGrid(); });
+  $("bRandom").addEventListener("click", function () { patterns[bank] = randomizePattern(null, steps, groupSize); renderGrid(); commitChange(); });
+  $("bClear").addEventListener("click", function () { patterns[bank] = emptyPattern(steps); renderGrid(); commitChange(); });
   // Export: clipboard first; if the host denies clipboard-write (iframe permissions vary by embedder),
   // fall back to execCommand("copy") on a hidden-then-selected textarea, and as a last resort show the
   // JSON in a read-only textarea for a manual select-all/copy. The user always ends with the JSON.
@@ -559,15 +569,37 @@ if (typeof document === "undefined") {           // node test harness
   // toggle) and clears every bank's pattern (a 4/4 pattern has no meaningful mapping onto 3/4's
   // different bar length, so silently truncating/padding would just look broken — clearing and
   // saying so via the select's own tooltip is the honest choice).
-  $("timeSig").addEventListener("change", function (e) {
+  function applyTimeSig(next) {
     if (playing) stop();
-    timeSig = e.target.value;
+    timeSig = next;
     var sig = TIME_SIGNATURES[timeSig];
     steps = sig.steps; groupSize = sig.groupSize;
     BANKS.forEach(function (b) { patterns[b] = emptyPattern(steps); });
     buildGrid();
     renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview();
+  }
+  // Hosted (editing a note), this wipes the pattern IN THE NOTE and autosave would write it, so it asks first — with an inline bar,
+  // because the iframe sandbox blocks the native confirm dialog. Standalone keeps the immediate behaviour (nothing is written anywhere).
+  var pendingTimeSig = null;
+  function hideTsConfirm() { pendingTimeSig = null; $("tsConfirm").hidden = true; }
+  $("timeSig").addEventListener("change", function (e) {
+    var next = e.target.value;
+    if (!(hostWindow() && hostLoaded)) { applyTimeSig(next); return; }
+    if (next === timeSig) { hideTsConfirm(); return; }
+    pendingTimeSig = next;
+    e.target.value = timeSig;                                           // the select keeps showing what is still in force
+    $("tsConfirmText").textContent = "This clears the pattern in the note. Change to " + next + "?";
+    $("tsConfirm").hidden = false;
   });
+  $("tsChange").addEventListener("click", function () {
+    var next = pendingTimeSig;
+    hideTsConfirm();
+    if (next === null || !TIME_SIGNATURES[next]) return;
+    $("timeSig").value = next;
+    applyTimeSig(next);
+    commitChange();
+  });
+  $("tsCancel").addEventListener("click", hideTsConfirm);
 
   // --- Web Audio: synthesis + lookahead scheduler --------------------------------------------
   var ctx = null;
@@ -647,20 +679,28 @@ if (typeof document === "undefined") {           // node test harness
   }
   $("bPlay").addEventListener("click", function () { if (playing) stop(); else start(); });
 
-  // --- host protocol (Beat-as-data Phase 5): edit a rhythm data NOTE through this widget ------------------------------
-  // Standalone (opened directly, or embedded by an html-embed block) nothing below is visible and behaviour is unchanged. When
-  // the plugin hosts this page it replies to our `ready` with `forge-rhythm-load`; only THEN does Save appear. Messages are
-  // accepted only from the embedding window (e.source === window.parent); the plugin makes the mirror check on its side.
-  var hostNote = "", saveMsgTimer = null;
+  // --- host protocol (Beat-as-data Phase 5 + 5b): edit a rhythm data NOTE through this widget ------------------------
+  // Standalone (opened directly, or embedded by an html-embed block) nothing below is visible and behaviour is unchanged: no
+  // messages are posted, no autosave. When the plugin hosts this page it replies to our `ready` with `forge-rhythm-load`; only
+  // THEN does the host bar appear and autosave switch on. Every action that changes pattern data calls commitChange() — the ONE
+  // place a `forge-rhythm-save` is posted (the plugin debounces and writes). Play, mute, solo, volume and bank selection never
+  // call it. The plugin answers with `forge-rhythm-status` (saving / saved / error / conflict / idle). Messages are accepted only
+  // from the embedding window (e.source === window.parent); the plugin makes the mirror check on its side.
+  var hostNote = "", hostLoaded = false;
   function hostWindow() { return window.parent && window.parent !== window ? window.parent : null; }
   function postToHost(msg) { var h = hostWindow(); if (h) { try { h.postMessage(msg, "*"); } catch (e) { /* host gone */ } } }
+  function commitChange() {
+    if (!hostWindow() || !hostLoaded) return;      // standalone, or a note that has not loaded (or was refused): never write
+    postToHost({ type: "forge-rhythm-save", data: buildRhythmData(timeSig, swingPct, bpm, patterns[bank]) });
+  }
   function setHostMsg(id, text, isError) {
     var el = $(id); el.textContent = text; el.classList.toggle("error", !!isError);
   }
   function applyLoad(msg) {
     var r = parseRhythmLoad(msg.data);
-    if (!r.ok) { $("hostBar").hidden = false; setHostMsg("loadMsg", "Could not load this note: " + r.message, true); return; }
+    if (!r.ok) { hostLoaded = false; hideTsConfirm(); $("hostBar").hidden = false; setHostMsg("loadMsg", "Could not load this note: " + r.message, true); return; }
     if (playing) stop();
+    hideTsConfirm();
     timeSig = r.state.timeSig; steps = r.state.steps; groupSize = r.state.groupSize;
     $("timeSig").value = timeSig;
     setBpm(r.state.bpm);
@@ -672,13 +712,20 @@ if (typeof document === "undefined") {           // node test harness
     buildGrid(); renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview();
     hostNote = typeof msg.noteName === "string" ? msg.noteName : "";
     $("hostNote").textContent = hostNote;
-    $("hostBar").hidden = false; $("bSave").hidden = false;
+    hostLoaded = true;
+    $("hostBar").hidden = false; $("bReload").hidden = true;
     setHostMsg("loadMsg", "", false); setHostMsg("saveMsg", "", false);
   }
-  function showSaveResult(msg) {
-    setHostMsg("saveMsg", msg.ok ? "Saved to " + hostNote : String(msg.message || "Not saved"), !msg.ok);
-    clearTimeout(saveMsgTimer);
-    if (msg.ok) saveMsgTimer = setTimeout(function () { setHostMsg("saveMsg", "", false); }, 3000);   // errors stay until the next try
+  // The autosave indicator. "Saved" and errors both PERSIST (an error until the next successful save replaces it).
+  function showStatus(state, message) {
+    var text = String(message || "");
+    if (state === "saving") setHostMsg("saveMsg", "Saving…", false);
+    else if (state === "saved") setHostMsg("saveMsg", "Saved", false);
+    else if (state === "error") setHostMsg("saveMsg", text || "Not saved", true);
+    else if (state === "conflict") setHostMsg("saveMsg", text || "The note changed on disk — your latest edit was not saved.", true);
+    else if (state === "idle") setHostMsg("saveMsg", "", false);
+    else return;
+    $("bReload").hidden = state !== "conflict";
   }
   window.addEventListener("message", function (e) {
     var h = hostWindow();
@@ -686,12 +733,10 @@ if (typeof document === "undefined") {           // node test harness
     var m = e.data;
     if (!m || typeof m !== "object") return;
     if (m.type === "forge-rhythm-load") applyLoad(m);
-    else if (m.type === "forge-rhythm-save-result") showSaveResult(m);
+    else if (m.type === "forge-rhythm-status") showStatus(m.state, m.message);
+    else if (m.type === "forge-rhythm-save-result") showStatus(m.ok ? "saved" : "error", m.message);     // Phase 5 reply, still understood
   });
-  $("bSave").addEventListener("click", function () {
-    setHostMsg("saveMsg", "Saving...", false);
-    postToHost({ type: "forge-rhythm-save", data: buildRhythmData(timeSig, swingPct, bpm, patterns[bank]) });
-  });
+  $("bReload").addEventListener("click", function () { postToHost({ type: "forge-rhythm-reload" }); });
 
   setBpm(bpm);
   renderGrid();

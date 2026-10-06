@@ -6,3 +6,5 @@ Program a pattern by clicking steps for kick, snare and hi-hat, then press Play.
 music_instruments/resources/html/rhythm_box.html
 360
 ```
+
+**Edit a pattern that lives in a note.** The rhythm data notes in `rhythm_data/` are just JSON, and you can drive them from the grid instead of hand-typing booleans like an animal. Open one and hit **Open as Beat Box** in the note's header (or run *Edit rhythm in Rhythm Box* from the command palette): the same tab turns into this widget, loaded with the note's pattern. Click cells, change the tempo, swing or time signature, and it saves itself a moment after you stop — the little status next to the note's name says *Saving…* then *Saved*, and there's no Save button to forget. Play, mute, solo, volume and the banks never touch the note. **Open as JSON** in the header flips the tab back to the plain text. Change the time signature and you'll be asked first, because it wipes the pattern.
