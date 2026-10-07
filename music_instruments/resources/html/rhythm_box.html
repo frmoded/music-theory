@@ -104,8 +104,8 @@
   .host-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; font-size: 13px; color: var(--ink); }
   .host-bar .note { font-weight: 600; }
   #bReload { background: var(--highlight); border-color: var(--ink); font-weight: 600; }
-  .ts-confirm { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 8px; padding: 6px 10px; font-size: 13px; border: 1px solid var(--ink); border-radius: 6px; background: var(--highlight); }
-  .ts-confirm[hidden], #bReload[hidden] { display: none; }
+  .confirm-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 8px; padding: 6px 10px; font-size: 13px; border: 1px solid var(--ink); border-radius: 6px; background: var(--highlight); }
+  .confirm-bar[hidden], #bReload[hidden] { display: none; }
   .host-msg { font-size: 12px; color: var(--muted); min-height: 16px; }
   .host-msg.error { color: #B54A50; }
 </style>
@@ -119,10 +119,10 @@
   <span class="host-msg" id="saveMsg" role="status" aria-live="polite"></span>
   <button id="bReload" hidden title="Discard what is on screen and load the note as it is on disk now">Reload from note</button>
 </div>
-<div class="ts-confirm" id="tsConfirm" role="alertdialog" aria-label="Confirm time signature change" hidden>
-  <span id="tsConfirmText"></span>
-  <button id="tsChange">Change</button>
-  <button id="tsCancel">Cancel</button>
+<div class="confirm-bar" id="confirmBar" role="alertdialog" aria-label="Confirm change to the note" hidden>
+  <span id="confirmText"></span>
+  <button id="confirmOk">Continue</button>
+  <button id="confirmCancel">Cancel</button>
 </div>
 
 <div class="transport">
@@ -539,8 +539,9 @@ if (typeof document === "undefined") {           // node test harness
       renderGrid();                                        // the scheduler keeps reading `patterns[bank]` from the next step it schedules
     });
   });
-  $("bRandom").addEventListener("click", function () { patterns[bank] = randomizePattern(null, steps, groupSize); renderGrid(); commitChange(); });
-  $("bClear").addEventListener("click", function () { patterns[bank] = emptyPattern(steps); renderGrid(); commitChange(); });
+  // Random and Clear rewrite the whole pattern. Standalone they apply at once; hosted they ask first (the ONE confirm bar, below).
+  $("bRandom").addEventListener("click", function () { requestWholePatternChange({ kind: "random" }); });
+  $("bClear").addEventListener("click", function () { requestWholePatternChange({ kind: "clear" }); });
   // Export: clipboard first; if the host denies clipboard-write (iframe permissions vary by embedder),
   // fall back to execCommand("copy") on a hidden-then-selected textarea, and as a last resort show the
   // JSON in a read-only textarea for a manual select-all/copy. The user always ends with the JSON.
@@ -580,28 +581,45 @@ if (typeof document === "undefined") {           // node test harness
     buildGrid();
     renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview();
   }
-  // Hosted (editing a note), this wipes the pattern IN THE NOTE and autosave would write it, so it asks first — with an inline bar,
-  // because the iframe sandbox blocks the native confirm dialog. Standalone keeps the immediate behaviour (nothing is written anywhere).
-  var pendingTimeSig = null;
-  function hideTsConfirm() { pendingTimeSig = null; $("tsConfirm").hidden = true; }
+  // Hosted (editing a note), a time-signature change, Random and Clear rewrite the pattern IN THE NOTE and autosave would write it, so each
+  // asks first — with ONE inline bar shared by all three (the iframe sandbox blocks the native confirm dialog). Standalone keeps the
+  // immediate behaviour (nothing is written anywhere). Only one question is open at a time: a new one REPLACES the old; any other data
+  // edit (cell, tempo, swing — everything that goes through commitChange) DISMISSES it without applying it; playback actions neither
+  // open nor dismiss it.
+  var pendingConfirm = null;
+  function dismissConfirm() { pendingConfirm = null; $("confirmBar").hidden = true; }
+  function askConfirm(action, text, okLabel) {
+    pendingConfirm = action;
+    $("confirmText").textContent = text;
+    $("confirmOk").textContent = okLabel;
+    $("confirmBar").hidden = false;
+  }
+  function applyWholePatternChange(action) {
+    if (action.kind === "random") { patterns[bank] = randomizePattern(null, steps, groupSize); renderGrid(); }
+    else if (action.kind === "clear") { patterns[bank] = emptyPattern(steps); renderGrid(); }
+    else if (action.kind === "timesig" && TIME_SIGNATURES[action.next]) { $("timeSig").value = action.next; applyTimeSig(action.next); }
+    else return;
+    commitChange();
+  }
+  function requestWholePatternChange(action) {
+    if (!(hostWindow() && hostLoaded)) { applyWholePatternChange(action); return; }
+    if (action.kind === "random") askConfirm(action, "Randomize the pattern? This replaces the pattern in the note.", "Continue");
+    else if (action.kind === "clear") askConfirm(action, "Clear the pattern? This empties the pattern in the note.", "Continue");
+    else askConfirm(action, "This clears the pattern in the note. Change to " + action.next + "?", "Change");
+  }
   $("timeSig").addEventListener("change", function (e) {
     var next = e.target.value;
     if (!(hostWindow() && hostLoaded)) { applyTimeSig(next); return; }
-    if (next === timeSig) { hideTsConfirm(); return; }
-    pendingTimeSig = next;
+    if (next === timeSig) { dismissConfirm(); return; }
     e.target.value = timeSig;                                           // the select keeps showing what is still in force
-    $("tsConfirmText").textContent = "This clears the pattern in the note. Change to " + next + "?";
-    $("tsConfirm").hidden = false;
+    requestWholePatternChange({ kind: "timesig", next: next });
   });
-  $("tsChange").addEventListener("click", function () {
-    var next = pendingTimeSig;
-    hideTsConfirm();
-    if (next === null || !TIME_SIGNATURES[next]) return;
-    $("timeSig").value = next;
-    applyTimeSig(next);
-    commitChange();
+  $("confirmOk").addEventListener("click", function () {
+    var action = pendingConfirm;
+    dismissConfirm();
+    if (action) applyWholePatternChange(action);
   });
-  $("tsCancel").addEventListener("click", hideTsConfirm);
+  $("confirmCancel").addEventListener("click", dismissConfirm);
 
   // --- Web Audio: synthesis + lookahead scheduler --------------------------------------------
   var ctx = null;
@@ -692,6 +710,7 @@ if (typeof document === "undefined") {           // node test harness
   function hostWindow() { return window.parent && window.parent !== window ? window.parent : null; }
   function postToHost(msg) { var h = hostWindow(); if (h) { try { h.postMessage(msg, "*"); } catch (e) { /* host gone */ } } }
   function commitChange() {
+    dismissConfirm();                              // any data edit ends a pending Random / Clear / time-signature question (without applying it)
     if (!hostWindow() || !hostLoaded) return;      // standalone, or a note that has not loaded (or was refused): never write
     postToHost({ type: "forge-rhythm-save", data: buildRhythmData(timeSig, swingPct, bpm, patterns[bank]) });   // hosted: `bank` is always "A" — the note's one pattern
   }
@@ -700,9 +719,9 @@ if (typeof document === "undefined") {           // node test harness
   }
   function applyLoad(msg) {
     var r = parseRhythmLoad(msg.data);
-    if (!r.ok) { hostLoaded = false; hideTsConfirm(); $("hostBar").hidden = false; setHostMsg("loadMsg", "Could not load this note: " + r.message, true); return; }
+    if (!r.ok) { hostLoaded = false; dismissConfirm(); $("hostBar").hidden = false; setHostMsg("loadMsg", "Could not load this note: " + r.message, true); return; }
     if (playing) stop();
-    hideTsConfirm();
+    dismissConfirm();
     timeSig = r.state.timeSig; steps = r.state.steps; groupSize = r.state.groupSize;
     $("timeSig").value = timeSig;
     setBpm(r.state.bpm);
