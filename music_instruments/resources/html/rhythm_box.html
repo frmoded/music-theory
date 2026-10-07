@@ -55,6 +55,7 @@
   .banks button { min-width: 36px; min-height: 34px; padding: 4px 8px; }
   .export-msg { font-size: 12px; color: var(--muted); min-height: 16px; }
   .export-fallback { width: 100%; height: 150px; margin-top: 8px; font: 12px/1.4 ui-monospace, Menlo, Consolas, monospace; color: var(--ink); background: #fff; border: 1px solid var(--axis); border-radius: 6px; padding: 6px; }
+  .banks button[hidden] { display: none; }
   .banks button.active { background: var(--highlight); border-color: var(--ink); font-weight: 600; }
   #timeSig {
     font: inherit; font-size: 13px; color: var(--ink); margin-left: 10px;
@@ -532,6 +533,7 @@ if (typeof document === "undefined") {           // node test harness
   $("volume").addEventListener("input", function (e) { volume = (+e.target.value) / 100; $("volumeVal").textContent = e.target.value + "%"; });
   Array.prototype.forEach.call(document.querySelectorAll(".banks button"), function (b) {
     b.addEventListener("click", function () {
+      if (hostWindow()) return;                           // hosted (editing a note): ONE pattern per note, no banks — more variations = more notes
       bank = b.getAttribute("data-bank");                 // switching bank does NOT stop playback;
       Array.prototype.forEach.call(document.querySelectorAll(".banks button"), function (x) { x.classList.toggle("active", x === b); });
       renderGrid();                                        // the scheduler keeps reading `patterns[bank]` from the next step it schedules
@@ -691,7 +693,7 @@ if (typeof document === "undefined") {           // node test harness
   function postToHost(msg) { var h = hostWindow(); if (h) { try { h.postMessage(msg, "*"); } catch (e) { /* host gone */ } } }
   function commitChange() {
     if (!hostWindow() || !hostLoaded) return;      // standalone, or a note that has not loaded (or was refused): never write
-    postToHost({ type: "forge-rhythm-save", data: buildRhythmData(timeSig, swingPct, bpm, patterns[bank]) });
+    postToHost({ type: "forge-rhythm-save", data: buildRhythmData(timeSig, swingPct, bpm, patterns[bank]) });   // hosted: `bank` is always "A" — the note's one pattern
   }
   function setHostMsg(id, text, isError) {
     var el = $(id); el.textContent = text; el.classList.toggle("error", !!isError);
@@ -737,6 +739,11 @@ if (typeof document === "undefined") {           // node test harness
     else if (m.type === "forge-rhythm-save-result") showStatus(m.ok ? "saved" : "error", m.message);     // Phase 5 reply, still understood
   });
   $("bReload").addEventListener("click", function () { postToHost({ type: "forge-rhythm-reload" }); });
+  // Hosted (editing a note) there are no banks: the note holds one pattern, and a variation is another note. The bank buttons are hidden
+  // from the first paint (before any load) and their handler is inert while hosted. Standalone keeps all four banks, as always.
+  if (hostWindow()) {
+    Array.prototype.forEach.call(document.querySelectorAll(".banks button[data-bank]"), function (b) { b.hidden = true; });
+  }
 
   setBpm(bpm);
   renderGrid();
