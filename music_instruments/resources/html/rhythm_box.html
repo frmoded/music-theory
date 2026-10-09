@@ -71,6 +71,9 @@
     min-width: 22px; min-height: 22px; padding: 0; font-size: 10px; border-radius: 4px;
     border: 1px solid var(--axis); background: #fff; color: var(--muted); line-height: 1;
   }
+  .mini-btn.remove { color: var(--muted); }
+  .mini-btn.remove:disabled { opacity: 0.35; cursor: default; }
+  .add-row { margin: 6px 0 2px; font-size: 13px; }
   .mini-btn.on.mute { background: var(--right-text); color: #fff; border-color: var(--right-text); }
   .mini-btn.on.solo { background: var(--accent); color: #fff; border-color: var(--accent); }
   .step {
@@ -158,11 +161,17 @@
   <select id="timeSig" aria-label="Time signature" title="Switching time signature stops playback and clears all four pattern banks (a 4/4 pattern has no meaningful 3/4 equivalent to preserve). Applies to every bank, not just the current one.">
     <option value="4/4" selected>4/4</option>
     <option value="3/4">3/4 (waltz)</option>
+    <option value="12/8">12/8</option>
+    <option value="6/8">6/8</option>
+    <option value="5/4">5/4</option>
   </select>
 </div>
 
 <div class="scroller">
   <div class="grid-wrap" id="grid" role="group" aria-label="16-step pattern grid, kick, snare, hi-hat"></div>
+</div>
+<div class="add-row">
+  <select id="addInstrument" aria-label="Add instrument" title="Add a row for another instrument (bell, claves, congas)"></select>
 </div>
 
 <div class="bottom-row">
@@ -178,31 +187,39 @@
 // --- pure math (no DOM) -- BEGIN pure-core -------------------------------------------------
 var STEPS = 16;                                  // default (4/4) step count; a parameter everywhere it matters
 var GROUP_SIZE = 4;                              // 16th notes per beat, same for every signature this ship supports
-var CHANNELS = ["kick", "snare", "hihat"];
+// Every channel the widget knows — exactly the engine's `_RHYTHM_CHANNEL_INSTRUMENTS` keys (a parity test reads them from the bundled
+// lib.py). A note shows one row per channel IT contains; DEFAULT_ROWS is what the standalone widget (no note) starts with.
+var CHANNELS = ["kick", "snare", "hihat", "bell", "claves", "conga_high", "conga_low"];
+var DEFAULT_ROWS = ["kick", "snare", "hihat"];
 var BANKS = ["A", "B", "C", "D"];
 var MIN_BPM = 40, MAX_BPM = 240;
-// Exactly two signatures, per the driver's explicit scope (no UI for arbitrary beats-per-bar).
-// `steps = beatsPerBar * subdivision`, `groupSize = subdivision` — the grid and every pure
-// function below are written generically against these two numbers, not against 16/12 directly,
-// so a third signature later is a new TIME_SIGNATURES entry, not a parallel set of functions.
+// A fixed menu of signatures (no UI for arbitrary beats-per-bar). `steps = beatsPerBar * subdivision`, `groupSize = subdivision` — the
+// grid and every pure function below are written generically against these numbers, so another signature is a new entry here, not a
+// parallel set of functions. `stepQl` is how long ONE step lasts in quarter notes (what the engine's bar length / steps works out to,
+// and what playback speed needs): a sixteenth = 0.25 in the simple meters, an eighth = 0.5 in the compound ones (12/8, 6/8).
+// The engine proves each of these (tests/music/test_rhythm_world_vocabulary.py): 12/8 = 12 steps / group 3, 6/8 = 6 / 3, 5/4 = 20 / 4.
 var TIME_SIGNATURES = {
-  "4/4": { label: "4/4", beatsPerBar: 4, subdivision: 4, steps: 16, groupSize: 4 },
-  "3/4": { label: "3/4 (waltz)", beatsPerBar: 3, subdivision: 4, steps: 12, groupSize: 4 }
+  "4/4": { label: "4/4", beatsPerBar: 4, subdivision: 4, steps: 16, groupSize: 4, stepQl: 0.25 },
+  "3/4": { label: "3/4 (waltz)", beatsPerBar: 3, subdivision: 4, steps: 12, groupSize: 4, stepQl: 0.25 },
+  "12/8": { label: "12/8", beatsPerBar: 4, subdivision: 3, steps: 12, groupSize: 3, stepQl: 0.5 },
+  "6/8": { label: "6/8", beatsPerBar: 2, subdivision: 3, steps: 6, groupSize: 3, stepQl: 0.5 },
+  "5/4": { label: "5/4", beatsPerBar: 5, subdivision: 4, steps: 20, groupSize: 4, stepQl: 0.25 }
 };
 
 function clampBpm(bpm) { return Math.max(MIN_BPM, Math.min(MAX_BPM, bpm)); }
-// One 16th note, in seconds, at a given BPM (BPM is quarter notes per minute; a 16th is 1/4 of that).
-function stepSeconds(bpm) { return 60 / bpm / 4; }
+// One step, in seconds, at a given BPM (BPM is quarter notes per minute). `stepQl` = the step's length in quarter notes: 0.25 (a 16th,
+// the default — every simple meter) or 0.5 (an eighth — the compound meters 12/8 and 6/8).
+function stepSeconds(bpm, stepQl) { return 60 / bpm * (stepQl == null ? 0.25 : stepQl); }
 
 // Standard swing: delay every SECOND 16th of each eighth-note pair (steps 1,3,5,... 0-indexed —
 // the "off" 16th) by a fraction of one 16th-note's duration. 0% = straight grid; 100% = the off
 // 16th sits halfway to the NEXT 16th (a gentle, non-extreme swing feel; some DAWs push further
 // toward a full triplet feel at 100% — this implementation caps at +0.5 step, a defensible,
 // commonly-used middle ground, stated explicitly here rather than left ambiguous).
-function swingOffsetSeconds(bpm, swingPct, stepIndex) {
+function swingOffsetSeconds(bpm, swingPct, stepIndex, stepQl) {
   var pct = Math.max(0, Math.min(100, swingPct));
   if (stepIndex % 2 === 0) return 0;                 // only the "off" 16th of each pair swings
-  return (pct / 100) * 0.5 * stepSeconds(bpm);
+  return (pct / 100) * 0.5 * stepSeconds(bpm, stepQl);
 }
 
 // Tap tempo: push a new tap timestamp (ms) onto a rolling history, discarding it (starting a
@@ -242,15 +259,22 @@ function channelStepWeight(channel, step, groupSize) {
   if (channel === "kick") return onDownbeat ? 0.85 : (step % 2 === 0 ? 0.25 : 0.08);
   if (channel === "snare") return onBackbeat ? 0.9 : (step % groupSize === 2 ? 0.15 : 0.05);
   if (channel === "hihat") return step % 2 === 0 ? 0.85 : 0.55;
+  // World-rhythm channels: sparse, beat-anchored, so Random reads as a pattern and not noise.
+  if (channel === "bell") return onDownbeat ? 0.6 : 0.2;
+  if (channel === "claves") return onDownbeat ? 0.45 : 0.15;
+  if (channel === "conga_high") return step % groupSize === groupSize - 1 || onBackbeat ? 0.45 : 0.15;
+  if (channel === "conga_low") return onDownbeat ? 0.5 : 0.1;
   return 0;
 }
 // `rng` is injectable (defaults to Math.random) so this is deterministically testable: pass a
 // fixed sequence of "random" values and the resulting pattern is exactly predictable.
-function randomizePattern(rng, steps, groupSize) {
+// Only the `rows` shown are randomised (default: the three standalone rows); every other channel stays empty. The rng is consumed in row order.
+function randomizePattern(rng, steps, groupSize, rows) {
   rng = rng || Math.random;
   steps = steps == null ? STEPS : steps;
-  var pattern = {};
-  CHANNELS.forEach(function (ch) {
+  rows = rows || DEFAULT_ROWS;
+  var pattern = emptyPattern(steps);
+  rows.forEach(function (ch) {
     pattern[ch] = [];
     for (var s = 0; s < steps; s++) pattern[ch].push(rng() < channelStepWeight(ch, s, groupSize));
   });
@@ -279,18 +303,18 @@ function isChannelAudible(channel, muted, soloed) {
 // This function touches no audio/DOM at all, so the actual "does it drift" question is answered
 // by this function's own arithmetic, not by timers — a real driver ear-check still matters for
 // perceived feel, but the SCHEDULING MATH itself is fully unit-testable.
-function advanceScheduler(state, now, bpm, swingPct, scheduleAheadTime, steps) {
+function advanceScheduler(state, now, bpm, swingPct, scheduleAheadTime, steps, stepQl) {
   steps = steps == null ? STEPS : steps;
   var events = [];
   var currentStep = state.currentStep, nextNoteTime = state.nextNoteTime;
   while (nextNoteTime < now + scheduleAheadTime) {
     events.push({ step: currentStep, time: nextNoteTime });
-    var dur = stepSeconds(bpm);
+    var dur = stepSeconds(bpm, stepQl);
     var nextStep = (currentStep + 1) % steps;
     nextNoteTime += dur;
     // The swing offset for the UPCOMING step is added on top of its nominal grid time, then
     // subtracted back off before the step after that, so swing does not accumulate drift.
-    nextNoteTime += swingOffsetSeconds(bpm, swingPct, nextStep) - swingOffsetSeconds(bpm, swingPct, currentStep);
+    nextNoteTime += swingOffsetSeconds(bpm, swingPct, nextStep, stepQl) - swingOffsetSeconds(bpm, swingPct, currentStep, stepQl);
     currentStep = nextStep;
   }
   return { events: events, state: { currentStep: currentStep, nextNoteTime: nextNoteTime } };
@@ -325,10 +349,12 @@ function cellOn(v) { return normalizeCell(v) !== false; }
 // A click toggles an int cell to a rest and an empty cell to a PLAIN hit (never an invented velocity).
 function toggleCell(v) { return normalizeCell(v) === false ? true : false; }
 function isAccentedCell(v) { var n = normalizeCell(v); return typeof n === "number" && n >= ACCENT_THRESHOLD; }
-function buildRhythmData(timeSigKey, swingPct, bpm, pattern) {
+// `rows` = the channels to write, in order (a note's own channels, so a load -> save with no edit is byte-identical); default: the
+// three standalone rows.
+function buildRhythmData(timeSigKey, swingPct, bpm, pattern, rows) {
   var sig = TIME_SIGNATURES[timeSigKey];
   var channels = {};
-  CHANNELS.forEach(function (ch) {
+  (rows || DEFAULT_ROWS).forEach(function (ch) {
     var row = new Array(sig.steps).fill(false);
     (pattern[ch] || []).slice(0, sig.steps).forEach(function (v, i) { row[i] = normalizeCell(v); });
     channels[ch] = row;
@@ -360,7 +386,8 @@ function parseRhythmLoad(data) {
   if (!data || typeof data !== "object" || Array.isArray(data)) return bad("The rhythm data must be an object.");
   var sigKey = data.time_signature;
   if (typeof sigKey !== "string" || !Object.prototype.hasOwnProperty.call(TIME_SIGNATURES, sigKey)) {
-    return bad("The Rhythm Box supports " + Object.keys(TIME_SIGNATURES).join(" and ") + ", not " + JSON.stringify(sigKey) + ".");
+    var keys = Object.keys(TIME_SIGNATURES);
+    return bad("The Rhythm Box supports " + keys.slice(0, -1).join(", ") + " and " + keys[keys.length - 1] + ", not " + JSON.stringify(sigKey) + ".");
   }
   var sig = TIME_SIGNATURES[sigKey];
   if (data.steps !== sig.steps || data.group_size !== sig.groupSize) {
@@ -377,7 +404,9 @@ function parseRhythmLoad(data) {
   var chans = data.channels;
   if (!chans || typeof chans !== "object" || Array.isArray(chans)) return bad("channels must be an object.");
   var pattern = emptyPattern(sig.steps), failure = null;
-  Object.keys(chans).forEach(function (name) {
+  var rows = Object.keys(chans);                  // the note's own channels, in its order: one grid row each
+  if (rows.length === 0) return bad("channels must not be empty.");
+  rows.forEach(function (name) {
     if (failure) return;
     if (CHANNELS.indexOf(name) < 0) { failure = bad("Unknown channel " + JSON.stringify(name) + " (the Rhythm Box has " + CHANNELS.join(", ") + ")."); return; }
     var row = chans[name];
@@ -390,14 +419,14 @@ function parseRhythmLoad(data) {
     });
   });
   if (failure) return failure;
-  return { ok: true, state: { timeSig: sigKey, steps: sig.steps, groupSize: sig.groupSize, swingPct: swing, bpm: tempo, pattern: pattern } };
+  return { ok: true, state: { timeSig: sigKey, steps: sig.steps, groupSize: sig.groupSize, swingPct: swing, bpm: tempo, pattern: pattern, rows: rows } };
 }
 // --- pure math -- END pure-core -------------------------------------------------------------
 
 if (typeof document === "undefined") {           // node test harness
   module.exports = {
     STEPS: STEPS, GROUP_SIZE: GROUP_SIZE, TIME_SIGNATURES: TIME_SIGNATURES,
-    CHANNELS: CHANNELS, BANKS: BANKS, MIN_BPM: MIN_BPM, MAX_BPM: MAX_BPM,
+    CHANNELS: CHANNELS, DEFAULT_ROWS: DEFAULT_ROWS, BANKS: BANKS, MIN_BPM: MIN_BPM, MAX_BPM: MAX_BPM,
     clampBpm: clampBpm, stepSeconds: stepSeconds, swingOffsetSeconds: swingOffsetSeconds, swingVisualPx: swingVisualPx,
     pushTap: pushTap, bpmFromTapHistory: bpmFromTapHistory,
     channelStepWeight: channelStepWeight, randomizePattern: randomizePattern, emptyPattern: emptyPattern,
@@ -410,7 +439,9 @@ if (typeof document === "undefined") {           // node test harness
 (function () {
   "use strict";
   var $ = function (id) { return document.getElementById(id); };
-  var CHANNEL_LABEL = { kick: "Kick", snare: "Snare", hihat: "Hi-hat" };
+  var CHANNEL_LABEL = { kick: "Kick", snare: "Snare", hihat: "Hi-hat", bell: "Bell", claves: "Claves", conga_high: "High Conga", conga_low: "Low Conga" };
+  // The rows on screen, in order: a loaded note's own channels (in ITS order), or the three standalone defaults.
+  var rows = DEFAULT_ROWS.slice();
 
   // --- state --------------------------------------------------------------------------------
   var bpm = 120;
@@ -436,11 +467,11 @@ if (typeof document === "undefined") {           // node test harness
   function buildGrid() {
     gridEl.innerHTML = "";
     stepEls = {};
-    gridEl.setAttribute("aria-label", steps + "-step pattern grid (" + timeSig + "), kick, snare, hi-hat");
-    CHANNELS.forEach(function (ch) {
+    gridEl.setAttribute("aria-label", steps + "-step pattern grid (" + timeSig + "), " + rows.map(function (c) { return CHANNEL_LABEL[c]; }).join(", "));
+    rows.forEach(function (ch) {
       var row = document.createElement("div");
       row.className = "channel-row";
-      row.style.gridTemplateColumns = "110px repeat(" + steps + ", 1fr)";
+      row.style.gridTemplateColumns = "150px repeat(" + steps + ", 1fr)";
       var label = document.createElement("div");
       label.className = "channel-label";
       var nameSpan = document.createElement("span");
@@ -449,7 +480,12 @@ if (typeof document === "undefined") {           // node test harness
       mBtn.className = "mini-btn mute"; mBtn.textContent = "M"; mBtn.setAttribute("aria-label", "Mute " + CHANNEL_LABEL[ch]); mBtn.setAttribute("aria-pressed", "false");
       var sBtn = document.createElement("button");
       sBtn.className = "mini-btn solo"; sBtn.textContent = "S"; sBtn.setAttribute("aria-label", "Solo " + CHANNEL_LABEL[ch]); sBtn.setAttribute("aria-pressed", "false");
-      label.appendChild(nameSpan); label.appendChild(mBtn); label.appendChild(sBtn);
+      var rBtn = document.createElement("button");
+      rBtn.className = "mini-btn remove"; rBtn.textContent = "\u00d7"; rBtn.setAttribute("data-remove", ch);
+      rBtn.setAttribute("aria-label", "Remove " + CHANNEL_LABEL[ch] + " row"); rBtn.title = "Remove this instrument row";
+      rBtn.disabled = rows.length <= 1;                // a note must keep at least one channel
+      rBtn.addEventListener("click", function () { requestRemoveRow(ch); });
+      label.appendChild(nameSpan); label.appendChild(mBtn); label.appendChild(sBtn); label.appendChild(rBtn);
       row.appendChild(label);
       stepEls[ch] = [];
       for (var s = 0; s < steps; s++) {
@@ -471,6 +507,21 @@ if (typeof document === "undefined") {           // node test harness
       gridEl.appendChild(row);
       row.setAttribute("data-mute-btn-" + ch, "");
     });
+    renderAddInstrument();
+  }
+  // "Add instrument": the channels not shown yet (in the engine's order). The first option is the inert prompt.
+  function renderAddInstrument() {
+    var sel = $("addInstrument");
+    sel.innerHTML = "";
+    var prompt = document.createElement("option"); prompt.value = ""; prompt.textContent = "Add instrument\u2026";
+    sel.appendChild(prompt);
+    CHANNELS.forEach(function (ch) {
+      if (rows.indexOf(ch) >= 0) return;
+      var o = document.createElement("option"); o.value = ch; o.textContent = CHANNEL_LABEL[ch];
+      sel.appendChild(o);
+    });
+    sel.value = "";
+    sel.hidden = rows.length >= CHANNELS.length;
   }
   buildGrid();
 
@@ -481,8 +532,43 @@ if (typeof document === "undefined") {           // node test harness
   }
   function toggleMute(ch) { if (muted.has(ch)) muted.delete(ch); else muted.add(ch); renderMuteSolo(); }
   function toggleSolo(ch) { if (soloed.has(ch)) soloed.delete(ch); else soloed.add(ch); renderMuteSolo(); }
+  // --- rows: one per instrument in the note ---------------------------------------------------------------------------------
+  // Adding or removing a row is a DATA change (the note's `channels` keys change), so both end in commitChange() through
+  // applyWholePatternChange — the single save path. Removing a row that has hits asks first when a note is being edited.
+  function rowHasHits(ch) {
+    return (patterns[bank][ch] || []).some(function (v) { return cellOn(v); });
+  }
+  function addRow(ch) {
+    if (CHANNELS.indexOf(ch) < 0 || rows.indexOf(ch) >= 0) return false;
+    rows.push(ch);
+    BANKS.forEach(function (b) { patterns[b][ch] = new Array(steps).fill(false); });
+    buildGrid(); renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview();
+    return true;
+  }
+  function removeRow(ch) {
+    if (rows.length <= 1 || rows.indexOf(ch) < 0) return false;
+    rows = rows.filter(function (c) { return c !== ch; });
+    BANKS.forEach(function (b) { patterns[b][ch] = new Array(steps).fill(false); });
+    muted.delete(ch); soloed.delete(ch);
+    buildGrid(); renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview();
+    return true;
+  }
+  function requestRemoveRow(ch) {
+    if (rows.length <= 1) return;
+    var action = { kind: "removerow", channel: ch };
+    if (hostWindow() && hostLoaded && rowHasHits(ch)) {
+      askConfirm(action, "Remove the " + CHANNEL_LABEL[ch] + " row? Its hits are removed from the note.", "Remove");
+      return;
+    }
+    applyWholePatternChange(action);
+  }
+  $("addInstrument").addEventListener("change", function (e) {
+    var ch = e.target.value;
+    if (ch) applyWholePatternChange({ kind: "addrow", channel: ch });
+    renderAddInstrument();
+  });
   function renderMuteSolo() {
-    CHANNELS.forEach(function (ch) {
+    rows.forEach(function (ch) {
       var row = gridEl.querySelector('[data-mute-btn-' + ch + ']');
       var mBtn = row.querySelector(".mini-btn.mute"), sBtn = row.querySelector(".mini-btn.solo");
       mBtn.classList.toggle("on", muted.has(ch)); mBtn.setAttribute("aria-pressed", muted.has(ch) ? "true" : "false");
@@ -490,7 +576,7 @@ if (typeof document === "undefined") {           // node test harness
     });
   }
   function renderGrid() {
-    CHANNELS.forEach(function (ch) {
+    rows.forEach(function (ch) {
       for (var s = 0; s < steps; s++) {
         var cell = patterns[bank][ch][s], on = cellOn(cell), accented = isAccentedCell(cell);
         stepEls[ch][s].classList.toggle("on", on);
@@ -502,7 +588,7 @@ if (typeof document === "undefined") {           // node test harness
     });
   }
   function renderPlayhead() {
-    CHANNELS.forEach(function (ch) {
+    rows.forEach(function (ch) {
       for (var s = 0; s < steps; s++) stepEls[ch][s].classList.toggle("playing", playing && s === currentStep);
     });
     $("stepPos").textContent = playing && currentStep >= 0 ? (currentStep + 1) + " / " + steps : "-- / " + steps;
@@ -510,7 +596,7 @@ if (typeof document === "undefined") {           // node test harness
   // Swing preview: nudge the off-beat step cells sideways by swingVisualPx, independent of
   // playback state, so the eye can see the delay grow as the slider moves, even while stopped.
   function renderSwingPreview() {
-    CHANNELS.forEach(function (ch) {
+    rows.forEach(function (ch) {
       for (var s = 0; s < steps; s++) {
         var px = swingVisualPx(swingPct, s);
         stepEls[ch][s].style.transform = px ? "translateX(" + px + "px)" : "";
@@ -552,7 +638,7 @@ if (typeof document === "undefined") {           // node test harness
     exportMsgTimer = setTimeout(function () { $("exportMsg").textContent = ""; }, 2500);
   }
   $("bExport").addEventListener("click", function () {
-    var json = rhythmDataJson(buildRhythmData(timeSig, swingPct, bpm, patterns[bank]));
+    var json = rhythmDataJson(buildRhythmData(timeSig, swingPct, bpm, patterns[bank], rows));
     var ta = $("exportFallback");
     function showManual() { ta.hidden = false; ta.value = json; ta.focus(); ta.select(); exportMsg("Copy blocked here - JSON shown below, press Cmd/Ctrl+C"); }
     function legacyCopy() {
@@ -595,7 +681,9 @@ if (typeof document === "undefined") {           // node test harness
     $("confirmBar").hidden = false;
   }
   function applyWholePatternChange(action) {
-    if (action.kind === "random") { patterns[bank] = randomizePattern(null, steps, groupSize); renderGrid(); }
+    if (action.kind === "random") { patterns[bank] = randomizePattern(null, steps, groupSize, rows); renderGrid(); }
+    else if (action.kind === "removerow") { if (!removeRow(action.channel)) return; }
+    else if (action.kind === "addrow") { if (!addRow(action.channel)) return; }
     else if (action.kind === "clear") { patterns[bank] = emptyPattern(steps); renderGrid(); }
     else if (action.kind === "timesig" && TIME_SIGNATURES[action.next]) { $("timeSig").value = action.next; applyTimeSig(action.next); }
     else return;
@@ -660,18 +748,58 @@ if (typeof document === "undefined") {           // node test harness
     var g = c.createGain(); g.gain.setValueAtTime(0.35, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
     noise.connect(hp); hp.connect(g); g.connect(mg); noise.start(t); noise.stop(t + 0.07);
   }
-  var VOICE = { kick: playKick, snare: playSnare, hihat: playHihat };
+  // World-rhythm voices (Phase 7): all synthesised, no samples — recognisably different, none harsh. Gains stay at or below the kick's.
+  function playBell(c, t) {                        // cowbell: two detuned square partials through a band-pass, medium-short decay
+    var mg = masterGain(c);
+    var bp = c.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 760; bp.Q.value = 1.1;
+    var g = c.createGain(); g.gain.setValueAtTime(0.35, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+    [562, 845].forEach(function (f) {
+      var o = c.createOscillator(); o.type = "square"; o.frequency.value = f;
+      o.connect(bp); o.start(t); o.stop(t + 0.32);
+    });
+    bp.connect(g); g.connect(mg);
+  }
+  function playClaves(c, t) {                      // claves: a short, high, woody click — one sine "tok" plus a tick of filtered noise
+    var mg = masterGain(c);
+    var o = c.createOscillator(), g = c.createGain();
+    o.type = "sine"; o.frequency.setValueAtTime(2500, t); o.frequency.exponentialRampToValueAtTime(1900, t + 0.04);
+    g.gain.setValueAtTime(0.6, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.07);
+    o.connect(g); g.connect(mg); o.start(t); o.stop(t + 0.08);
+    var n = c.createBufferSource(); n.buffer = noiseBuffer(c, 0.02);
+    var hp = c.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 3500;
+    var ng = c.createGain(); ng.gain.setValueAtTime(0.15, t); ng.gain.exponentialRampToValueAtTime(0.001, t + 0.02);
+    n.connect(hp); hp.connect(ng); ng.connect(mg); n.start(t); n.stop(t + 0.03);
+  }
+  function playCongaHigh(c, t) {                   // muted high conga: a short mid-high pitched thump with a slap of band-passed noise
+    var mg = masterGain(c);
+    var o = c.createOscillator(), g = c.createGain();
+    o.type = "sine"; o.frequency.setValueAtTime(420, t); o.frequency.exponentialRampToValueAtTime(330, t + 0.08);
+    g.gain.setValueAtTime(0.7, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.13);
+    o.connect(g); g.connect(mg); o.start(t); o.stop(t + 0.15);
+    var n = c.createBufferSource(); n.buffer = noiseBuffer(c, 0.03);
+    var bp = c.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 1500; bp.Q.value = 0.9;
+    var ng = c.createGain(); ng.gain.setValueAtTime(0.18, t); ng.gain.exponentialRampToValueAtTime(0.001, t + 0.03);
+    n.connect(bp); bp.connect(ng); ng.connect(mg); n.start(t); n.stop(t + 0.04);
+  }
+  function playCongaLow(c, t) {                    // low conga: a lower, longer thump
+    var mg = masterGain(c);
+    var o = c.createOscillator(), g = c.createGain();
+    o.type = "sine"; o.frequency.setValueAtTime(230, t); o.frequency.exponentialRampToValueAtTime(150, t + 0.14);
+    g.gain.setValueAtTime(0.85, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+    o.connect(g); g.connect(mg); o.start(t); o.stop(t + 0.32);
+  }
+  var VOICE = { kick: playKick, snare: playSnare, hihat: playHihat, bell: playBell, claves: playClaves, conga_high: playCongaHigh, conga_low: playCongaLow };
 
   function scheduleStep(step, time) {
     var c = audio(); if (!c) return;
-    CHANNELS.forEach(function (ch) {
+    rows.forEach(function (ch) {
       if (patterns[bank][ch][step] && isChannelAudible(ch, muted, soloed)) VOICE[ch](c, time);
     });
   }
 
   function schedulerTick() {
     var c = audio(); if (!c) return;
-    var out = advanceScheduler(schedulerState, c.currentTime, bpm, swingPct, SCHEDULE_AHEAD_S, steps);
+    var out = advanceScheduler(schedulerState, c.currentTime, bpm, swingPct, SCHEDULE_AHEAD_S, steps, TIME_SIGNATURES[timeSig].stepQl);
     out.events.forEach(function (ev) {
       scheduleStep(ev.step, ev.time);
       // Update the visual step indicator on its OWN loose timer (setTimeout keyed off the
@@ -712,7 +840,7 @@ if (typeof document === "undefined") {           // node test harness
   function commitChange() {
     dismissConfirm();                              // any data edit ends a pending Random / Clear / time-signature question (without applying it)
     if (!hostWindow() || !hostLoaded) return;      // standalone, or a note that has not loaded (or was refused): never write
-    postToHost({ type: "forge-rhythm-save", data: buildRhythmData(timeSig, swingPct, bpm, patterns[bank]) });   // hosted: `bank` is always "A" — the note's one pattern
+    postToHost({ type: "forge-rhythm-save", data: buildRhythmData(timeSig, swingPct, bpm, patterns[bank], rows) });   // hosted: `bank` is always "A" — the note's one pattern
   }
   function setHostMsg(id, text, isError) {
     var el = $(id); el.textContent = text; el.classList.toggle("error", !!isError);
@@ -728,6 +856,7 @@ if (typeof document === "undefined") {           // node test harness
     swingPct = r.state.swingPct; $("swing").value = swingPct; $("swingVal").textContent = swingPct + "%";
     BANKS.forEach(function (b) { patterns[b] = emptyPattern(steps); });      // the other banks are cleared, as on a time-signature change
     patterns["A"] = r.state.pattern;
+    rows = r.state.rows.slice();                      // one row per channel in the note, in the note's order
     bank = "A";
     Array.prototype.forEach.call(document.querySelectorAll(".banks button"), function (x) { x.classList.toggle("active", x.getAttribute("data-bank") === "A"); });
     buildGrid(); renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview();
