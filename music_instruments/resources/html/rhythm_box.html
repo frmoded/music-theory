@@ -111,16 +111,22 @@
   .confirm-bar[hidden], #bReload[hidden] { display: none; }
   .host-msg { font-size: 12px; color: var(--muted); min-height: 16px; }
   .host-msg.error { color: #B54A50; }
+  .host-bar [hidden] { display: none; }
+  /* Phase 8, playground mode (the plugin's `forge-rhythm` embed): a label, Reset and Open note replace the autosave controls. */
+  .host-bar .playground-label { font-weight: 600; }
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <div class="host-bar" id="hostBar" hidden>
-  <span>Editing</span> <span class="note" id="hostNote"></span>
+  <span id="hostEditing">Editing</span> <span class="note" id="hostNote"></span>
+  <span class="host-msg playground-label" id="playgroundLabel" hidden>Playground &mdash; edits are not saved</span>
   <span class="host-msg" id="loadMsg" role="status" aria-live="polite"></span>
   <span class="host-msg" id="saveMsg" role="status" aria-live="polite"></span>
   <button id="bReload" hidden title="Discard what is on screen and load the note as it is on disk now">Reload from note</button>
+  <button id="bReset" hidden title="Put the rhythm back exactly as it is in the note">Reset</button>
+  <button id="bOpenNote" hidden title="Open this rhythm in its own tab, where changes are saved">Open note</button>
 </div>
 <div class="confirm-bar" id="confirmBar" role="alertdialog" aria-label="Confirm change to the note" hidden>
   <span id="confirmText"></span>
@@ -689,15 +695,17 @@ if (typeof document === "undefined") {           // node test harness
     else return;
     commitChange();
   }
+  // Only note-editing asks first. A playground (Phase 8) changes nothing anywhere, and Reset undoes it, so it applies at once.
+  function confirmsFirst() { return !!(hostWindow() && hostLoaded && hostMode !== "playground"); }
   function requestWholePatternChange(action) {
-    if (!(hostWindow() && hostLoaded)) { applyWholePatternChange(action); return; }
+    if (!confirmsFirst()) { applyWholePatternChange(action); return; }
     if (action.kind === "random") askConfirm(action, "Randomize the pattern? This replaces the pattern in the note.", "Continue");
     else if (action.kind === "clear") askConfirm(action, "Clear the pattern? This empties the pattern in the note.", "Continue");
     else askConfirm(action, "This clears the pattern in the note. Change to " + action.next + "?", "Change");
   }
   $("timeSig").addEventListener("change", function (e) {
     var next = e.target.value;
-    if (!(hostWindow() && hostLoaded)) { applyTimeSig(next); return; }
+    if (!confirmsFirst()) { applyTimeSig(next); return; }
     if (next === timeSig) { dismissConfirm(); return; }
     e.target.value = timeSig;                                           // the select keeps showing what is still in force
     requestWholePatternChange({ kind: "timesig", next: next });
@@ -818,12 +826,14 @@ if (typeof document === "undefined") {           // node test harness
     $("bPlay").textContent = "Stop"; $("bPlay").classList.add("playing"); $("bPlay").setAttribute("aria-pressed", "true");
     timerId = setInterval(schedulerTick, LOOKAHEAD_MS);
     schedulerTick();
+    announcePlaying(true);
   }
   function stop() {
     playing = false;
     if (timerId) { clearInterval(timerId); timerId = null; }
     currentStep = -1; renderPlayhead();
     $("bPlay").textContent = "Play"; $("bPlay").classList.remove("playing"); $("bPlay").setAttribute("aria-pressed", "false");
+    announcePlaying(false);
   }
   $("bPlay").addEventListener("click", function () { if (playing) stop(); else start(); });
 
@@ -834,13 +844,34 @@ if (typeof document === "undefined") {           // node test harness
   // place a `forge-rhythm-save` is posted (the plugin debounces and writes). Play, mute, solo, volume and bank selection never
   // call it. The plugin answers with `forge-rhythm-status` (saving / saved / error / conflict / idle). Messages are accepted only
   // from the embedding window (e.source === window.parent); the plugin makes the mirror check on its side.
+  //
+  // Phase 8 (the plugin's `forge-rhythm` embed) adds a second HOST MODE, chosen by the load message's `mode`: "playground". There the
+  // widget is a toy over a COPY of the note's data: commitChange() posts `forge-rhythm-edited` (no data) and NEVER a save; Random, Clear
+  // and a time-signature change apply at once; Reset puts the loaded data back; Open note asks the host to open the note; playing /
+  // stopping is announced so the host can keep one sound at a time. Any `mode` other than the exact string "playground" is "edit".
   var hostNote = "", hostLoaded = false;
+  var hostMode = "edit";             // "edit" | "playground"
+  var loadedData = null;             // playground: a private copy of the last loaded data, what Reset restores
   function hostWindow() { return window.parent && window.parent !== window ? window.parent : null; }
   function postToHost(msg) { var h = hostWindow(); if (h) { try { h.postMessage(msg, "*"); } catch (e) { /* host gone */ } } }
   function commitChange() {
     dismissConfirm();                              // any data edit ends a pending Random / Clear / time-signature question (without applying it)
     if (!hostWindow() || !hostLoaded) return;      // standalone, or a note that has not loaded (or was refused): never write
+    if (hostMode === "playground") { postToHost({ type: "forge-rhythm-edited" }); return; }   // a playground NEVER saves
     postToHost({ type: "forge-rhythm-save", data: buildRhythmData(timeSig, swingPct, bpm, patterns[bank], rows) });   // hosted: `bank` is always "A" — the note's one pattern
+  }
+  function announcePlaying(on) {
+    if (hostMode === "playground" && hostLoaded) postToHost({ type: "forge-rhythm-playing", playing: !!on });
+  }
+  // The host bar shows exactly one of the two mode's sets of controls.
+  function renderHostBar() {
+    var pg = hostMode === "playground";
+    $("hostEditing").hidden = pg;
+    $("playgroundLabel").hidden = !pg;
+    $("bReset").hidden = !pg;
+    $("bOpenNote").hidden = !pg;
+    $("saveMsg").hidden = pg;
+    if (pg) { $("bReload").hidden = true; setHostMsg("saveMsg", "", false); }
   }
   function setHostMsg(id, text, isError) {
     var el = $(id); el.textContent = text; el.classList.toggle("error", !!isError);
@@ -848,8 +879,21 @@ if (typeof document === "undefined") {           // node test harness
   function applyLoad(msg) {
     var r = parseRhythmLoad(msg.data);
     if (!r.ok) { hostLoaded = false; dismissConfirm(); $("hostBar").hidden = false; setHostMsg("loadMsg", "Could not load this note: " + r.message, true); return; }
+    hostMode = msg.mode === "playground" ? "playground" : "edit";
+    loadedData = hostMode === "playground" ? JSON.parse(JSON.stringify(msg.data)) : null;
+    hostLoaded = true;                                // set BEFORE showLoaded so a stop() inside it is announced consistently
+    showLoaded(r.state);
+    hostNote = typeof msg.noteName === "string" ? msg.noteName : "";
+    $("hostNote").textContent = hostNote;
+    $("hostBar").hidden = false; $("bReload").hidden = true;
+    renderHostBar();
+    setHostMsg("loadMsg", "", false); setHostMsg("saveMsg", "", false);
+  }
+  // Put a validated state on screen (a load, or a playground's Reset). Never posts a save: loading is not a data change.
+  function showLoaded(state) {
     if (playing) stop();
     dismissConfirm();
+    var r = { state: state };
     timeSig = r.state.timeSig; steps = r.state.steps; groupSize = r.state.groupSize;
     $("timeSig").value = timeSig;
     setBpm(r.state.bpm);
@@ -860,14 +904,10 @@ if (typeof document === "undefined") {           // node test harness
     bank = "A";
     Array.prototype.forEach.call(document.querySelectorAll(".banks button"), function (x) { x.classList.toggle("active", x.getAttribute("data-bank") === "A"); });
     buildGrid(); renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview();
-    hostNote = typeof msg.noteName === "string" ? msg.noteName : "";
-    $("hostNote").textContent = hostNote;
-    hostLoaded = true;
-    $("hostBar").hidden = false; $("bReload").hidden = true;
-    setHostMsg("loadMsg", "", false); setHostMsg("saveMsg", "", false);
   }
   // The autosave indicator. "Saved" and errors both PERSIST (an error until the next successful save replaces it).
   function showStatus(state, message) {
+    if (hostMode === "playground") return;            // a playground has no autosave indicator, whatever the host says
     var text = String(message || "");
     if (state === "saving") setHostMsg("saveMsg", "Saving…", false);
     else if (state === "saved") setHostMsg("saveMsg", "Saved", false);
@@ -885,7 +925,18 @@ if (typeof document === "undefined") {           // node test harness
     if (m.type === "forge-rhythm-load") applyLoad(m);
     else if (m.type === "forge-rhythm-status") showStatus(m.state, m.message);
     else if (m.type === "forge-rhythm-save-result") showStatus(m.ok ? "saved" : "error", m.message);     // Phase 5 reply, still understood
+    else if (m.type === "forge-rhythm-request-data") {      // Phase 8: a READ of the current state (what the embed's Score toggle engraves)
+      postToHost({ type: "forge-rhythm-current-data", data: hostLoaded ? buildRhythmData(timeSig, swingPct, bpm, patterns[bank], rows) : null });
+    }
+    else if (m.type === "forge-rhythm-stop") { if (playing) stop(); }
   });
+  $("bReset").addEventListener("click", function () {
+    if (hostMode !== "playground" || !hostLoaded || !loadedData) return;
+    var r = parseRhythmLoad(loadedData);
+    if (r.ok) showLoaded(r.state);
+    postToHost({ type: "forge-rhythm-reset" });         // the host re-reads the note and answers with a fresh load (picks up a changed note)
+  });
+  $("bOpenNote").addEventListener("click", function () { postToHost({ type: "forge-rhythm-open-note" }); });
   $("bReload").addEventListener("click", function () { postToHost({ type: "forge-rhythm-reload" }); });
   // Hosted (editing a note) there are no banks: the note holds one pattern, and a variation is another note. The bank buttons are hidden
   // from the first paint (before any load) and their handler is inert while hosted. Standalone keeps all four banks, as always.
