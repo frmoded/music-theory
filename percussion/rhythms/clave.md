@@ -4,7 +4,7 @@ description: "The son clave, the five-hit pattern that holds Afro-Cuban music to
 
 Two sticks, five hits, sixteen steps. Nobody dances to the clave. Everybody dances *because* of the clave. It's the spine: bass, piano, horns and singers all hang their phrases on it, and a band that loses it gets very quiet very fast.
 
-Look at the first half: hits on 0, 3, 6. That's tresillo, the 3+3+2 you already know, wearing a hat. Then a short two-hit answer on 10 and 12.
+Look at the first half: hits on 0, 3, 6. That's tresillo at double speed (3+3+4 sixteenths, the same dotted-dotted-quarter shape), wearing a hat. Then a short two-hit answer on 10 and 12.
 
 ```forge-rhythm
 [[rhythm_pattern_clave_son_3_2]]

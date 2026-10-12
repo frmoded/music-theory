@@ -2,7 +2,7 @@
 description: "Tresillo, the 3+3+2 cell under half the world's dance music: why eight steps split unevenly feel better than evenly, and how to bend it."
 ---
 
-Eight steps. Split them 4+4 and you get a march. Split them **3+3+2** and you get the thing that has been making people move since long before anyone wrote it down: tresillo.
+Eight eighth notes in a bar. Split them 4+4 and you get a march. Split them **3+3+2** and you get the thing that has been making people move since long before anyone wrote it down: tresillo.
 
 Two long hits, one short. The ear expects the third hit to land where the 4+4 would have put it, and it arrives a step early. That tiny swindle is the whole trick.
 
@@ -14,7 +14,9 @@ It's in habanera, in ragtime's left hand, in reggaeton's *dembow*, in half the p
 
 ## Challenge
 
-Move **one** hit by **one** step. Pull the last kick one step earlier and the 3+3+2 turns into 3+2+3: still a tresillo, now with a limp. Push it one step later and it's 3+3+1+1 territory, and the thing starts to fall apart. Find the exact point where it stops being tresillo and becomes a mistake.
+The grid has sixteen sixteenth steps, with the kick on **0, 6 and 12**. Move **one** hit and listen.
+
+Pull the last kick **two** steps earlier (12 → 10). The gaps become 6+4+6 sixteenths, which is 3+2+3 in eighths: still a tresillo, now with a limp. Then push it **one** step later (12 → 13). The gap back to the downbeat shrinks to three steps, the one before it stretches to seven, and the thing starts to fall apart. Find the exact point where it stops being tresillo and becomes a mistake.
 
 Then add a hi-hat on every step and move the kick again. Same shift, different groove. Why?
 
