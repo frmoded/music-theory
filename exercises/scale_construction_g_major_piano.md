@@ -4,18 +4,18 @@ inputs:
   - student_pitches
 input_widgets:
   student_pitches: piano
-description_hash: 703303d396896f9e2a56c18e8cfe5905ea7691788a49d0aeb67dde7a373bc34e
+description_hash: a59a8c7348c441be79b9d89ed7cb6f31f1aa1d1a1806dad1b11e9c0f222af666
 recipe_hash: 89bb0583e16bc3d4a5b50f9f3312589f1342b76e53dbb9805cd1d5d0e3e367be
 python_hash: e5d1a4fc162f7e942b790e395406201fb6b83935dfe1843a475fc8837c15f097
-recipe_derived_from_source_hash: 703303d396896f9e2a56c18e8cfe5905ea7691788a49d0aeb67dde7a373bc34e
+recipe_derived_from_source_hash: a59a8c7348c441be79b9d89ed7cb6f31f1aa1d1a1806dad1b11e9c0f222af666
 source_facet: description
-recipe_derived_from_description_hash: 703303d396896f9e2a56c18e8cfe5905ea7691788a49d0aeb67dde7a373bc34e
+recipe_derived_from_description_hash: a59a8c7348c441be79b9d89ed7cb6f31f1aa1d1a1806dad1b11e9c0f222af666
 ---
 
 # Description
 
 Click the seven notes of the G major scale on the piano, from the tonic
-(G3) up to the seventh (F#4). Then click Forge to grade your attempt.
+(G3) up to the seventh (F#4). Then press **Run** to grade your attempt.
 
 Same W-W-H-W-W-W-H pattern as C major, transposed to start on G — which
 forces exactly one black key. Find it.

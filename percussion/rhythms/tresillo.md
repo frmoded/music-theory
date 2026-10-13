@@ -10,6 +10,8 @@ Two long hits, one short. The ear expects the third hit to land where the 4+4 wo
 [[rhythm_pattern_tresillo]]
 ```
 
+The grid counts sixteenths, so every eighth note is two cells.
+
 It's in habanera, in ragtime's left hand, in reggaeton's *dembow*, in half the pop on the radio right now. Nobody pays royalties on a rhythm this good.
 
 ## Challenge

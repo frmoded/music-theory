@@ -2,13 +2,13 @@
 type: action
 inputs: [guess]
 source_facet: description
-description_hash: 728e29d050a686de0794a6417961ae9e0eaa2731e52aae4268b0be9289a1b0a3
+description_hash: e4062f7f88e7884be2ab9171c042b9417fb79ef9299d8fbcac5d1cef31f4f62e
 recipe_hash: f87ba2f2b90c025567f3d41e2aacf2acc61ca14aaaa84e0c25c2db4232e55624
 python_hash: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-recipe_derived_from_description_hash: 728e29d050a686de0794a6417961ae9e0eaa2731e52aae4268b0be9289a1b0a3
-recipe_derived_from_source_hash: 728e29d050a686de0794a6417961ae9e0eaa2731e52aae4268b0be9289a1b0a3
+recipe_derived_from_description_hash: e4062f7f88e7884be2ab9171c042b9417fb79ef9299d8fbcac5d1cef31f4f62e
+recipe_derived_from_source_hash: e4062f7f88e7884be2ab9171c042b9417fb79ef9299d8fbcac5d1cef31f4f62e
 python_derived_from_recipe_hash: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-python_derived_from_source_hash: 728e29d050a686de0794a6417961ae9e0eaa2731e52aae4268b0be9289a1b0a3
+python_derived_from_source_hash: e4062f7f88e7884be2ab9171c042b9417fb79ef9299d8fbcac5d1cef31f4f62e
 recipe_version: 1
 ---
 
@@ -19,19 +19,6 @@ Complete the C major scale you heard in [[exercises/complete_this_scale_challeng
 ## Inputs
 
 - guess — the four notes you think complete the octave, e.g. ["G4", "A4", "B4", "C5"]
-
-<div style="
-  display:flex;
-  justify-content:space-between;
-  font-size:12px;
-  color:#666666;
-  border-top:1px solid #F2F2EC;
-  padding:6px 2px;
-  margin:10px 0;
-">
-<span>&larr; <a class="internal-link" data-href="complete_this_scale_challenge" href="complete_this_scale_challenge" style="color:#1963D1;">complete_this_scale_challenge</a></span>
-<span>&uarr; <a class="internal-link" data-href="Scales" href="Scales" style="color:#1963D1;">Scales</a></span>
-</div>
 
 # Recipe
 

@@ -4,18 +4,18 @@ inputs:
   - student_pitches
 input_widgets:
   student_pitches: piano
-description_hash: 28673f2b1dda2dede23e931c5c0a91dc8a0a61c456538ebd5a260f737d7fdc33
+description_hash: 4fe9d9bcc97ec6a1735abc99cd881a63f596183fff407a7a4f56910a2ec60873
 recipe_hash: cfa03deeb152d34a9917e881988f4b6a0144fe0387fd18831209c2093aa3462d
 python_hash: e5d1a4fc162f7e942b790e395406201fb6b83935dfe1843a475fc8837c15f097
-recipe_derived_from_source_hash: 28673f2b1dda2dede23e931c5c0a91dc8a0a61c456538ebd5a260f737d7fdc33
+recipe_derived_from_source_hash: 4fe9d9bcc97ec6a1735abc99cd881a63f596183fff407a7a4f56910a2ec60873
 source_facet: description
-recipe_derived_from_description_hash: 28673f2b1dda2dede23e931c5c0a91dc8a0a61c456538ebd5a260f737d7fdc33
+recipe_derived_from_description_hash: 4fe9d9bcc97ec6a1735abc99cd881a63f596183fff407a7a4f56910a2ec60873
 ---
 
 # Description
 
 Click the seven notes of the A natural minor scale on the piano, from
-the tonic (A3) up to the seventh (G4). Then click Forge to grade your
+the tonic (A3) up to the seventh (G4). Then press **Run** to grade your
 attempt.
 
 A minor shares every key with C major — all white keys — but starts on
