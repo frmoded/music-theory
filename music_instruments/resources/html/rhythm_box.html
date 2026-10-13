@@ -114,6 +114,37 @@
   .host-bar [hidden] { display: none; }
   /* Phase 8, playground mode (the plugin's `forge-rhythm` embed): a label, Reset and Open note replace the autosave controls. */
   .host-bar .playground-label { font-weight: 600; }
+  /* Circle mode (rhythm necklace): a second drawing of the SAME data. Colours are the grid's own (kick = --muted, hi-hat = --derived,
+     the rest = --right), so a channel reads the same in both views. */
+  .view-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+  .view-switch { display: inline-flex; border: 1px solid var(--axis); border-radius: 6px; overflow: hidden; }
+  .view-switch button { border: none; border-radius: 0; min-width: 72px; }
+  .view-switch button + button { border-left: 1px solid var(--axis); }
+  .view-switch button[aria-pressed="true"] { background: var(--highlight); font-weight: 600; }
+  .view-msg { font-size: 12px; color: var(--muted); min-height: 16px; }
+  .circle-view[hidden], .grid-view[hidden] { display: none; }
+  .circle-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 8px 0; }
+  .ring-legend { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .ring-legend .ring-pick { min-height: 30px; padding: 4px 10px; font-size: 12px; }
+  .ring-legend .ring-pick[aria-pressed="true"] { background: var(--highlight); border-color: var(--ink); font-weight: 600; }
+  button[aria-pressed="true"].shape-toggle { background: var(--grid); border-color: var(--ink); }
+  svg.circle-svg { display: block; width: 100%; max-width: 560px; height: auto; margin: 0 auto; touch-action: manipulation; }
+  svg.circle-svg .dot { stroke-width: 1.5; }
+  svg.circle-svg .dot.rest { fill: #fff; stroke: var(--axis); }
+  svg.circle-svg .dot.hit { fill: var(--right); stroke: var(--right-text); }
+  svg.circle-svg .dot.hit.ch-kick { fill: var(--muted); stroke: var(--ink); }
+  svg.circle-svg .dot.hit.ch-hihat { fill: var(--derived); stroke: #4b5a70; }
+  svg.circle-svg .dot.accent { stroke-width: 3; stroke: var(--ink); }
+  svg.circle-svg .dot.playing { stroke: #B54A50; stroke-width: 3.5; }
+  svg.circle-svg .target { fill: transparent; stroke: none; cursor: pointer; }
+  svg.circle-svg .cell:focus { outline: none; }
+  svg.circle-svg .cell:focus-visible .dot, svg.circle-svg .cell.focused .dot { stroke: var(--accent); stroke-width: 3; }
+  svg.circle-svg .ring-guide { fill: none; stroke: var(--grid); stroke-width: 1; }
+  svg.circle-svg .tick { stroke: var(--zero); stroke-width: 2; stroke-linecap: round; }
+  svg.circle-svg .step-label { font-size: 10px; fill: var(--muted); text-anchor: middle; dominant-baseline: middle; font-variant-numeric: tabular-nums; }
+  svg.circle-svg .shape { fill: rgba(179, 147, 115, 0.18); stroke: var(--right-text); stroke-width: 2; stroke-linejoin: round; pointer-events: none; }
+  svg.circle-svg .playhead { stroke: #B54A50; stroke-width: 2; stroke-linecap: round; pointer-events: none; }
+  svg.circle-svg .playhead[data-step=""] { visibility: hidden; }
 </style>
 </head>
 <body>
@@ -166,6 +197,7 @@
   <button data-bank="D">D</button>
   <select id="timeSig" aria-label="Time signature" title="Switching time signature stops playback and clears all four pattern banks (a 4/4 pattern has no meaningful 3/4 equivalent to preserve). Applies to every bank, not just the current one.">
     <option value="4/4" selected>4/4</option>
+    <option value="4/4@8">4/4 (eighth notes)</option>
     <option value="3/4">3/4 (waltz)</option>
     <option value="12/8">12/8</option>
     <option value="6/8">6/8</option>
@@ -173,11 +205,31 @@
   </select>
 </div>
 
+<div class="view-bar">
+  <div class="view-switch" id="viewSwitch" role="group" aria-label="View">
+    <button type="button" id="bViewGrid" aria-pressed="true" title="Show the pattern as a step grid">Grid</button>
+    <button type="button" id="bViewCircle" aria-pressed="false" title="Show the same pattern as a circle (a rhythm necklace)">Circle</button>
+  </div>
+  <span class="view-msg" id="viewMsg" role="status" aria-live="polite"></span>
+</div>
+
+<div class="grid-view" id="gridView">
 <div class="scroller">
   <div class="grid-wrap" id="grid" role="group" aria-label="16-step pattern grid, kick, snare, hi-hat"></div>
 </div>
 <div class="add-row">
   <select id="addInstrument" aria-label="Add instrument" title="Add a row for another instrument (bell, claves, congas)"></select>
+</div>
+</div>
+
+<div class="circle-view" id="circleView" hidden>
+  <div class="circle-tools">
+    <button type="button" id="bRotLeft" title="Turn the whole pattern one step earlier (wraps around)">Rotate left</button>
+    <button type="button" id="bRotRight" title="Turn the whole pattern one step later (wraps around)">Rotate right</button>
+    <button type="button" id="bShape" class="shape-toggle" aria-pressed="true" title="Draw the polygon through the selected ring's hits">Show shape</button>
+    <span class="ring-legend" id="ringLegend" role="group" aria-label="Pick a ring (its hits make the shape)"></span>
+  </div>
+  <svg class="circle-svg" id="circle" role="group" aria-label="Rhythm circle" viewBox="0 0 460 460" tabindex="-1"></svg>
 </div>
 
 <div class="bottom-row">
@@ -211,6 +263,35 @@ var TIME_SIGNATURES = {
   "6/8": { label: "6/8", beatsPerBar: 2, subdivision: 3, steps: 6, groupSize: 3, stepQl: 0.5 },
   "5/4": { label: "5/4", beatsPerBar: 5, subdivision: 4, steps: 20, groupSize: 4, stepQl: 0.25 }
 };
+
+// Eighth-note resolution (drain 2026-10-14-1200): 4/4 may ALSO be written as 8 steps (one step = an eighth, 0.5 quarter) in groups of 2 (a
+// beat) or 4 (a half bar). The engine already scores it (step = bar / steps); only this widget refused it. Nothing else gains a second grid.
+// A note keeps the group_size it was written with — it is carried in state and written back, not replaced by the menu default.
+var EIGHTH_GRIDS = { "4/4": { steps: 8, groupSizes: [2, 4], stepQl: 0.5 } };
+// The meter menu: its VALUE is a grid key, not a time_signature (4/4 appears twice: sixteenth and eighth resolution). `timeSig` in state
+// stays the data's own time_signature string.
+var MENU_GRIDS = {
+  "4/4": { timeSig: "4/4", steps: 16, groupSize: 4, stepQl: 0.25, label: "4/4" },
+  "4/4@8": { timeSig: "4/4", steps: 8, groupSize: 2, stepQl: 0.5, label: "4/4 (eighth notes)" },
+  "3/4": { timeSig: "3/4", steps: 12, groupSize: 4, stepQl: 0.25, label: "3/4 (waltz)" },
+  "12/8": { timeSig: "12/8", steps: 12, groupSize: 3, stepQl: 0.5, label: "12/8" },
+  "6/8": { timeSig: "6/8", steps: 6, groupSize: 3, stepQl: 0.5, label: "6/8" },
+  "5/4": { timeSig: "5/4", steps: 20, groupSize: 4, stepQl: 0.25, label: "5/4" }
+};
+// The grid a (time_signature, steps, group_size) triple means, or null when this widget cannot save it back unchanged.
+function resolveGrid(sigKey, steps, groupSize) {
+  if (!Object.prototype.hasOwnProperty.call(TIME_SIGNATURES, sigKey)) return null;
+  var sig = TIME_SIGNATURES[sigKey];
+  if (steps === sig.steps && groupSize === sig.groupSize) return { steps: sig.steps, groupSize: sig.groupSize, stepQl: sig.stepQl };
+  var alt = EIGHTH_GRIDS[sigKey];
+  if (alt && steps === alt.steps && alt.groupSizes.indexOf(groupSize) >= 0) return { steps: alt.steps, groupSize: groupSize, stepQl: alt.stepQl };
+  return null;
+}
+// The menu key for the grid a note is in (so the select shows what is in force after a load).
+function menuKeyFor(sigKey, steps) {
+  var alt = EIGHTH_GRIDS[sigKey];
+  return alt && steps === alt.steps ? sigKey + "@8" : sigKey;
+}
 
 function clampBpm(bpm) { return Math.max(MIN_BPM, Math.min(MAX_BPM, bpm)); }
 // One step, in seconds, at a given BPM (BPM is quarter notes per minute). `stepQl` = the step's length in quarter notes: 0.25 (a 16th,
@@ -336,6 +417,68 @@ function swingVisualPx(swingPct, stepIndex) {
   if (stepIndex % 2 === 0) return 0;                  // only the "off" 16th nudges, same convention as swingOffsetSeconds
   return (pct / 100) * 6;                              // capped at 6px — a preview, not a ruler
 }
+// --- Circle mode (rhythm necklace): pure geometry, rotation, polygon ---------------------------------------------------------
+// A second DISPLAY of the same data. N steps are N equally spaced points, step 0 at 12 o'clock, going CLOCKWISE; one concentric ring per
+// channel, the first channel outermost. Everything here is arithmetic: the DOM half only draws what this returns.
+var CIRCLE_MAX_RINGS = 4;                          // beyond this the rings are not legible: the widget says so and keeps Grid
+var CIRCLE_LABELS_MAX_STEPS = 16;                  // step numbers are drawn up to this many steps, hidden when crowded
+var CIRCLE_SIZE = 460;                             // the SVG viewBox edge; CSS scales it to the container (an embed is ~460 px wide)
+function circleGeometry(steps, ringCount, size) {
+  size = size || CIRCLE_SIZE;
+  ringCount = Math.max(1, ringCount | 0);
+  var cx = size / 2, cy = size / 2;
+  var labelBand = steps <= CIRCLE_LABELS_MAX_STEPS ? 22 : 0;     // room outside the outer ring for the step numbers
+  var tickBand = 10;                                              // room outside the outer ring for the group-start ticks
+  var maxTarget = 14;                                             // a 28 px hit target: comfortably over the 24 px floor
+  var outer = size / 2 - 8 - labelBand - tickBand - maxTarget;    // the outermost ring's radius
+  var ringGap = ringCount > 1 ? Math.min(38, (outer - 62) / (ringCount - 1)) : 0;
+  var ringRadii = [];
+  for (var r = 0; r < ringCount; r++) ringRadii.push(outer - r * ringGap);
+  var inner = ringRadii[ringCount - 1];
+  // The target is as large as it can be without two targets touching: limited by the neighbour chord on the INNERMOST ring and by the
+  // gap between rings. For N <= 16 and up to 4 rings at the default size that is always >= 12 px (a 24 px target).
+  var chord = 2 * inner * Math.sin(Math.PI / steps);
+  var targetRadius = Math.min(maxTarget, chord / 2, ringCount > 1 ? ringGap / 2 : maxTarget);
+  var dotRadius = Math.max(2, Math.min(9, targetRadius * 0.62));
+  var points = [];
+  for (var ri = 0; ri < ringCount; ri++) {
+    var ring = [];
+    for (var i = 0; i < steps; i++) {
+      var a = (2 * Math.PI * i) / steps;                          // 0 = 12 o'clock, increasing clockwise
+      ring.push({ x: cx + ringRadii[ri] * Math.sin(a), y: cy - ringRadii[ri] * Math.cos(a) });
+    }
+    points.push(ring);
+  }
+  return {
+    size: size, cx: cx, cy: cy, steps: steps, ringRadii: ringRadii, points: points,
+    targetRadius: targetRadius, dotRadius: dotRadius, groupDotRadius: dotRadius * 1.3,
+    labels: { visible: steps <= CIRCLE_LABELS_MAX_STEPS, radius: outer + maxTarget + tickBand + 8 },
+    tick: { from: outer + targetRadius + 2, to: outer + targetRadius + 2 + tickBand },
+    angle: function (step) { return (2 * Math.PI * step) / steps; }
+  };
+}
+// Rotate every SHOWN channel by one step, wrapping: dir +1 = right (a hit moves one step later), -1 = left. A copy; channels that are not
+// rows of the note are carried through untouched, and cells go through normalizeCell so velocities survive and 0 reads as a rest.
+function rotatePattern(pattern, rows, steps, dir) {
+  var out = {};
+  Object.keys(pattern).forEach(function (ch) { out[ch] = pattern[ch].slice(); });
+  rows.forEach(function (ch) {
+    var src = pattern[ch] || [], row = new Array(steps);
+    for (var i = 0; i < steps; i++) {
+      var from = (((i - dir) % steps) + steps) % steps;
+      row[i] = normalizeCell(src[from]);
+    }
+    out[ch] = row;
+  });
+  return out;
+}
+// The polygon's vertices: the ring's hits, in step order.
+function polygonPoints(geometry, ring, row) {
+  var pts = [];
+  (row || []).forEach(function (v, i) { if (cellOn(v) && geometry.points[ring] && geometry.points[ring][i]) pts.push(geometry.points[ring][i]); });
+  return pts;
+}
+
 // Rhythm-data export (Beat-as-data Phase 0): serialize one bank's pattern + the widget's live
 // time signature / swing / tempo into the JSON shape the engine's `rhythm_data_to_stream` reads.
 // Field names mirror this file's own state exactly (TIME_SIGNATURES entry -> time_signature/steps/
@@ -357,15 +500,17 @@ function toggleCell(v) { return normalizeCell(v) === false ? true : false; }
 function isAccentedCell(v) { var n = normalizeCell(v); return typeof n === "number" && n >= ACCENT_THRESHOLD; }
 // `rows` = the channels to write, in order (a note's own channels, so a load -> save with no edit is byte-identical); default: the
 // three standalone rows.
-function buildRhythmData(timeSigKey, swingPct, bpm, pattern, rows) {
+// `grid` ({steps, groupSize}) = the grid the note is in; omitted, the signature's own default (what every pre-eighth-note caller meant).
+function buildRhythmData(timeSigKey, swingPct, bpm, pattern, rows, grid) {
   var sig = TIME_SIGNATURES[timeSigKey];
+  var nSteps = grid ? grid.steps : sig.steps, group = grid ? grid.groupSize : sig.groupSize;
   var channels = {};
   (rows || DEFAULT_ROWS).forEach(function (ch) {
-    var row = new Array(sig.steps).fill(false);
-    (pattern[ch] || []).slice(0, sig.steps).forEach(function (v, i) { row[i] = normalizeCell(v); });
+    var row = new Array(nSteps).fill(false);
+    (pattern[ch] || []).slice(0, nSteps).forEach(function (v, i) { row[i] = normalizeCell(v); });
     channels[ch] = row;
   });
-  return { time_signature: timeSigKey, steps: sig.steps, group_size: sig.groupSize,
+  return { time_signature: timeSigKey, steps: nSteps, group_size: group,
            swing_pct: swingPct, tempo_bpm: Math.round(bpm), channels: channels };
 }
 function rhythmDataJson(data) {
@@ -396,8 +541,12 @@ function parseRhythmLoad(data) {
     return bad("The Rhythm Box supports " + keys.slice(0, -1).join(", ") + " and " + keys[keys.length - 1] + ", not " + JSON.stringify(sigKey) + ".");
   }
   var sig = TIME_SIGNATURES[sigKey];
-  if (data.steps !== sig.steps || data.group_size !== sig.groupSize) {
-    return bad(sigKey + " here means " + sig.steps + " steps in groups of " + sig.groupSize + "; this pattern has " + data.steps + " steps in groups of " + data.group_size + ".");
+  var grid = resolveGrid(sigKey, data.steps, data.group_size);
+  if (!grid) {
+    var alt = EIGHTH_GRIDS[sigKey];
+    return bad(sigKey + " here means " + sig.steps + " steps in groups of " + sig.groupSize
+      + (alt ? " (or " + alt.steps + " steps in groups of " + alt.groupSizes.join(" or ") + ")" : "")
+      + "; this pattern has " + data.steps + " steps in groups of " + data.group_size + ".");
   }
   var swing = data.swing_pct === undefined ? 0 : data.swing_pct;
   if (typeof swing !== "number" || Math.floor(swing) !== swing || swing < 0 || swing > 100) {
@@ -409,14 +558,14 @@ function parseRhythmLoad(data) {
   }
   var chans = data.channels;
   if (!chans || typeof chans !== "object" || Array.isArray(chans)) return bad("channels must be an object.");
-  var pattern = emptyPattern(sig.steps), failure = null;
+  var pattern = emptyPattern(grid.steps), failure = null;
   var rows = Object.keys(chans);                  // the note's own channels, in its order: one grid row each
   if (rows.length === 0) return bad("channels must not be empty.");
   rows.forEach(function (name) {
     if (failure) return;
     if (CHANNELS.indexOf(name) < 0) { failure = bad("Unknown channel " + JSON.stringify(name) + " (the Rhythm Box has " + CHANNELS.join(", ") + ")."); return; }
     var row = chans[name];
-    if (!Array.isArray(row) || row.length !== sig.steps) { failure = bad("Channel " + name + " must be a list of " + sig.steps + " steps."); return; }
+    if (!Array.isArray(row) || row.length !== grid.steps) { failure = bad("Channel " + name + " must be a list of " + grid.steps + " steps."); return; }
     row.forEach(function (v, i) {
       if (failure) return;
       var ok = v === true || v === false || v === 0 || normalizeCell(v) !== false;
@@ -425,7 +574,7 @@ function parseRhythmLoad(data) {
     });
   });
   if (failure) return failure;
-  return { ok: true, state: { timeSig: sigKey, steps: sig.steps, groupSize: sig.groupSize, swingPct: swing, bpm: tempo, pattern: pattern, rows: rows } };
+  return { ok: true, state: { timeSig: sigKey, steps: grid.steps, groupSize: grid.groupSize, stepQl: grid.stepQl, swingPct: swing, bpm: tempo, pattern: pattern, rows: rows } };
 }
 // --- pure math -- END pure-core -------------------------------------------------------------
 
@@ -439,7 +588,10 @@ if (typeof document === "undefined") {           // node test harness
     isChannelAudible: isChannelAudible, advanceScheduler: advanceScheduler,
     buildRhythmData: buildRhythmData, rhythmDataJson: rhythmDataJson,
     ACCENT_THRESHOLD: ACCENT_THRESHOLD, normalizeCell: normalizeCell, cellOn: cellOn, toggleCell: toggleCell,
-    isAccentedCell: isAccentedCell, parseRhythmLoad: parseRhythmLoad
+    isAccentedCell: isAccentedCell, parseRhythmLoad: parseRhythmLoad,
+    EIGHTH_GRIDS: EIGHTH_GRIDS, MENU_GRIDS: MENU_GRIDS, resolveGrid: resolveGrid, menuKeyFor: menuKeyFor,
+    CIRCLE_MAX_RINGS: CIRCLE_MAX_RINGS, CIRCLE_SIZE: CIRCLE_SIZE, circleGeometry: circleGeometry,
+    rotatePattern: rotatePattern, polygonPoints: polygonPoints
   };
 } else {
 (function () {
@@ -456,7 +608,10 @@ if (typeof document === "undefined") {           // node test harness
   var bank = "A";
   var timeSig = "4/4";
   var steps = TIME_SIGNATURES[timeSig].steps, groupSize = TIME_SIGNATURES[timeSig].groupSize;
+  var gridStepQl = TIME_SIGNATURES[timeSig].stepQl;     // how long ONE step lasts in quarter notes (0.25 sixteenth, 0.5 eighth)
   var patterns = {}; BANKS.forEach(function (b) { patterns[b] = emptyPattern(steps); });
+  // View (Grid | Circle) lives in WIDGET STATE ONLY — never in the note, never in a save payload. Grid is the default.
+  var viewMode = "grid", viewInit = false, showShape = true, shapeRing = null, focusedCell = null;
   var muted = new Set(), soloed = new Set();
   var tapHistory = [];
   var playing = false;
@@ -548,7 +703,7 @@ if (typeof document === "undefined") {           // node test harness
     if (CHANNELS.indexOf(ch) < 0 || rows.indexOf(ch) >= 0) return false;
     rows.push(ch);
     BANKS.forEach(function (b) { patterns[b][ch] = new Array(steps).fill(false); });
-    buildGrid(); renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview();
+    buildGrid(); renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview(); syncView();
     return true;
   }
   function removeRow(ch) {
@@ -556,7 +711,7 @@ if (typeof document === "undefined") {           // node test harness
     rows = rows.filter(function (c) { return c !== ch; });
     BANKS.forEach(function (b) { patterns[b][ch] = new Array(steps).fill(false); });
     muted.delete(ch); soloed.delete(ch);
-    buildGrid(); renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview();
+    buildGrid(); renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview(); syncView();
     return true;
   }
   function requestRemoveRow(ch) {
@@ -592,13 +747,195 @@ if (typeof document === "undefined") {           // node test harness
         stepEls[ch][s].setAttribute("aria-label", CHANNEL_LABEL[ch] + " step " + (s + 1) + vel);
       }
     });
+    if (viewMode === "circle") renderCircle();
   }
   function renderPlayhead() {
     rows.forEach(function (ch) {
       for (var s = 0; s < steps; s++) stepEls[ch][s].classList.toggle("playing", playing && s === currentStep);
     });
     $("stepPos").textContent = playing && currentStep >= 0 ? (currentStep + 1) + " / " + steps : "-- / " + steps;
+    if (viewMode === "circle") renderCirclePlayhead();
   }
+
+  // --- Circle view -------------------------------------------------------------------------------------------------------
+  // Drawing only: geometry comes from circleGeometry(), every edit goes through toggleStep() / rotate() and so through commitChange() —
+  // the single data-change path (confirm bars, "not saved" playground, autosave all unchanged). The circle posts nothing of its own.
+  var SVGNS = "http://www.w3.org/2000/svg";
+  function svgEl(name, attrs) {
+    var el = document.createElementNS(SVGNS, name);
+    Object.keys(attrs || {}).forEach(function (k) { el.setAttribute(k, attrs[k]); });
+    return el;
+  }
+  var cellEls = [];                                // cellEls[ringIndex][step] -> the <g class="cell">
+  var circleEl = $("circle");
+  function selectedRing() { return rows.indexOf(shapeRing) >= 0 ? shapeRing : rows[0]; }
+  function renderCircle() {
+    var g = circleGeometry(steps, rows.length, CIRCLE_SIZE);
+    var hadFocus = !!(document.activeElement && circleEl.contains(document.activeElement));
+    circleEl.innerHTML = "";
+    cellEls = [];
+    circleEl.setAttribute("viewBox", "0 0 " + g.size + " " + g.size);
+    circleEl.setAttribute("aria-label", "Rhythm circle, " + steps + " steps (" + timeSig + "), " + rows.map(function (c) { return CHANNEL_LABEL[c]; }).join(", ") + ". Arrow keys move, Space toggles a hit.");
+    // faint ring guides, outermost first
+    g.ringRadii.forEach(function (r) { circleEl.appendChild(svgEl("circle", { "class": "ring-guide", cx: g.cx, cy: g.cy, r: r })); });
+    // group-start ticks, outside the outer ring
+    for (var s = 0; s < steps; s += groupSize) {
+      var a = g.angle(s);
+      circleEl.appendChild(svgEl("line", {
+        "class": "tick",
+        x1: g.cx + g.tick.from * Math.sin(a), y1: g.cy - g.tick.from * Math.cos(a),
+        x2: g.cx + g.tick.to * Math.sin(a), y2: g.cy - g.tick.to * Math.cos(a)
+      }));
+    }
+    // step numbers, only while there is room
+    if (g.labels.visible) {
+      for (var n = 0; n < steps; n++) {
+        var an = g.angle(n);
+        var t = svgEl("text", { "class": "step-label", "data-step": n, x: g.cx + g.labels.radius * Math.sin(an), y: g.cy - g.labels.radius * Math.cos(an) });
+        t.textContent = String(n + 1);
+        circleEl.appendChild(t);
+      }
+    }
+    // the polygon through the selected ring's hits (under the dots)
+    var ringName = selectedRing(), ringIndex = rows.indexOf(ringName);
+    if (showShape && ringIndex >= 0) {
+      var pts = polygonPoints(g, ringIndex, patterns[bank][ringName]);
+      if (pts.length >= 2) {
+        circleEl.appendChild(svgEl("polygon", {
+          "class": "shape", "data-ring": ringName,
+          points: pts.map(function (p) { return p.x.toFixed(1) + "," + p.y.toFixed(1); }).join(" ")
+        }));
+      }
+    }
+    // the dots: one <g class="cell"> per (ring, step) — a big transparent target and the visible dot
+    rows.forEach(function (ch, ri) {
+      cellEls[ri] = [];
+      for (var st = 0; st < steps; st++) {
+        var pt = g.points[ri][st], cell = patterns[bank][ch][st], on = cellOn(cell), accented = isAccentedCell(cell);
+        var grp = svgEl("g", {
+          "class": "cell", "data-channel": ch, "data-step": st, role: "button", tabindex: "-1",
+          "aria-pressed": on ? "true" : "false",
+          "aria-label": CHANNEL_LABEL[ch] + " step " + (st + 1) + (on ? ", hit" : ", rest")
+        });
+        grp.appendChild(svgEl("circle", { "class": "target", cx: pt.x, cy: pt.y, r: g.targetRadius }));
+        var isStart = st % groupSize === 0;
+        grp.appendChild(svgEl("circle", {
+          "class": "dot ch-" + ch + (on ? " hit" : " rest") + (accented ? " accent" : "") + (isStart ? " group-start" : ""),
+          "data-channel": ch, "data-step": st, cx: pt.x, cy: pt.y, r: isStart ? g.groupDotRadius : g.dotRadius
+        }));
+        (function (ch, st) {
+          grp.addEventListener("click", function () { focusedCell = { ring: rows.indexOf(ch), step: st }; toggleStep(ch, st); });
+          grp.addEventListener("focus", function () { focusedCell = { ring: rows.indexOf(ch), step: st }; });
+        })(ch, st);
+        circleEl.appendChild(grp);
+        cellEls[ri][st] = grp;
+      }
+    });
+    // the playhead (hidden until playing), on top
+    circleEl.appendChild(svgEl("line", {
+      "class": "playhead", id: "playhead", "data-step": "",
+      x1: g.cx, y1: g.cy, x2: g.cx, y2: g.cy - (g.ringRadii[0] + g.targetRadius)
+    }));
+    circleEl._geometry = g;
+    renderRingLegend();
+    renderCirclePlayhead();
+    // roving tabindex: ONE tab stop for the whole ring, arrow keys move inside it
+    var f = focusedCell && cellEls[focusedCell.ring] && cellEls[focusedCell.ring][focusedCell.step] ? focusedCell : { ring: 0, step: 0 };
+    if (cellEls[f.ring] && cellEls[f.ring][f.step]) {
+      cellEls[f.ring][f.step].setAttribute("tabindex", "0");
+      if (hadFocus) cellEls[f.ring][f.step].focus();
+    }
+  }
+  // The playhead: a line from the centre through the current step, and that step lit on every ring. The SAME currentStep the grid uses.
+  function renderCirclePlayhead() {
+    var ph = circleEl.querySelector("#playhead"), g = circleEl._geometry;
+    if (!ph || !g) return;
+    var live = playing && currentStep >= 0;
+    ph.setAttribute("data-step", live ? String(currentStep) : "");
+    if (live) {
+      var a = g.angle(currentStep), r = g.ringRadii[0] + g.targetRadius;
+      ph.setAttribute("x2", g.cx + r * Math.sin(a)); ph.setAttribute("y2", g.cy - r * Math.cos(a));
+    }
+    cellEls.forEach(function (ring) {
+      ring.forEach(function (cell, st) {
+        var dot = cell.querySelector(".dot");
+        if (dot) dot.classList.toggle("playing", live && st === currentStep);
+      });
+    });
+  }
+  function renderRingLegend() {
+    var legend = $("ringLegend");
+    legend.innerHTML = "";
+    var chosen = selectedRing();
+    rows.forEach(function (ch) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "ring-pick"; b.setAttribute("data-ring", ch);
+      b.textContent = CHANNEL_LABEL[ch];
+      b.setAttribute("aria-pressed", ch === chosen ? "true" : "false");
+      b.setAttribute("title", "Show the shape of the " + CHANNEL_LABEL[ch] + " ring");
+      b.addEventListener("click", function () { shapeRing = ch; renderCircle(); });
+      legend.appendChild(b);
+    });
+  }
+  // Keyboard inside the circle: arrows walk the ring / change ring, Space or Enter toggles the focused hit.
+  circleEl.addEventListener("keydown", function (e) {
+    var f = focusedCell;
+    if (!f || !cellEls[f.ring]) return;
+    var n = steps, r = f.ring, s = f.step, key = e.key;
+    if (key === "ArrowRight") s = (s + 1) % n;
+    else if (key === "ArrowLeft") s = (s - 1 + n) % n;
+    else if (key === "ArrowUp") r = Math.max(0, r - 1);           // up = toward the outer ring
+    else if (key === "ArrowDown") r = Math.min(rows.length - 1, r + 1);
+    else if (key === " " || key === "Enter") { e.preventDefault(); toggleStep(rows[r], s); return; }
+    else return;
+    e.preventDefault();
+    cellEls[f.ring][f.step].setAttribute("tabindex", "-1");
+    focusedCell = { ring: r, step: s };
+    cellEls[r][s].setAttribute("tabindex", "0");
+    cellEls[r][s].focus();
+  });
+  // --- the view switch ---------------------------------------------------------------------------------------------------
+  var CIRCLE_LIMIT_MSG = "Circle view shows up to 4 instruments; use Grid";
+  function renderView() {
+    var circle = viewMode === "circle";
+    $("gridView").hidden = circle;
+    $("circleView").hidden = !circle;
+    $("bViewGrid").setAttribute("aria-pressed", circle ? "false" : "true");
+    $("bViewCircle").setAttribute("aria-pressed", circle ? "true" : "false");
+    if (circle) renderCircle();
+  }
+  // Returns true if the view is now `next`. Circle is refused (Grid kept, with the inline message) when the note has more rings than are legible.
+  function setView(next) {
+    if (next === "circle" && rows.length > CIRCLE_MAX_RINGS) {
+      viewMode = "grid";
+      setHostMsg("viewMsg", CIRCLE_LIMIT_MSG, false);
+      renderView();
+      return false;
+    }
+    viewMode = next;
+    setHostMsg("viewMsg", "", false);
+    renderView();
+    return true;
+  }
+  // After anything that changes the rows or the grid: Circle that has become illegible falls back to Grid; otherwise redraw.
+  function syncView() {
+    if (viewMode === "circle" && rows.length > CIRCLE_MAX_RINGS) setView("grid"); else renderView();
+  }
+  $("bViewGrid").addEventListener("click", function () { setView("grid"); });
+  $("bViewCircle").addEventListener("click", function () { setView("circle"); });
+  $("bShape").addEventListener("click", function () {
+    showShape = !showShape;
+    $("bShape").setAttribute("aria-pressed", showShape ? "true" : "false");
+    if (viewMode === "circle") renderCircle();
+  });
+  // Rotate: shifts EVERY shown channel one step (wrapping). A normal edit — through commitChange() like a dot, no confirm bar.
+  function rotate(dir) {
+    patterns[bank] = rotatePattern(patterns[bank], rows, steps, dir);
+    renderGrid();
+    commitChange();
+  }
+  $("bRotLeft").addEventListener("click", function () { rotate(-1); });
+  $("bRotRight").addEventListener("click", function () { rotate(1); });
   // Swing preview: nudge the off-beat step cells sideways by swingVisualPx, independent of
   // playback state, so the eye can see the delay grow as the slider moves, even while stopped.
   function renderSwingPreview() {
@@ -644,7 +981,7 @@ if (typeof document === "undefined") {           // node test harness
     exportMsgTimer = setTimeout(function () { $("exportMsg").textContent = ""; }, 2500);
   }
   $("bExport").addEventListener("click", function () {
-    var json = rhythmDataJson(buildRhythmData(timeSig, swingPct, bpm, patterns[bank], rows));
+    var json = rhythmDataJson(buildRhythmData(timeSig, swingPct, bpm, patterns[bank], rows, { steps: steps, groupSize: groupSize }));
     var ta = $("exportFallback");
     function showManual() { ta.hidden = false; ta.value = json; ta.focus(); ta.select(); exportMsg("Copy blocked here - JSON shown below, press Cmd/Ctrl+C"); }
     function legacyCopy() {
@@ -664,14 +1001,15 @@ if (typeof document === "undefined") {           // node test harness
   // toggle) and clears every bank's pattern (a 4/4 pattern has no meaningful mapping onto 3/4's
   // different bar length, so silently truncating/padding would just look broken — clearing and
   // saying so via the select's own tooltip is the honest choice).
+  // `next` is a MENU key ("4/4", "4/4@8", "3/4", ...): 4/4 has two grids, so the menu value is not the time_signature string.
   function applyTimeSig(next) {
     if (playing) stop();
-    timeSig = next;
-    var sig = TIME_SIGNATURES[timeSig];
-    steps = sig.steps; groupSize = sig.groupSize;
+    var g = MENU_GRIDS[next];
+    timeSig = g.timeSig;
+    steps = g.steps; groupSize = g.groupSize; gridStepQl = g.stepQl;
     BANKS.forEach(function (b) { patterns[b] = emptyPattern(steps); });
     buildGrid();
-    renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview();
+    renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview(); syncView();
   }
   // Hosted (editing a note), a time-signature change, Random and Clear rewrite the pattern IN THE NOTE and autosave would write it, so each
   // asks first — with ONE inline bar shared by all three (the iframe sandbox blocks the native confirm dialog). Standalone keeps the
@@ -691,7 +1029,7 @@ if (typeof document === "undefined") {           // node test harness
     else if (action.kind === "removerow") { if (!removeRow(action.channel)) return; }
     else if (action.kind === "addrow") { if (!addRow(action.channel)) return; }
     else if (action.kind === "clear") { patterns[bank] = emptyPattern(steps); renderGrid(); }
-    else if (action.kind === "timesig" && TIME_SIGNATURES[action.next]) { $("timeSig").value = action.next; applyTimeSig(action.next); }
+    else if (action.kind === "timesig" && MENU_GRIDS[action.next]) { $("timeSig").value = action.next; applyTimeSig(action.next); }
     else return;
     commitChange();
   }
@@ -701,13 +1039,13 @@ if (typeof document === "undefined") {           // node test harness
     if (!confirmsFirst()) { applyWholePatternChange(action); return; }
     if (action.kind === "random") askConfirm(action, "Randomize the pattern? This replaces the pattern in the note.", "Continue");
     else if (action.kind === "clear") askConfirm(action, "Clear the pattern? This empties the pattern in the note.", "Continue");
-    else askConfirm(action, "This clears the pattern in the note. Change to " + action.next + "?", "Change");
+    else askConfirm(action, "This clears the pattern in the note. Change to " + MENU_GRIDS[action.next].label + "?", "Change");
   }
   $("timeSig").addEventListener("change", function (e) {
     var next = e.target.value;
     if (!confirmsFirst()) { applyTimeSig(next); return; }
-    if (next === timeSig) { dismissConfirm(); return; }
-    e.target.value = timeSig;                                           // the select keeps showing what is still in force
+    if (next === menuKeyFor(timeSig, steps)) { dismissConfirm(); return; }
+    e.target.value = menuKeyFor(timeSig, steps);                        // the select keeps showing what is still in force
     requestWholePatternChange({ kind: "timesig", next: next });
   });
   $("confirmOk").addEventListener("click", function () {
@@ -807,7 +1145,7 @@ if (typeof document === "undefined") {           // node test harness
 
   function schedulerTick() {
     var c = audio(); if (!c) return;
-    var out = advanceScheduler(schedulerState, c.currentTime, bpm, swingPct, SCHEDULE_AHEAD_S, steps, TIME_SIGNATURES[timeSig].stepQl);
+    var out = advanceScheduler(schedulerState, c.currentTime, bpm, swingPct, SCHEDULE_AHEAD_S, steps, gridStepQl);
     out.events.forEach(function (ev) {
       scheduleStep(ev.step, ev.time);
       // Update the visual step indicator on its OWN loose timer (setTimeout keyed off the
@@ -858,7 +1196,7 @@ if (typeof document === "undefined") {           // node test harness
     dismissConfirm();                              // any data edit ends a pending Random / Clear / time-signature question (without applying it)
     if (!hostWindow() || !hostLoaded) return;      // standalone, or a note that has not loaded (or was refused): never write
     if (hostMode === "playground") { postToHost({ type: "forge-rhythm-edited" }); return; }   // a playground NEVER saves
-    postToHost({ type: "forge-rhythm-save", data: buildRhythmData(timeSig, swingPct, bpm, patterns[bank], rows) });   // hosted: `bank` is always "A" — the note's one pattern
+    postToHost({ type: "forge-rhythm-save", data: buildRhythmData(timeSig, swingPct, bpm, patterns[bank], rows, { steps: steps, groupSize: groupSize }) });   // hosted: `bank` is always "A" — the note's one pattern
   }
   function announcePlaying(on) {
     if (hostMode === "playground" && hostLoaded) postToHost({ type: "forge-rhythm-playing", playing: !!on });
@@ -883,6 +1221,12 @@ if (typeof document === "undefined") {           // node test harness
     loadedData = hostMode === "playground" ? JSON.parse(JSON.stringify(msg.data)) : null;
     hostLoaded = true;                                // set BEFORE showLoaded so a stop() inside it is announced consistently
     showLoaded(r.state);
+    // The host may suggest the FIRST view (`view: circle` on a forge-rhythm block). Only the exact strings count, and only once: a later
+    // load (Reset, the note changed on disk) must not undo what the student chose since. Never written to the note.
+    if (!viewInit) {
+      viewInit = true;
+      if (msg.view === "circle" || msg.view === "grid") setView(msg.view);
+    }
     hostNote = typeof msg.noteName === "string" ? msg.noteName : "";
     $("hostNote").textContent = hostNote;
     $("hostBar").hidden = false; $("bReload").hidden = true;
@@ -894,8 +1238,8 @@ if (typeof document === "undefined") {           // node test harness
     if (playing) stop();
     dismissConfirm();
     var r = { state: state };
-    timeSig = r.state.timeSig; steps = r.state.steps; groupSize = r.state.groupSize;
-    $("timeSig").value = timeSig;
+    timeSig = r.state.timeSig; steps = r.state.steps; groupSize = r.state.groupSize; gridStepQl = r.state.stepQl;
+    $("timeSig").value = menuKeyFor(timeSig, steps);
     setBpm(r.state.bpm);
     swingPct = r.state.swingPct; $("swing").value = swingPct; $("swingVal").textContent = swingPct + "%";
     BANKS.forEach(function (b) { patterns[b] = emptyPattern(steps); });      // the other banks are cleared, as on a time-signature change
@@ -903,7 +1247,7 @@ if (typeof document === "undefined") {           // node test harness
     rows = r.state.rows.slice();                      // one row per channel in the note, in the note's order
     bank = "A";
     Array.prototype.forEach.call(document.querySelectorAll(".banks button"), function (x) { x.classList.toggle("active", x.getAttribute("data-bank") === "A"); });
-    buildGrid(); renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview();
+    buildGrid(); renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview(); syncView();
   }
   // The autosave indicator. "Saved" and errors both PERSIST (an error until the next successful save replaces it).
   function showStatus(state, message) {
@@ -926,7 +1270,7 @@ if (typeof document === "undefined") {           // node test harness
     else if (m.type === "forge-rhythm-status") showStatus(m.state, m.message);
     else if (m.type === "forge-rhythm-save-result") showStatus(m.ok ? "saved" : "error", m.message);     // Phase 5 reply, still understood
     else if (m.type === "forge-rhythm-request-data") {      // Phase 8: a READ of the current state (what the embed's Score toggle engraves)
-      postToHost({ type: "forge-rhythm-current-data", data: hostLoaded ? buildRhythmData(timeSig, swingPct, bpm, patterns[bank], rows) : null });
+      postToHost({ type: "forge-rhythm-current-data", data: hostLoaded ? buildRhythmData(timeSig, swingPct, bpm, patterns[bank], rows, { steps: steps, groupSize: groupSize }) : null });
     }
     else if (m.type === "forge-rhythm-stop") { if (playing) stop(); }
   });

@@ -12,9 +12,16 @@ Look at the first half: hits on 0, 3, 6. That's tresillo at double speed (3+3+4 
 
 **3-2** means three hits in the first half, two in the second. Flip the order and you get **2-3**, the same rhythm starting from the other end. It sounds like the music changed its mind about where it began.
 
+```forge-rhythm
+[[rhythm_pattern_clave_son_3_2]]
+view: circle
+```
+
+Same five hits, drawn as a circle: turn it and the 3-2 becomes 2-3.
+
 ## Challenge
 
-Move the **third** hit (step 6) to step 7. You've just made the rumba clave, the one that sounds a little more tense and a little less polite. Hear the difference?
+Move the **third** hit (step 6) to step 7. You've just made the rumba clave, the one that sounds a little more tense and a little less polite. Hear the difference? ([[rhythm_pattern_clave_rumba_3_2]] has it ready-made.)
 
 Then try dropping the last hit. The pattern is still a clave in spirit, but something in the room goes missing. What did you take?
 

@@ -13,6 +13,8 @@ music_instruments/resources/html/rhythm_box.html
 
 **Beyond the kit.** The grid isn't limited to kick, snare and hi-hat anymore: **Add instrument** brings in a bell, claves, a high conga and a low conga, and a rhythm note shows exactly one row for each instrument it contains — so a bell pattern is a single row, honest and uncluttered. The meter menu has grown to match: 4/4, 3/4, **12/8**, **6/8** and **5/4**, with the steps grouped the way the meter feels (threes in 12/8 and 6/8, fours in 5/4). Open `rhythm_pattern_bell_12_8` for the West African bell, `rhythm_pattern_clave_son_3_2` for the clave that half of Latin music hangs on, `rhythm_pattern_tresillo` for the 3+3+2 cell, `rhythm_pattern_hemiola` for two-against-three, and `rhythm_pattern_tha_dhi_gi_na_thom` for a Carnatic five-beat phrase played on hand drums — a stylised kit rendering, the drums standing in for the syllables. Same grid, very different worlds.
 
+**Grid or circle.** The **Grid | Circle** switch above the pattern redraws the same bar as a circle: step 1 at the top, time running clockwise, one ring per instrument (the first one outermost). Click a dot to toggle a hit, exactly as in the grid; **Show shape** joins one ring's hits into a polygon, which is the quickest way to *see* why a rhythm feels the way it does — and **Rotate left / Rotate right** slide every instrument one step round the circle, so the son clave's 3-2 turns into a 2-3 under your hands. Nothing about the note changes except the hits themselves; the view is only how you look at them. Up to four instruments fit legibly — with more, the circle says so and the grid stays. The meter menu also offers **4/4 (eighth notes)**: one bar in eight steps instead of sixteen, for patterns that never need the in-between 16ths.
+
 **Put a rhythm in your own note.** Don't copy the pattern and don't paste a second widget — point at the data note and let it play right where you're writing. Drop a `forge-rhythm` block into any note, with a link to a rhythm data note on its first line:
 
 ````
@@ -21,7 +23,7 @@ music_instruments/resources/html/rhythm_box.html
 ```
 ````
 
-That's the whole thing: the rhythm shows up as a Beat Box in place, headed with the note's name, with **Open note** beside it. Two optional lines can follow the link — `height: 480` (pixels) and `title: Three-three-two` (the heading) — and nothing else; a typo gets you a plain message, not a silent shrug.
+That's the whole thing: the rhythm shows up as a Beat Box in place, headed with the note's name, with **Open note** beside it. Three optional lines can follow the link — `height: 480` (pixels), `title: Three-three-two` (the heading) and `view: circle` (start in the circle view; `view: grid` is the default) — and nothing else; a typo gets you a plain message, not a silent shrug.
 
 It's a playground, on purpose. Click cells, shove the tempo, change the meter, hit Random — nothing is saved, ever, and the label says so. **Reset** puts the rhythm back exactly as it is in the note; **Open note** opens the real thing in its own tab, where changes *are* saved. If the note changes while you're mid-experiment, your experiment wins until you press Reset. Start a second embed and the first one shuts up — one groove at a time. In the music edition there's also a **Score** button that engraves what's on screen *right now*, your edits included, and the same button flips back to the grid. Here's the tresillo, ready to wreck:
 
