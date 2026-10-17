@@ -226,6 +226,8 @@
   <div class="circle-tools">
     <button type="button" id="bRotLeft" title="Turn the whole pattern one step earlier (wraps around)">Rotate left</button>
     <button type="button" id="bRotRight" title="Turn the whole pattern one step later (wraps around)">Rotate right</button>
+    <button type="button" id="bBeatLeft" title="Turn the whole pattern one beat earlier (one group of steps; wraps around)" aria-label="Rotate left by a beat">Left a beat</button>
+    <button type="button" id="bBeatRight" title="Turn the whole pattern one beat later (one group of steps; wraps around)" aria-label="Rotate right by a beat">Right a beat</button>
     <button type="button" id="bShape" class="shape-toggle" aria-pressed="true" title="Draw the polygon through the selected ring's hits">Show shape</button>
     <span class="ring-legend" id="ringLegend" role="group" aria-label="Pick a ring (its hits make the shape)"></span>
   </div>
@@ -928,14 +930,18 @@ if (typeof document === "undefined") {           // node test harness
     $("bShape").setAttribute("aria-pressed", showShape ? "true" : "false");
     if (viewMode === "circle") renderCircle();
   });
-  // Rotate: shifts EVERY shown channel one step (wrapping). A normal edit — through commitChange() like a dot, no confirm bar.
-  function rotate(dir) {
-    patterns[bank] = rotatePattern(patterns[bank], rows, steps, dir);
+  // Rotate: shifts EVERY shown channel by `by` steps (wrapping; negative = left). A normal edit — through commitChange() like a dot, no
+  // confirm bar. One step per press on the two plain buttons; one BEAT — the grid's own group_size (4 in 4/4 and 5/4, 3 in 12/8 and 6/8,
+  // 2 or 4 on the eighth-note grid) — on the two "a beat" buttons.
+  function rotate(by) {
+    patterns[bank] = rotatePattern(patterns[bank], rows, steps, by);
     renderGrid();
     commitChange();
   }
   $("bRotLeft").addEventListener("click", function () { rotate(-1); });
   $("bRotRight").addEventListener("click", function () { rotate(1); });
+  $("bBeatLeft").addEventListener("click", function () { rotate(-groupSize); });
+  $("bBeatRight").addEventListener("click", function () { rotate(groupSize); });
   // Swing preview: nudge the off-beat step cells sideways by swingVisualPx, independent of
   // playback state, so the eye can see the delay grow as the slider moves, even while stopped.
   function renderSwingPreview() {
