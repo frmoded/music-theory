@@ -26,16 +26,16 @@
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: var(--muted);
-    padding: 8px 10px 14px;
+    padding: 6px 8px 8px;
     -webkit-text-size-adjust: 100%;
   }
   .wrap { max-width: 720px; margin: 0 auto; }
   .scroller { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .transport { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+  .transport { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; margin-bottom: 6px; }
   button {
     font: inherit; font-size: 13px; color: var(--ink);
     background: #fff; border: 1px solid var(--axis); border-radius: 6px;
-    padding: 8px 12px; cursor: pointer; min-height: 40px;
+    padding: 5px 10px; cursor: pointer; min-height: 32px;
   }
   button:hover { border-color: var(--ink); }
   button:active { background: var(--grid); }
@@ -43,28 +43,30 @@
   button.play { border-color: var(--derived); color: var(--derived); font-weight: 600; min-width: 76px; }
   button.play.playing { background: var(--derived); color: #fff; }
   .bpm { display: flex; align-items: center; gap: 4px; border: 1px solid var(--axis); border-radius: 6px; padding: 2px; }
-  .bpm button { border: none; min-width: 34px; min-height: 34px; padding: 4px; }
+  .bpm button { border: none; min-width: 30px; min-height: 28px; padding: 2px; }
   .bpm .val { min-width: 54px; text-align: center; font-variant-numeric: tabular-nums; font-size: 14px; color: var(--ink); }
   .step-pos { min-width: 62px; text-align: center; font-variant-numeric: tabular-nums; font-size: 12px; color: var(--muted); }
-  .sliders { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 10px; align-items: center; }
+  .sliders { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 6px; align-items: center; }
+  .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
   .slider-field { display: flex; align-items: center; gap: 6px; font-size: 12px; }
   .slider-field-wrap { display: flex; flex-direction: column; gap: 2px; }
   .swing-caption { margin: 0; font-size: 11px; color: var(--muted); max-width: 320px; }
-  .slider-field input[type="range"] { width: 110px; }
-  .banks { display: flex; gap: 4px; margin-bottom: 10px; align-items: center; }
-  .banks button { min-width: 36px; min-height: 34px; padding: 4px 8px; }
+  .slider-field input[type="range"] { width: 96px; }
+  .banks { display: flex; gap: 4px; margin-bottom: 6px; align-items: center; }
+  .banks[hidden] { display: none; }
+  .banks button { min-width: 36px; min-height: 30px; padding: 3px 8px; }
   .export-msg { font-size: 12px; color: var(--muted); min-height: 16px; }
   .export-fallback { width: 100%; height: 150px; margin-top: 8px; font: 12px/1.4 ui-monospace, Menlo, Consolas, monospace; color: var(--ink); background: #fff; border: 1px solid var(--axis); border-radius: 6px; padding: 6px; }
   .banks button[hidden] { display: none; }
   .banks button.active { background: var(--highlight); border-color: var(--ink); font-weight: 600; }
   #timeSig {
-    font: inherit; font-size: 13px; color: var(--ink); margin-left: 10px;
+    font: inherit; font-size: 13px; color: var(--ink);
     background: #fff; border: 1px solid var(--axis); border-radius: 6px;
-    padding: 8px 12px; cursor: pointer; min-height: 34px;
+    padding: 4px 8px; cursor: pointer; min-height: 32px;
   }
   #timeSig:hover { border-color: var(--ink); }
   .grid-wrap { min-width: 620px; }
-  .channel-row { display: grid; grid-template-columns: 110px repeat(16, 1fr); gap: 3px; align-items: center; margin-bottom: 4px; }
+  .channel-row { display: grid; grid-template-columns: 110px repeat(16, 1fr); gap: 3px; align-items: center; margin-bottom: 2px; }
   .channel-label { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
   .channel-label .name { flex: 1; }
   .mini-btn {
@@ -73,11 +75,13 @@
   }
   .mini-btn.remove { color: var(--muted); }
   .mini-btn.remove:disabled { opacity: 0.35; cursor: default; }
-  .add-row { margin: 6px 0 2px; font-size: 13px; }
+  .add-row { margin: 4px 0 0; font-size: 13px; }
+  .add-row select, .circle-tools select { font: inherit; font-size: 13px; color: var(--ink); background: #fff; border: 1px solid var(--axis); border-radius: 6px; padding: 4px 6px; min-height: 32px; }
+  .circle-tools select:disabled { opacity: 0.5; cursor: not-allowed; }
   .mini-btn.on.mute { background: var(--right-text); color: #fff; border-color: var(--right-text); }
   .mini-btn.on.solo { background: var(--accent); color: #fff; border-color: var(--accent); }
   .step {
-    min-height: 34px; border: 1px solid var(--grid); border-radius: 4px; background: #fff;
+    min-height: 28px; border: 1px solid var(--grid); border-radius: 4px; background: #fff;
     cursor: pointer; padding: 0; position: relative;
     transition: transform 150ms ease-out;   /* smooths the swing-preview nudge as the slider moves */
   }
@@ -92,19 +96,24 @@
        invisible, the same class of bug the piano/guitar/lute button-border fix caught earlier
        this session. This desaturated red keeps "red = position marker" recognizable (distinct
        from the gold/tan/slate "on" colors below) while dropping saturation, at 5.04:1 contrast. */
-    content: ""; position: absolute; inset: -3px; border: 2px solid #B54A50; border-radius: 6px; pointer-events: none;
+    content: ""; position: absolute; inset: -2px; border: 1.5px solid rgba(181, 74, 80, 0.8); border-radius: 6px; pointer-events: none;
   }
   /* Was var(--left) #2B2B2B (near-black, same value as Title Text) -- driver: "same but less so".
      var(--muted) #555555 (already used for Body Text) is visibly softer while staying clearly
      "on" against the paper background (7.27:1) and against the other two channels' on-colors. */
   .step[data-channel="kick"].on { background: var(--muted); border-color: var(--ink); }
   .step[data-channel="hihat"].on { background: var(--derived); border-color: #4b5a70; }
-  .bottom-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; align-items: center; }
+  .bottom-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 0; align-items: center; }
+  /* Rare actions (Random, Clear, Export JSON) behind one "more" disclosure; the buttons stay real buttons in the document. */
+  .more-menu { margin-top: 4px; }
+  .more-menu > summary { display: inline-block; list-style: none; cursor: pointer; padding: 3px 12px; border: 1px solid var(--axis); border-radius: 6px; background: #fff; color: var(--ink); font-size: 15px; line-height: 1.2; }
+  .more-menu > summary::-webkit-details-marker { display: none; }
+  .more-menu > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   /* Beat-as-data Phase 5: a cell holding a velocity >= 100 (e.g. from accent_mask) is drawn with a double ring so the accents
      are visible. Shown on top of the channel colour, so it reads on kick, snare and hi-hat alike. */
   .step.on.accent { box-shadow: inset 0 0 0 2px #fff, inset 0 0 0 4px var(--ink); }
   /* Host mode only (the widget was opened by the plugin's "Open as Beat Box"): note name + autosave indicator. Hidden standalone. */
-  .host-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; font-size: 13px; color: var(--ink); }
+  .host-bar { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; margin-bottom: 6px; font-size: 13px; color: var(--ink); }
   .host-bar .note { font-weight: 600; }
   #bReload { background: var(--highlight); border-color: var(--ink); font-weight: 600; }
   .confirm-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 8px; padding: 6px 10px; font-size: 13px; border: 1px solid var(--ink); border-radius: 6px; background: var(--highlight); }
@@ -116,26 +125,29 @@
   .host-bar .playground-label { font-weight: 600; }
   /* Circle mode (rhythm necklace): a second drawing of the SAME data. Colours are the grid's own (kick = --muted, hi-hat = --derived,
      the rest = --right), so a channel reads the same in both views. */
-  .view-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
   .view-switch { display: inline-flex; border: 1px solid var(--axis); border-radius: 6px; overflow: hidden; }
-  .view-switch button { border: none; border-radius: 0; min-width: 72px; }
+  .view-switch button { border: none; border-radius: 0; min-width: 60px; min-height: 30px; padding: 3px 10px; }
   .view-switch button + button { border-left: 1px solid var(--axis); }
   .view-switch button[aria-pressed="true"] { background: var(--highlight); font-weight: 600; }
   .view-msg { font-size: 12px; color: var(--muted); min-height: 16px; }
   .circle-view[hidden], .grid-view[hidden] { display: none; }
-  .circle-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 8px 0; }
+  .circle-tools { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; margin: 2px 0 4px; }
+  .circle-tools button { min-width: 34px; padding: 3px 8px; font-size: 15px; line-height: 1.1; }
   .ring-legend { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-  .ring-legend .ring-pick { min-height: 30px; padding: 4px 10px; font-size: 12px; }
+  .ring-legend .ring-pick { min-height: 26px; padding: 2px 8px; font-size: 12px; min-width: 0; }
   .ring-legend .ring-pick[aria-pressed="true"] { background: var(--highlight); border-color: var(--ink); font-weight: 600; }
   button[aria-pressed="true"].shape-toggle { background: var(--grid); border-color: var(--ink); }
-  svg.circle-svg { display: block; width: 100%; max-width: 560px; height: auto; margin: 0 auto; touch-action: manipulation; }
+  /* The width is set by the script to what the ring count needs (circleSizeFor), so the viewBox units are CSS pixels and the targets are real
+     pixels; max-width keeps it inside a narrow pane, where it scales down as before. */
+  svg.circle-svg { display: block; max-width: 100%; height: auto; margin: 0 auto; touch-action: manipulation; }
   svg.circle-svg .dot { stroke-width: 1.5; }
   svg.circle-svg .dot.rest { fill: #fff; stroke: var(--axis); }
   svg.circle-svg .dot.hit { fill: var(--right); stroke: var(--right-text); }
   svg.circle-svg .dot.hit.ch-kick { fill: var(--muted); stroke: var(--ink); }
   svg.circle-svg .dot.hit.ch-hihat { fill: var(--derived); stroke: #4b5a70; }
   svg.circle-svg .dot.accent { stroke-width: 3; stroke: var(--ink); }
-  svg.circle-svg .dot.playing { stroke: #B54A50; stroke-width: 3.5; }
+  /* The active dot: a lighter ring and a soft warm tint — it reads, but no longer shouts over the shape. */
+  svg.circle-svg .dot.playing { stroke: rgba(181, 74, 80, 0.7); stroke-width: 2; fill-opacity: 0.85; filter: drop-shadow(0 0 3px rgba(181, 74, 80, 0.45)); }
   svg.circle-svg .target { fill: transparent; stroke: none; cursor: pointer; }
   svg.circle-svg .cell:focus { outline: none; }
   svg.circle-svg .cell:focus-visible .dot, svg.circle-svg .cell.focused .dot { stroke: var(--accent); stroke-width: 3; }
@@ -143,7 +155,8 @@
   svg.circle-svg .tick { stroke: var(--zero); stroke-width: 2; stroke-linecap: round; }
   svg.circle-svg .step-label { font-size: 10px; fill: var(--muted); text-anchor: middle; dominant-baseline: middle; font-variant-numeric: tabular-nums; }
   svg.circle-svg .shape { fill: rgba(179, 147, 115, 0.18); stroke: var(--right-text); stroke-width: 2; stroke-linejoin: round; pointer-events: none; }
-  svg.circle-svg .playhead { stroke: #B54A50; stroke-width: 2; stroke-linecap: round; pointer-events: none; }
+  /* A hairline, not a spoke: thin and translucent. It is drawn last (on top) but never takes a click and no longer hides a dot or the shape. */
+  svg.circle-svg .playhead { stroke: #B54A50; stroke-width: 1; opacity: 0.45; stroke-linecap: round; pointer-events: none; }
   svg.circle-svg .playhead[data-step=""] { visibility: hidden; }
 </style>
 </head>
@@ -174,16 +187,27 @@
   </div>
   <button id="bTap" title="Tap a few times to set the tempo">Tap tempo</button>
   <span class="step-pos" id="stepPos" aria-live="polite">-- / 16</span>
+  <select id="timeSig" aria-label="Time signature" title="Switching time signature stops playback and clears all four pattern banks (a 4/4 pattern has no meaningful 3/4 equivalent to preserve). Applies to every bank, not just the current one.">
+    <option value="4/4" selected>4/4</option>
+    <option value="4/4@8">4/4 (eighth notes)</option>
+    <option value="3/4">3/4 (waltz)</option>
+    <option value="12/8">12/8</option>
+    <option value="6/8">6/8</option>
+    <option value="5/4">5/4</option>
+  </select>
+  <div class="view-switch" id="viewSwitch" role="group" aria-label="View">
+    <button type="button" id="bViewGrid" aria-pressed="true" title="Show the pattern as a step grid">Grid</button>
+    <button type="button" id="bViewCircle" aria-pressed="false" title="Show the same pattern as a circle (a rhythm necklace)">Circle</button>
+  </div>
+  <span class="view-msg" id="viewMsg" role="status" aria-live="polite"></span>
 </div>
 
 <div class="sliders">
-  <div class="slider-field-wrap">
-    <label class="slider-field">Swing
-      <input type="range" id="swing" min="0" max="100" value="0" aria-label="Swing amount">
-      <span id="swingVal">0%</span>
-    </label>
-    <p class="swing-caption">Delays every off-beat 16th note &mdash; try 50&ndash;100% while playing a steady pattern to hear the shuffle. The off-beat step cells below nudge right as a preview, even while stopped.</p>
-  </div>
+  <label class="slider-field" title="Swing: delays every off-beat 16th note. Try 50&ndash;100% while playing a steady pattern to hear the shuffle. The off-beat step cells nudge right as a preview, even while stopped.">Swing
+    <input type="range" id="swing" min="0" max="100" value="0" aria-label="Swing amount" aria-describedby="swingCaption" title="Swing: delays every off-beat 16th note. Try 50&ndash;100% while playing a steady pattern to hear the shuffle. The off-beat step cells nudge right as a preview, even while stopped.">
+    <span id="swingVal">0%</span>
+  </label>
+  <p class="swing-caption sr-only" id="swingCaption">Delays every off-beat 16th note &mdash; try 50&ndash;100% while playing a steady pattern to hear the shuffle. The off-beat step cells below nudge right as a preview, even while stopped.</p>
   <label class="slider-field">Volume
     <input type="range" id="volume" min="0" max="100" value="80" aria-label="Volume">
     <span id="volumeVal">80%</span>
@@ -195,22 +219,6 @@
   <button data-bank="B">B</button>
   <button data-bank="C">C</button>
   <button data-bank="D">D</button>
-  <select id="timeSig" aria-label="Time signature" title="Switching time signature stops playback and clears all four pattern banks (a 4/4 pattern has no meaningful 3/4 equivalent to preserve). Applies to every bank, not just the current one.">
-    <option value="4/4" selected>4/4</option>
-    <option value="4/4@8">4/4 (eighth notes)</option>
-    <option value="3/4">3/4 (waltz)</option>
-    <option value="12/8">12/8</option>
-    <option value="6/8">6/8</option>
-    <option value="5/4">5/4</option>
-  </select>
-</div>
-
-<div class="view-bar">
-  <div class="view-switch" id="viewSwitch" role="group" aria-label="View">
-    <button type="button" id="bViewGrid" aria-pressed="true" title="Show the pattern as a step grid">Grid</button>
-    <button type="button" id="bViewCircle" aria-pressed="false" title="Show the same pattern as a circle (a rhythm necklace)">Circle</button>
-  </div>
-  <span class="view-msg" id="viewMsg" role="status" aria-live="polite"></span>
 </div>
 
 <div class="grid-view" id="gridView">
@@ -224,22 +232,26 @@
 
 <div class="circle-view" id="circleView" hidden>
   <div class="circle-tools">
-    <button type="button" id="bRotLeft" title="Turn the whole pattern one step earlier (wraps around)">Rotate left</button>
-    <button type="button" id="bRotRight" title="Turn the whole pattern one step later (wraps around)">Rotate right</button>
-    <button type="button" id="bBeatLeft" title="Turn the whole pattern one beat earlier (one group of steps; wraps around)" aria-label="Rotate left by a beat">Left a beat</button>
-    <button type="button" id="bBeatRight" title="Turn the whole pattern one beat later (one group of steps; wraps around)" aria-label="Rotate right by a beat">Right a beat</button>
-    <button type="button" id="bShape" class="shape-toggle" aria-pressed="true" title="Draw the polygon through the selected ring's hits">Show shape</button>
+    <button type="button" id="bRotLeft" title="Rotate left one step: turn the whole pattern one step earlier (wraps around)" aria-label="Rotate left one step">&lsaquo;</button>
+    <button type="button" id="bRotRight" title="Rotate right one step: turn the whole pattern one step later (wraps around)" aria-label="Rotate right one step">&rsaquo;</button>
+    <button type="button" id="bBeatLeft" title="Rotate left a beat: turn the whole pattern one beat earlier (one group of steps; wraps around)" aria-label="Rotate left by a beat">&laquo;</button>
+    <button type="button" id="bBeatRight" title="Rotate right a beat: turn the whole pattern one beat later (one group of steps; wraps around)" aria-label="Rotate right by a beat">&raquo;</button>
+    <button type="button" id="bShape" class="shape-toggle" aria-pressed="true" title="Show shape: draw the polygon through the selected ring's hits" aria-label="Show shape">&#9651;</button>
+    <select id="addInstrumentCircle" aria-label="Add instrument" title="Add an instrument as a new ring (bell, claves, congas)"></select>
     <span class="ring-legend" id="ringLegend" role="group" aria-label="Pick a ring (its hits make the shape)"></span>
   </div>
   <svg class="circle-svg" id="circle" role="group" aria-label="Rhythm circle" viewBox="0 0 460 460" tabindex="-1"></svg>
 </div>
 
-<div class="bottom-row">
-  <button id="bRandom" title="Fill the current pattern with a musically biased random beat">Random</button>
-  <button id="bClear" title="Empty the current pattern">Clear</button>
-  <button id="bExport" title="Copy this bank's pattern (plus time signature, swing and tempo) as JSON, ready to paste into a data note">Export JSON</button>
-  <span class="export-msg" id="exportMsg" role="status" aria-live="polite"></span>
-</div>
+<details class="more-menu" id="moreMenu">
+  <summary title="More: Random, Clear, Export JSON" aria-label="More actions: Random, Clear, Export JSON">&#8943;</summary>
+  <div class="bottom-row">
+    <button id="bRandom" title="Fill the current pattern with a musically biased random beat">Random</button>
+    <button id="bClear" title="Empty the current pattern">Clear</button>
+    <button id="bExport" title="Copy this bank's pattern (plus time signature, swing and tempo) as JSON, ready to paste into a data note">Export JSON</button>
+    <span class="export-msg" id="exportMsg" role="status" aria-live="polite"></span>
+  </div>
+</details>
 <textarea id="exportFallback" class="export-fallback" readonly hidden aria-label="Pattern JSON (select all and copy)"></textarea>
 
 </div>
@@ -424,16 +436,33 @@ function swingVisualPx(swingPct, stepIndex) {
 // channel, the first channel outermost. Everything here is arithmetic: the DOM half only draws what this returns.
 var CIRCLE_MAX_RINGS = 4;                          // beyond this the rings are not legible: the widget says so and keeps Grid
 var CIRCLE_LABELS_MAX_STEPS = 16;                  // step numbers are drawn up to this many steps, hidden when crowded
-var CIRCLE_SIZE = 460;                             // the SVG viewBox edge; CSS scales it to the container (an embed is ~460 px wide)
+var CIRCLE_SIZE = 460;                             // the default / largest viewBox edge (an embed is ~460 px wide)
+var CIRCLE_INNER_MIN = 56;                         // the innermost ring is never tighter than this (a polygon needs some room)
+var CIRCLE_TARGET_MIN = 13;                        // target radius the smallest circle still guarantees (26 px, over the 24 px floor)
+var CIRCLE_RING_STEP = 26;                         // the least gap between rings that keeps those targets from touching
+var CIRCLE_MAX_TARGET = 14, CIRCLE_TICK_BAND = 10, CIRCLE_EDGE = 8;
+function circleLabelBand(steps) { return steps <= CIRCLE_LABELS_MAX_STEPS ? 22 : 0; }
+// The innermost ring's radius that gives every step on it a CIRCLE_TARGET_MIN target without two touching its neighbour.
+function circleInnerFloor(steps) { return Math.max(CIRCLE_INNER_MIN, CIRCLE_TARGET_MIN / Math.sin(Math.PI / steps)); }
+// The smallest square (CSS px == viewBox units) a circle of `rings` rings of `steps` steps needs for >= 24 px hit targets that never overlap,
+// capped at CIRCLE_SIZE. It used to be a fixed 460 square whatever was in it; one ring needs about half of that.
+function circleSizeFor(steps, rings) {
+  rings = Math.max(1, Math.min(CIRCLE_MAX_RINGS, rings | 0));
+  var outer = circleInnerFloor(steps) + (rings - 1) * CIRCLE_RING_STEP;
+  var edge = CIRCLE_EDGE + circleLabelBand(steps) + CIRCLE_TICK_BAND + CIRCLE_MAX_TARGET;
+  return Math.min(CIRCLE_SIZE, Math.ceil(2 * (outer + edge)));
+}
 function circleGeometry(steps, ringCount, size) {
   size = size || CIRCLE_SIZE;
   ringCount = Math.max(1, ringCount | 0);
   var cx = size / 2, cy = size / 2;
-  var labelBand = steps <= CIRCLE_LABELS_MAX_STEPS ? 22 : 0;     // room outside the outer ring for the step numbers
-  var tickBand = 10;                                              // room outside the outer ring for the group-start ticks
-  var maxTarget = 14;                                             // a 28 px hit target: comfortably over the 24 px floor
-  var outer = size / 2 - 8 - labelBand - tickBand - maxTarget;    // the outermost ring's radius
-  var ringGap = ringCount > 1 ? Math.min(38, (outer - 62) / (ringCount - 1)) : 0;
+  var labelBand = circleLabelBand(steps);                         // room outside the outer ring for the step numbers
+  var tickBand = CIRCLE_TICK_BAND;                                // room outside the outer ring for the group-start ticks
+  var maxTarget = CIRCLE_MAX_TARGET;                              // a 28 px hit target: comfortably over the 24 px floor
+  var outer = size / 2 - CIRCLE_EDGE - labelBand - tickBand - maxTarget;    // the outermost ring's radius
+  // The inner ring sits at its floor (or, for very many steps, no deeper than 80% of the way in); rings share what is left, at most 38 apart.
+  var innerFloor = Math.min(circleInnerFloor(steps), outer * 0.8);
+  var ringGap = ringCount > 1 ? Math.min(38, (outer - innerFloor) / (ringCount - 1)) : 0;
   var ringRadii = [];
   for (var r = 0; r < ringCount; r++) ringRadii.push(outer - r * ringGap);
   var inner = ringRadii[ringCount - 1];
@@ -592,7 +621,7 @@ if (typeof document === "undefined") {           // node test harness
     ACCENT_THRESHOLD: ACCENT_THRESHOLD, normalizeCell: normalizeCell, cellOn: cellOn, toggleCell: toggleCell,
     isAccentedCell: isAccentedCell, parseRhythmLoad: parseRhythmLoad,
     EIGHTH_GRIDS: EIGHTH_GRIDS, MENU_GRIDS: MENU_GRIDS, resolveGrid: resolveGrid, menuKeyFor: menuKeyFor,
-    CIRCLE_MAX_RINGS: CIRCLE_MAX_RINGS, CIRCLE_SIZE: CIRCLE_SIZE, circleGeometry: circleGeometry,
+    CIRCLE_MAX_RINGS: CIRCLE_MAX_RINGS, CIRCLE_SIZE: CIRCLE_SIZE, circleGeometry: circleGeometry, circleSizeFor: circleSizeFor,
     rotatePattern: rotatePattern, polygonPoints: polygonPoints
   };
 } else {
@@ -672,9 +701,10 @@ if (typeof document === "undefined") {           // node test harness
     });
     renderAddInstrument();
   }
-  // "Add instrument": the channels not shown yet (in the engine's order). The first option is the inert prompt.
-  function renderAddInstrument() {
-    var sel = $("addInstrument");
+  // "Add instrument": the channels not shown yet (in the engine's order). The first option is the inert prompt. TWO controls offer the same
+  // menu — the grid's, under the rows, and the circle's, in its toolbar — and both go through onAddInstrument, i.e. ONE path.
+  var CIRCLE_FULL_MSG = "Circle shows up to 4 instruments \u2014 use Grid to add more.";
+  function fillAddSelect(sel) {
     sel.innerHTML = "";
     var prompt = document.createElement("option"); prompt.value = ""; prompt.textContent = "Add instrument\u2026";
     sel.appendChild(prompt);
@@ -685,6 +715,15 @@ if (typeof document === "undefined") {           // node test harness
     });
     sel.value = "";
     sel.hidden = rows.length >= CHANNELS.length;
+  }
+  function renderAddInstrument() {
+    fillAddSelect($("addInstrument"));
+    var circ = $("addInstrumentCircle");
+    fillAddSelect(circ);
+    // At the ring limit the circle's control is DISABLED (and says why), not hidden and not a silent no-op; the grid's has no limit.
+    var full = rows.length >= CIRCLE_MAX_RINGS;
+    circ.disabled = full;
+    circ.title = full ? CIRCLE_FULL_MSG : "Add an instrument as a new ring (bell, claves, congas)";
   }
   buildGrid();
 
@@ -725,11 +764,13 @@ if (typeof document === "undefined") {           // node test harness
     }
     applyWholePatternChange(action);
   }
-  $("addInstrument").addEventListener("change", function (e) {
-    var ch = e.target.value;
+  function onAddInstrument(sel) {
+    var ch = sel.value;
     if (ch) applyWholePatternChange({ kind: "addrow", channel: ch });
     renderAddInstrument();
-  });
+  }
+  $("addInstrument").addEventListener("change", function (e) { onAddInstrument(e.target); });
+  $("addInstrumentCircle").addEventListener("change", function (e) { onAddInstrument(e.target); });
   function renderMuteSolo() {
     rows.forEach(function (ch) {
       var row = gridEl.querySelector('[data-mute-btn-' + ch + ']');
@@ -772,11 +813,12 @@ if (typeof document === "undefined") {           // node test harness
   var circleEl = $("circle");
   function selectedRing() { return rows.indexOf(shapeRing) >= 0 ? shapeRing : rows[0]; }
   function renderCircle() {
-    var g = circleGeometry(steps, rows.length, CIRCLE_SIZE);
+    var g = circleGeometry(steps, rows.length, circleSizeFor(steps, rows.length));
     var hadFocus = !!(document.activeElement && circleEl.contains(document.activeElement));
     circleEl.innerHTML = "";
     cellEls = [];
     circleEl.setAttribute("viewBox", "0 0 " + g.size + " " + g.size);
+    circleEl.style.width = g.size + "px";                // viewBox units are CSS px: the circle is exactly as big as its ring count needs
     circleEl.setAttribute("aria-label", "Rhythm circle, " + steps + " steps (" + timeSig + "), " + rows.map(function (c) { return CHANNEL_LABEL[c]; }).join(", ") + ". Arrow keys move, Space toggles a hit.");
     // faint ring guides, outermost first
     g.ringRadii.forEach(function (r) { circleEl.appendChild(svgEl("circle", { "class": "ring-guide", cx: g.cx, cy: g.cy, r: r })); });
@@ -904,7 +946,11 @@ if (typeof document === "undefined") {           // node test harness
     $("circleView").hidden = !circle;
     $("bViewGrid").setAttribute("aria-pressed", circle ? "false" : "true");
     $("bViewCircle").setAttribute("aria-pressed", circle ? "true" : "false");
-    if (circle) renderCircle();
+    if (circle) {
+      // exactly at the limit the circle works but cannot take another ring: say so where the disabled Add control is (5+ falls back to Grid)
+      setHostMsg("viewMsg", rows.length >= CIRCLE_MAX_RINGS ? CIRCLE_FULL_MSG : "", false);
+      renderCircle();
+    }
   }
   // Returns true if the view is now `next`. Circle is refused (Grid kept, with the inline message) when the note has more rings than are legible.
   function setView(next) {
@@ -1292,6 +1338,7 @@ if (typeof document === "undefined") {           // node test harness
   // from the first paint (before any load) and their handler is inert while hosted. Standalone keeps all four banks, as always.
   if (hostWindow()) {
     Array.prototype.forEach.call(document.querySelectorAll(".banks button[data-bank]"), function (b) { b.hidden = true; });
+    document.querySelector(".banks").hidden = true;      // the (now empty) row takes no space
   }
 
   setBpm(bpm);
