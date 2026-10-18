@@ -75,7 +75,8 @@
   }
   .mini-btn.remove { color: var(--muted); }
   .mini-btn.remove:disabled { opacity: 0.35; cursor: default; }
-  .add-row { margin: 4px 0 0; font-size: 13px; }
+  .add-row { margin: 4px 0 0; font-size: 13px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .add-row button { min-width: 34px; padding: 3px 8px; font-size: 15px; line-height: 1.1; }
   .add-row select, .circle-tools select { font: inherit; font-size: 13px; color: var(--ink); background: #fff; border: 1px solid var(--axis); border-radius: 6px; padding: 4px 6px; min-height: 32px; }
   .circle-tools select:disabled { opacity: 0.5; cursor: not-allowed; }
   .mini-btn.on.mute { background: var(--right-text); color: #fff; border-color: var(--right-text); }
@@ -226,6 +227,7 @@
   <div class="grid-wrap" id="grid" role="group" aria-label="16-step pattern grid, kick, snare, hi-hat"></div>
 </div>
 <div class="add-row">
+  <button type="button" id="bMirrorGrid" title="Mirror: reverse the rhythm in time within the bar (the last step becomes the first). Press again to undo." aria-label="Mirror (reverse the rhythm in time)">&#8646;</button>
   <select id="addInstrument" aria-label="Add instrument" title="Add a row for another instrument (bell, claves, congas)"></select>
 </div>
 </div>
@@ -234,8 +236,11 @@
   <div class="circle-tools">
     <button type="button" id="bRotLeft" title="Rotate left one step: turn the whole pattern one step earlier (wraps around)" aria-label="Rotate left one step">&lsaquo;</button>
     <button type="button" id="bRotRight" title="Rotate right one step: turn the whole pattern one step later (wraps around)" aria-label="Rotate right one step">&rsaquo;</button>
-    <button type="button" id="bBeatLeft" title="Rotate left a beat: turn the whole pattern one beat earlier (one group of steps; wraps around)" aria-label="Rotate left by a beat">&laquo;</button>
-    <button type="button" id="bBeatRight" title="Rotate right a beat: turn the whole pattern one beat later (one group of steps; wraps around)" aria-label="Rotate right by a beat">&raquo;</button>
+    <button type="button" id="bMirror" title="Mirror: reverse the rhythm in time within the bar (the last step becomes the first). Press again to undo." aria-label="Mirror (reverse the rhythm in time)">&#8646;</button>
+    <button type="button" id="bRingRotLeft" title="Rotate this ring one step earlier (only the selected ring)" aria-label="Rotate this ring left one step">&#8634;</button>
+    <button type="button" id="bRingRotRight" title="Rotate this ring one step later (only the selected ring)" aria-label="Rotate this ring right one step">&#8635;</button>
+    <button type="button" id="bRingOut" title="Move this ring outward (one place toward the outer edge)" aria-label="Move this ring outward">&#8593;</button>
+    <button type="button" id="bRingIn" title="Move this ring inward (one place toward the center)" aria-label="Move this ring inward">&#8595;</button>
     <button type="button" id="bShape" class="shape-toggle" aria-pressed="true" title="Show shape: draw the polygon through the selected ring's hits" aria-label="Show shape">&#9651;</button>
     <select id="addInstrumentCircle" aria-label="Add instrument" title="Add an instrument as a new ring (bell, claves, congas)"></select>
     <span class="ring-legend" id="ringLegend" role="group" aria-label="Pick a ring (its hits make the shape)"></span>
@@ -488,6 +493,18 @@ function circleGeometry(steps, ringCount, size) {
     angle: function (step) { return (2 * Math.PI * step) / steps; }
   };
 }
+// Mirror: reverse every SHOWN channel in time within the bar (step i -> N-1-i). Velocities and rests move with their cells; a short row is
+// read as rests past its end; channels that are not rows of the note are carried through untouched. A copy, and its own inverse.
+function mirrorPattern(pattern, rows, steps) {
+  var out = {};
+  Object.keys(pattern).forEach(function (ch) { out[ch] = pattern[ch].slice(); });
+  rows.forEach(function (ch) {
+    var src = pattern[ch] || [], row = new Array(steps);
+    for (var i = 0; i < steps; i++) row[i] = normalizeCell(src[steps - 1 - i]);
+    out[ch] = row;
+  });
+  return out;
+}
 // Rotate every SHOWN channel by one step, wrapping: dir +1 = right (a hit moves one step later), -1 = left. A copy; channels that are not
 // rows of the note are carried through untouched, and cells go through normalizeCell so velocities survive and 0 reads as a rest.
 function rotatePattern(pattern, rows, steps, dir) {
@@ -607,6 +624,23 @@ function parseRhythmLoad(data) {
   if (failure) return failure;
   return { ok: true, state: { timeSig: sigKey, steps: grid.steps, groupSize: grid.groupSize, stepQl: grid.stepQl, swingPct: swing, bpm: tempo, pattern: pattern, rows: rows } };
 }
+// Ring order (drain 2026-10-18-1800): `rows` is the order of the note's `channels` keys, the first ring OUTERMOST. Moving a ring swaps it with its
+// neighbour: dir -1 = outward (one place earlier), +1 = inward (one place later). At an end, or for a channel that is not a row, the order is
+// unchanged. Always a copy.
+function moveRing(rows, ch, dir) {
+  var i = rows.indexOf(ch), j = i + dir, out = rows.slice();
+  if (i < 0 || j < 0 || j >= rows.length) return out;
+  out[i] = rows[j]; out[j] = rows[i];
+  return out;
+}
+// Auto-height (drain 2026-10-18-1800): the height to tell the host, in whole pixels (rounded UP so the last pixel is never cut), or null when
+// there is nothing to say — junk, or a change of one pixel or less from what was last posted (sub-pixel / rounding wobble).
+function autoHeightPlan(content, lastPosted) {
+  if (typeof content !== "number" || !isFinite(content) || content <= 0) return null;
+  var h = Math.ceil(content);
+  if (typeof lastPosted === "number" && Math.abs(h - lastPosted) <= 1) return null;
+  return h;
+}
 // --- pure math -- END pure-core -------------------------------------------------------------
 
 if (typeof document === "undefined") {           // node test harness
@@ -622,7 +656,8 @@ if (typeof document === "undefined") {           // node test harness
     isAccentedCell: isAccentedCell, parseRhythmLoad: parseRhythmLoad,
     EIGHTH_GRIDS: EIGHTH_GRIDS, MENU_GRIDS: MENU_GRIDS, resolveGrid: resolveGrid, menuKeyFor: menuKeyFor,
     CIRCLE_MAX_RINGS: CIRCLE_MAX_RINGS, CIRCLE_SIZE: CIRCLE_SIZE, circleGeometry: circleGeometry, circleSizeFor: circleSizeFor,
-    rotatePattern: rotatePattern, polygonPoints: polygonPoints
+    rotatePattern: rotatePattern, mirrorPattern: mirrorPattern, polygonPoints: polygonPoints,
+    moveRing: moveRing, autoHeightPlan: autoHeightPlan
   };
 } else {
 (function () {
@@ -920,6 +955,7 @@ if (typeof document === "undefined") {           // node test harness
       b.addEventListener("click", function () { shapeRing = ch; renderCircle(); });
       legend.appendChild(b);
     });
+    syncRingTools();
   }
   // Keyboard inside the circle: arrows walk the ring / change ring, Space or Enter toggles the focused hit.
   circleEl.addEventListener("keydown", function (e) {
@@ -977,8 +1013,7 @@ if (typeof document === "undefined") {           // node test harness
     if (viewMode === "circle") renderCircle();
   });
   // Rotate: shifts EVERY shown channel by `by` steps (wrapping; negative = left). A normal edit — through commitChange() like a dot, no
-  // confirm bar. One step per press on the two plain buttons; one BEAT — the grid's own group_size (4 in 4/4 and 5/4, 3 in 12/8 and 6/8,
-  // 2 or 4 on the eighth-note grid) — on the two "a beat" buttons.
+  // confirm bar. One step per press (the two ‹ › buttons).
   function rotate(by) {
     patterns[bank] = rotatePattern(patterns[bank], rows, steps, by);
     renderGrid();
@@ -986,8 +1021,50 @@ if (typeof document === "undefined") {           // node test harness
   }
   $("bRotLeft").addEventListener("click", function () { rotate(-1); });
   $("bRotRight").addEventListener("click", function () { rotate(1); });
-  $("bBeatLeft").addEventListener("click", function () { rotate(-groupSize); });
-  $("bBeatRight").addEventListener("click", function () { rotate(groupSize); });
+  // Mirror: reverses EVERY shown channel in time within the bar. The same single data path (commitChange), no confirm bar; its own inverse.
+  // Two buttons, one handler: the circle toolbar's and the one beside the grid's Add instrument.
+  function mirror() {
+    patterns[bank] = mirrorPattern(patterns[bank], rows, steps);
+    renderGrid();
+    commitChange();
+  }
+  $("bMirror").addEventListener("click", mirror);
+  $("bMirrorGrid").addEventListener("click", mirror);
+  // Per-ring controls (circle view; the grid has no "selected row"): act on the SELECTED ring — the one whose shape is shown, picked in the ring
+  // legend. Both are ordinary data edits through commitChange(). Rotate turns ONLY that channel. Move changes the ring's place in the ring order,
+  // which is the order of the note's `channels` keys (so a save rewrites that order — two swapped lines in the note — and the Score's staves follow
+  // it). The selection follows the ring it was on.
+  function rotateRing(by) {
+    var ch = selectedRing();
+    if (rows.indexOf(ch) < 0) return;
+    patterns[bank] = rotatePattern(patterns[bank], [ch], steps, by);
+    renderGrid();
+    commitChange();
+  }
+  function moveSelectedRing(dir) {
+    var ch = selectedRing(), next = moveRing(rows, ch, dir);
+    if (next.join() === rows.join()) return;
+    shapeRing = ch; rows = next;
+    buildGrid(); renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview(); syncView();
+    commitChange();
+  }
+  // Names the selected ring in the buttons' tooltips and labels, and disables a move that cannot happen (outermost cannot go out, innermost cannot
+  // go in, a lone ring neither).
+  function syncRingTools() {
+    var ch = selectedRing(), i = rows.indexOf(ch), who = CHANNEL_LABEL[ch] || "this";
+    [["bRingRotLeft", "Rotate the " + who + " ring one step earlier (only this ring)", "Rotate the " + who + " ring left one step"],
+     ["bRingRotRight", "Rotate the " + who + " ring one step later (only this ring)", "Rotate the " + who + " ring right one step"],
+     ["bRingOut", "Move the " + who + " ring outward (one place toward the outer edge)", "Move the " + who + " ring outward"],
+     ["bRingIn", "Move the " + who + " ring inward (one place toward the center)", "Move the " + who + " ring inward"]
+    ].forEach(function (t) { $(t[0]).setAttribute("title", t[1]); $(t[0]).setAttribute("aria-label", t[2]); });
+    $("bRingRotLeft").disabled = $("bRingRotRight").disabled = i < 0;
+    $("bRingOut").disabled = i <= 0;
+    $("bRingIn").disabled = i < 0 || i >= rows.length - 1;
+  }
+  $("bRingRotLeft").addEventListener("click", function () { rotateRing(-1); });
+  $("bRingRotRight").addEventListener("click", function () { rotateRing(1); });
+  $("bRingOut").addEventListener("click", function () { moveSelectedRing(-1); });
+  $("bRingIn").addEventListener("click", function () { moveSelectedRing(1); });
   // Swing preview: nudge the off-beat step cells sideways by swingVisualPx, independent of
   // playback state, so the eye can see the delay grow as the slider moves, even while stopped.
   function renderSwingPreview() {
@@ -1266,7 +1343,39 @@ if (typeof document === "undefined") {           // node test harness
   function setHostMsg(id, text, isError) {
     var el = $(id); el.textContent = text; el.classList.toggle("error", !!isError);
   }
+  // --- auto height (generic: a widget that wants its iframe sized to its content does exactly this) --------------------------------
+  // The host opts in with `autoHeight: true` on the load message (an embed with an explicit `height:` never does). The widget then measures its
+  // BODY — whose height is its content's, not the iframe's, so this cannot feed back on itself — and posts {type: "resize", height}
+  // at most once per animation frame, and only when the plan says the height really changed. The host clamps and rate-limits on its side too.
+  // Standalone (no host window) never gets here: a load message is only accepted from the embedding window.
+  var autoHeightOn = false, lastPostedHeight = null, autoHeightFrame = 0, autoHeightObserver = null;
+  function postHeightNow() {
+    autoHeightFrame = 0;
+    if (!autoHeightOn) return;
+    var h = autoHeightPlan(document.body.getBoundingClientRect().height, lastPostedHeight);
+    if (h === null) return;
+    lastPostedHeight = h;
+    postToHost({ type: "resize", height: h });
+  }
+  function scheduleHeight() {
+    if (!autoHeightOn || autoHeightFrame) return;
+    var raf = window.requestAnimationFrame || function (f) { return setTimeout(f, 16); };
+    autoHeightFrame = raf(postHeightNow);
+  }
+  function setAutoHeight(on) {
+    if (on === autoHeightOn) { if (on) scheduleHeight(); return; }
+    autoHeightOn = on;
+    if (on) {
+      lastPostedHeight = null;
+      if (typeof ResizeObserver === "function" && !autoHeightObserver) {
+        autoHeightObserver = new ResizeObserver(scheduleHeight);
+        autoHeightObserver.observe(document.body);
+      }
+      scheduleHeight();
+    } else if (autoHeightObserver) { autoHeightObserver.disconnect(); autoHeightObserver = null; }
+  }
   function applyLoad(msg) {
+    setAutoHeight(msg.autoHeight === true);          // only the exact true; a later load without it switches it off again. BEFORE the parse: a refused note's message needs room too
     var r = parseRhythmLoad(msg.data);
     if (!r.ok) { hostLoaded = false; dismissConfirm(); $("hostBar").hidden = false; setHostMsg("loadMsg", "Could not load this note: " + r.message, true); return; }
     hostMode = msg.mode === "playground" ? "playground" : "edit";
