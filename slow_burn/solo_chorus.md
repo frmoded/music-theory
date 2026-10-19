@@ -2,7 +2,7 @@
 type: action
 description_hash: e3b8959cd6a325b60ad7e498b92e956a8df49897c7599db8bce8e8bc37766621
 recipe_hash: 922910256aaa5942de8598c45fb4e0ae53a96acc22dd39d0f4ad00a8ed39e6b2
-python_hash: 28f734b84e38334bf3b3ade17db0a46a75411fd9cdb9634ea11aa210fe28ce3b
+python_hash: f3c4f27e234a70251039ffc9dd21e1d090d79bc8e4dbdf478286cb4e3bdcb069
 recipe_derived_from_source_hash: e3b8959cd6a325b60ad7e498b92e956a8df49897c7599db8bce8e8bc37766621
 python_derived_from_source_hash: e3b8959cd6a325b60ad7e498b92e956a8df49897c7599db8bce8e8bc37766621
 source_facet: synced
@@ -34,11 +34,9 @@ Return Call [[voices_list]] with sections=[harmonic_frame, solo_line].
 
 ```python
 def compute(context):
-    # v0.7.0: form / guitar_solo_chorus are now library notes in
-    # forge.music.lib; called directly instead of via context.compute.
-    harmonic_frame = form()
-    solo_line = guitar_solo_chorus()
-    return voices(harmonic_frame, solo_line)
+  harmonic_frame = form()
+  solo_line = guitar_solo_chorus()
+  return voices_list(sections=[harmonic_frame, solo_line])
 ```
 
 # Dependencies

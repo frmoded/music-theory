@@ -6,10 +6,12 @@ input_widgets:
   student_pitches: piano
 description_hash: a59a8c7348c441be79b9d89ed7cb6f31f1aa1d1a1806dad1b11e9c0f222af666
 recipe_hash: 89bb0583e16bc3d4a5b50f9f3312589f1342b76e53dbb9805cd1d5d0e3e367be
-python_hash: e5d1a4fc162f7e942b790e395406201fb6b83935dfe1843a475fc8837c15f097
+python_hash: ad333c6c63a8f77126ef553d7abaf6e900044a1a9de516053c2aa92f756498b3
 recipe_derived_from_source_hash: a59a8c7348c441be79b9d89ed7cb6f31f1aa1d1a1806dad1b11e9c0f222af666
 source_facet: description
 recipe_derived_from_description_hash: a59a8c7348c441be79b9d89ed7cb6f31f1aa1d1a1806dad1b11e9c0f222af666
+python_derived_from_source_hash: a59a8c7348c441be79b9d89ed7cb6f31f1aa1d1a1806dad1b11e9c0f222af666
+python_derived_from_recipe_hash: 89bb0583e16bc3d4a5b50f9f3312589f1342b76e53dbb9805cd1d5d0e3e367be
 ---
 
 # Description
@@ -31,6 +33,6 @@ Return Call [[scale_construction_exercise]] with tonic="G3", mode="major", stude
 # Python
 
 ```python
-def compute(context):
-    return None
+def compute(context, student_pitches):
+  return scale_construction_exercise(tonic='G3', mode='major', student_pitches=student_pitches, widget_type='piano')
 ```

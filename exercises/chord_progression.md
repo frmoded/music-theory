@@ -7,7 +7,7 @@ inputs:
 recipe_version: 1
 description_hash: 7eb58c1f8a0ab9ecc10cc6f3cf053b238260a2f009435d56636bd6145785b0ed
 recipe_hash: 8d055994d0a30918dfd401764bd293e55456c2638d63622d2f57ad0c0ce3bcd9
-python_hash: c6b25d5b4e62f9f57ec2d5b8e4bf38d35af9af45d590fab8ebb5fcf20083bcf9
+python_hash: fb6972d689024ff8cd1c1afa432a88d8829c5996a583d824ba7ff66028de84d3
 recipe_derived_from_source_hash: 7eb58c1f8a0ab9ecc10cc6f3cf053b238260a2f009435d56636bd6145785b0ed
 source_facet: recipe
 recipe_derived_from_description_hash: 7eb58c1f8a0ab9ecc10cc6f3cf053b238260a2f009435d56636bd6145785b0ed
@@ -32,6 +32,6 @@ Return Call [[form]] with key_name=key_name, mode_name=mode_name, progression=pr
 # Python
 
 ```python
-def compute(context):
+def compute(context, key_name, mode_name, progression):
   return form(key_name=key_name, mode_name=mode_name, progression=progression, ts_str='4/4', tempo_bpm=90)
 ```

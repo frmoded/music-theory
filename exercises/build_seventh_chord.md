@@ -6,11 +6,12 @@ inputs:
 recipe_version: 2
 description_hash: 4922c20c1cc8c2b13cd13083b11dc986cecc511a941508509c1e381f8776785f
 recipe_hash: 79195ed2e624a9e865bc9b14f900c473b821f6310e8e4882ff97c469590d8be4
-python_hash: 28b2fce3f08f346746391a1bc5ed85aa8f10119090e6e0130aab1fc8bd0e5f25
+python_hash: 5c245c1396d3ed1d59c3ffc56d1407d2814f8fa7603e7048ff85c87bbd8e9e6f
 recipe_derived_from_source_hash: 4922c20c1cc8c2b13cd13083b11dc986cecc511a941508509c1e381f8776785f
 source_facet: recipe
 recipe_derived_from_description_hash: 4922c20c1cc8c2b13cd13083b11dc986cecc511a941508509c1e381f8776785f
 python_derived_from_recipe_hash: 79195ed2e624a9e865bc9b14f900c473b821f6310e8e4882ff97c469590d8be4
+python_derived_from_source_hash: 79195ed2e624a9e865bc9b14f900c473b821f6310e8e4882ff97c469590d8be4
 ---
 
 # Description
@@ -29,6 +30,6 @@ Return Call [[build_chord]] with tonic=tonic, quality=quality.
 # Python
 
 ```python
-def compute(context):
+def compute(context, tonic, quality):
   return build_chord(tonic=tonic, quality=quality)
 ```
