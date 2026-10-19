@@ -66,17 +66,25 @@
   .grid-wrap { min-width: 620px; }
   .channel-row { display: grid; grid-template-columns: 110px repeat(16, 1fr); gap: 3px; align-items: center; margin-bottom: 2px; }
   .channel-label { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
-  .channel-label .name { flex: 1; }
   .mini-btn {
     min-width: 22px; min-height: 22px; padding: 0; font-size: 10px; border-radius: 4px;
     border: 1px solid var(--axis); background: #fff; color: var(--muted); line-height: 1;
   }
   .mini-btn.remove { color: var(--muted); }
   .mini-btn.remove:disabled { opacity: 0.35; cursor: default; }
-  .add-row { margin: 4px 0 0; font-size: 13px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-  .add-row button { min-width: 34px; padding: 3px 8px; font-size: 15px; line-height: 1.1; }
-  .add-row select, .circle-tools select { font: inherit; font-size: 13px; color: var(--ink); background: #fff; border: 1px solid var(--axis); border-radius: 6px; padding: 4px 6px; min-height: 32px; }
-  .circle-tools select:disabled { opacity: 0.5; cursor: not-allowed; }
+  /* ONE toolbar for both views (drain 2026-10-20-0900): Add instrument first, then the five transforms (shift left / right, mirror, rotate counter-clockwise /
+     clockwise), then, in Circle only, the extras. It sits above the views, so it is the same row in Grid and in Circle. */
+  .rhythm-tools { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; margin: 2px 0 4px; font-size: 13px; }
+  .rhythm-tools[hidden], .tool-group[hidden] { display: none; }
+  .tool-group { display: inline-flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; }
+  .rhythm-tools button { min-width: 34px; padding: 3px 8px; font-size: 15px; line-height: 1.1; }
+  .rhythm-tools button.ring-pick { min-width: 0; font-size: 12px; line-height: normal; }
+  .rhythm-tools select { font: inherit; font-size: 13px; color: var(--ink); background: #fff; border: 1px solid var(--axis); border-radius: 6px; padding: 4px 6px; min-height: 32px; }
+  .rhythm-tools select:disabled { opacity: 0.5; cursor: not-allowed; }
+  /* The grid's row selector (the circle's is the ring chips): the instrument's name is a button; the selected one is highlighted like a chip. */
+  .channel-label .row-pick { flex: 1; min-width: 0; min-height: 24px; padding: 1px 6px; font-size: 12px; text-align: left; color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 4px; }
+  .channel-label .row-pick:hover { border-color: var(--axis); }
+  .channel-label .row-pick[aria-pressed="true"] { background: var(--highlight); border-color: var(--ink); color: var(--ink); font-weight: 600; }
   .mini-btn.on.mute { background: var(--right-text); color: #fff; border-color: var(--right-text); }
   .mini-btn.on.solo { background: var(--accent); color: #fff; border-color: var(--accent); }
   .step {
@@ -110,11 +118,12 @@
   .host-bar .note { font-weight: 600; }
   #bReload { background: var(--highlight); border-color: var(--ink); font-weight: 600; }
   .confirm-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 8px; padding: 6px 10px; font-size: 13px; border: 1px solid var(--ink); border-radius: 6px; background: var(--highlight); }
-  .confirm-bar[hidden], #bReload[hidden] { display: none; }
+  .host-bar[hidden], .confirm-bar[hidden], #bReload[hidden] { display: none; }   /* an author `display` beats the browser's [hidden]; .host-bar[hidden] was missing, so the bar showed a stray "Editing" row before any load (drain 2026-10-20-0900) */
   .host-msg { font-size: 12px; color: var(--muted); min-height: 16px; }
   .host-msg.error { color: #B54A50; }
   .host-bar [hidden] { display: none; }
-  /* Phase 8, playground mode (the plugin's `forge-rhythm` embed): a label and Reset replace the autosave controls (Open note is the host toolbar's). */
+  /* Phase 8, playground mode (the plugin's `forge-rhythm` embed): a label and Reset replace the autosave controls (Open note is the host toolbar's). Since drain
+     2026-10-20-0900 a host that says `resetInHost` draws Reset and the "not saved" reminder in ITS toolbar row and this whole bar is hidden; an older host gets them here. */
   .host-bar .playground-label { font-weight: 600; }
   /* Circle mode (rhythm necklace): a second drawing of the SAME data. Colours are the grid's own (kick = --muted, hi-hat = --derived,
      the rest = --right), so a channel reads the same in both views. */
@@ -124,8 +133,6 @@
   .view-switch button[aria-pressed="true"] { background: var(--highlight); font-weight: 600; }
   .view-msg { font-size: 12px; color: var(--muted); min-height: 16px; }
   .circle-view[hidden], .grid-view[hidden] { display: none; }
-  .circle-tools { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; margin: 2px 0 4px; }
-  .circle-tools button { min-width: 34px; padding: 3px 8px; font-size: 15px; line-height: 1.1; }
   .ring-legend { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
   .ring-legend .ring-pick { min-height: 26px; padding: 2px 8px; font-size: 12px; min-width: 0; }
   .ring-legend .ring-pick[aria-pressed="true"] { background: var(--highlight); border-color: var(--ink); font-weight: 600; }
@@ -177,7 +184,6 @@
     <span class="val" id="bpmVal">120 BPM</span>
     <button id="bBpmUp" title="Increase BPM" aria-label="Increase BPM">+</button>
   </div>
-  <button id="bTap" title="Tap a few times to set the tempo">Tap tempo</button>
   <span class="step-pos" id="stepPos" aria-live="polite">-- / 16</span>
   <select id="timeSig" aria-label="Time signature" title="Switching time signature stops playback and clears all four pattern banks (a 4/4 pattern has no meaningful 3/4 equivalent to preserve). Applies to every bank, not just the current one.">
     <option value="4/4" selected>4/4</option>
@@ -213,29 +219,24 @@
   <button data-bank="D">D</button>
 </div>
 
+<div class="rhythm-tools" id="rhythmTools" role="toolbar" aria-label="Rhythm tools">
+  <select id="addInstrument" aria-label="Add instrument" title="Add a row for another instrument (bell, claves, congas)"></select>
+  <span class="tool-group" id="transformTools" role="group" aria-label="Transform the pattern"></span>
+  <span class="tool-group" id="circleExtras" role="group" aria-label="Circle tools" hidden>
+    <button type="button" id="bRingOut" title="Move this ring outward (one place toward the outer edge)" aria-label="Move this ring outward">&#8593;</button>
+    <button type="button" id="bRingIn" title="Move this ring inward (one place toward the center)" aria-label="Move this ring inward">&#8595;</button>
+    <button type="button" id="bShape" class="shape-toggle" aria-pressed="true" title="Show shape: draw the polygon through the selected ring's hits" aria-label="Show shape">&#9651;</button>
+    <span class="ring-legend" id="ringLegend" role="group" aria-label="Pick a ring (its hits make the shape)"></span>
+  </span>
+</div>
+
 <div class="grid-view" id="gridView">
 <div class="scroller">
   <div class="grid-wrap" id="grid" role="group" aria-label="16-step pattern grid, kick, snare, hi-hat"></div>
 </div>
-<div class="add-row">
-  <button type="button" id="bMirrorGrid" title="Mirror: reverse the rhythm in time within the bar (the last step becomes the first). Press again to undo." aria-label="Mirror (reverse the rhythm in time)">&#8646;</button>
-  <select id="addInstrument" aria-label="Add instrument" title="Add a row for another instrument (bell, claves, congas)"></select>
-</div>
 </div>
 
 <div class="circle-view" id="circleView" hidden>
-  <div class="circle-tools">
-    <button type="button" id="bRotLeft" title="Rotate left one step: turn the whole pattern one step earlier (wraps around)" aria-label="Rotate left one step">&lsaquo;</button>
-    <button type="button" id="bRotRight" title="Rotate right one step: turn the whole pattern one step later (wraps around)" aria-label="Rotate right one step">&rsaquo;</button>
-    <button type="button" id="bMirror" title="Mirror: reverse the rhythm in time within the bar (the last step becomes the first). Press again to undo." aria-label="Mirror (reverse the rhythm in time)">&#8646;</button>
-    <button type="button" id="bRingRotLeft" title="Rotate this ring one step earlier (only the selected ring)" aria-label="Rotate this ring left one step">&#8634;</button>
-    <button type="button" id="bRingRotRight" title="Rotate this ring one step later (only the selected ring)" aria-label="Rotate this ring right one step">&#8635;</button>
-    <button type="button" id="bRingOut" title="Move this ring outward (one place toward the outer edge)" aria-label="Move this ring outward">&#8593;</button>
-    <button type="button" id="bRingIn" title="Move this ring inward (one place toward the center)" aria-label="Move this ring inward">&#8595;</button>
-    <button type="button" id="bShape" class="shape-toggle" aria-pressed="true" title="Show shape: draw the polygon through the selected ring's hits" aria-label="Show shape">&#9651;</button>
-    <select id="addInstrumentCircle" aria-label="Add instrument" title="Add an instrument as a new ring (bell, claves, congas)"></select>
-    <span class="ring-legend" id="ringLegend" role="group" aria-label="Pick a ring (its hits make the shape)"></span>
-  </div>
   <svg class="circle-svg" id="circle" role="group" aria-label="Rhythm circle" viewBox="0 0 460 460" tabindex="-1"></svg>
 </div>
 
@@ -307,28 +308,6 @@ function swingOffsetSeconds(bpm, swingPct, stepIndex, stepQl) {
   var pct = Math.max(0, Math.min(100, swingPct));
   if (stepIndex % 2 === 0) return 0;                 // only the "off" 16th of each pair swings
   return (pct / 100) * 0.5 * stepSeconds(bpm, stepQl);
-}
-
-// Tap tempo: push a new tap timestamp (ms) onto a rolling history, discarding it (starting a
-// fresh run) if the gap since the last tap is too large to be the same tempo. Keeps at most
-// `maxTaps` most recent taps so a long tapping session doesn't drift on stale early taps.
-function pushTap(history, t, maxTaps, resetGapMs) {
-  maxTaps = maxTaps || 8; resetGapMs = resetGapMs == null ? 2000 : resetGapMs;
-  var h = history.slice();
-  if (h.length && (t - h[h.length - 1]) > resetGapMs) h = [];
-  h.push(t);
-  if (h.length > maxTaps) h = h.slice(h.length - maxTaps);
-  return h;
-}
-// BPM from the average interval between consecutive taps in the history; null if fewer than 2
-// taps (not enough to measure an interval yet).
-function bpmFromTapHistory(history) {
-  if (history.length < 2) return null;
-  var sum = 0;
-  for (var i = 1; i < history.length; i++) sum += history[i] - history[i - 1];
-  var avgMs = sum / (history.length - 1);
-  if (avgMs <= 0) return null;
-  return clampBpm(60000 / avgMs);
 }
 
 function emptyPattern(steps) {
@@ -464,6 +443,44 @@ function rotatePattern(pattern, rows, steps, dir) {
   });
   return out;
 }
+// The transform toolbar (drain 2026-10-20-0900): ONE definition, so Grid and Circle cannot drift. Five controls, in this order, shown in BOTH views:
+//   shift left / shift right  — EVERY instrument one step earlier / later (wrapping)        scope "all"
+//   mirror                    — EVERY instrument reversed in time within the bar              scope "all"
+//   rotate counter-clockwise / clockwise — ONLY the selected instrument, one step earlier / later   scope "selected"
+// `domId` is the element id the page gives the generated button (the ids earlier drains' tests use). `{who}` in a "selected" control's text is the
+// selected instrument's name. One noun for both views: "instrument" (not "ring" or "row").
+var TRANSFORM_TOOLS = [
+  { id: "shiftLeft", domId: "bRotLeft", icon: "\u2039", scope: "all",
+    title: "Shift left: move every instrument one step earlier (wraps around)", label: "Shift all instruments left one step" },
+  { id: "shiftRight", domId: "bRotRight", icon: "\u203a", scope: "all",
+    title: "Shift right: move every instrument one step later (wraps around)", label: "Shift all instruments right one step" },
+  { id: "mirror", domId: "bMirror", icon: "\u21c6", scope: "all",
+    title: "Mirror: reverse the rhythm in time within the bar (the last step becomes the first). Press again to undo.", label: "Mirror (reverse the rhythm in time)" },
+  { id: "rotateCcw", domId: "bRingRotLeft", icon: "\u21ba", scope: "selected",
+    title: "Rotate {who} counter-clockwise: one step earlier, only this instrument (wraps around)", label: "Rotate {who} counter-clockwise one step" },
+  { id: "rotateCw", domId: "bRingRotRight", icon: "\u21bb", scope: "selected",
+    title: "Rotate {who} clockwise: one step later, only this instrument (wraps around)", label: "Rotate {who} clockwise one step" }
+];
+// The tooltip and the accessible name of one control, naming the selected instrument where the control acts on it.
+function transformToolText(tool, who) {
+  var name = who || "the selected instrument";
+  return { title: tool.title.split("{who}").join(name), label: tool.label.split("{who}").join(name) };
+}
+// The new pattern after one transform. A copy; an unknown id, or a "selected" transform whose selection is not one of the rows, changes nothing.
+function applyTransform(id, pattern, rows, steps, selected) {
+  if (id === "shiftLeft") return rotatePattern(pattern, rows, steps, -1);
+  if (id === "shiftRight") return rotatePattern(pattern, rows, steps, 1);
+  if (id === "mirror") return mirrorPattern(pattern, rows, steps);
+  if (id === "rotateCcw" || id === "rotateCw") {
+    if (rows.indexOf(selected) < 0) return rotatePattern(pattern, [], steps, 0);
+    return rotatePattern(pattern, [selected], steps, id === "rotateCw" ? 1 : -1);
+  }
+  return rotatePattern(pattern, [], steps, 0);
+}
+// The selected instrument: the chosen one if it is still a row, else the first row (undefined when there are none). One state for Grid and Circle.
+function selectedRowOf(rows, chosen) {
+  return rows.indexOf(chosen) >= 0 ? chosen : rows[0];
+}
 // The polygon's vertices: the ring's hits, in step order.
 function polygonPoints(geometry, ring, row) {
   var pts = [];
@@ -576,7 +593,6 @@ if (typeof document === "undefined") {           // node test harness
     STEPS: STEPS, GROUP_SIZE: GROUP_SIZE, TIME_SIGNATURES: TIME_SIGNATURES,
     CHANNELS: CHANNELS, DEFAULT_ROWS: DEFAULT_ROWS, BANKS: BANKS, MIN_BPM: MIN_BPM, MAX_BPM: MAX_BPM,
     clampBpm: clampBpm, stepSeconds: stepSeconds, swingOffsetSeconds: swingOffsetSeconds, swingVisualPx: swingVisualPx,
-    pushTap: pushTap, bpmFromTapHistory: bpmFromTapHistory,
     emptyPattern: emptyPattern,
     isChannelAudible: isChannelAudible, advanceScheduler: advanceScheduler,
     buildRhythmData: buildRhythmData,
@@ -585,6 +601,7 @@ if (typeof document === "undefined") {           // node test harness
     EIGHTH_GRIDS: EIGHTH_GRIDS, MENU_GRIDS: MENU_GRIDS, resolveGrid: resolveGrid, menuKeyFor: menuKeyFor,
     CIRCLE_MAX_RINGS: CIRCLE_MAX_RINGS, CIRCLE_SIZE: CIRCLE_SIZE, circleGeometry: circleGeometry, circleSizeFor: circleSizeFor,
     rotatePattern: rotatePattern, mirrorPattern: mirrorPattern, polygonPoints: polygonPoints,
+    TRANSFORM_TOOLS: TRANSFORM_TOOLS, transformToolText: transformToolText, applyTransform: applyTransform, selectedRowOf: selectedRowOf,
     moveRing: moveRing, autoHeightPlan: autoHeightPlan
   };
 } else {
@@ -605,9 +622,8 @@ if (typeof document === "undefined") {           // node test harness
   var gridStepQl = TIME_SIGNATURES[timeSig].stepQl;     // how long ONE step lasts in quarter notes (0.25 sixteenth, 0.5 eighth)
   var patterns = {}; BANKS.forEach(function (b) { patterns[b] = emptyPattern(steps); });
   // View (Grid | Circle) lives in WIDGET STATE ONLY — never in the note, never in a save payload. Grid is the default.
-  var viewMode = "grid", viewInit = false, showShape = true, shapeRing = null, focusedCell = null;
+  var viewMode = "grid", viewInit = false, showShape = true, selectedChannel = null, focusedCell = null;   // selectedChannel: the instrument the rotate buttons turn and the circle draws the shape of — ONE state for both views
   var muted = new Set(), soloed = new Set();
-  var tapHistory = [];
   var playing = false;
   var currentStep = -1;                // for the visual indicator only
   var schedulerState = { currentStep: 0, nextNoteTime: 0 };
@@ -629,8 +645,12 @@ if (typeof document === "undefined") {           // node test harness
       row.style.gridTemplateColumns = "150px repeat(" + steps + ", 1fr)";
       var label = document.createElement("div");
       label.className = "channel-label";
-      var nameSpan = document.createElement("span");
-      nameSpan.className = "name"; nameSpan.textContent = CHANNEL_LABEL[ch];
+      // The instrument's name is the row's SELECTOR (the circle's is the ring chips): the rotate buttons turn the selected one only.
+      var nameBtn = document.createElement("button");
+      nameBtn.type = "button"; nameBtn.className = "name row-pick"; nameBtn.textContent = CHANNEL_LABEL[ch];
+      nameBtn.setAttribute("data-row", ch); nameBtn.setAttribute("aria-pressed", "false");
+      nameBtn.title = "Select " + CHANNEL_LABEL[ch] + ": the rotate buttons turn only the selected instrument";
+      nameBtn.addEventListener("click", function () { selectChannel(ch); });
       var mBtn = document.createElement("button");
       mBtn.className = "mini-btn mute"; mBtn.textContent = "M"; mBtn.setAttribute("aria-label", "Mute " + CHANNEL_LABEL[ch]); mBtn.setAttribute("aria-pressed", "false");
       var sBtn = document.createElement("button");
@@ -640,7 +660,7 @@ if (typeof document === "undefined") {           // node test harness
       rBtn.setAttribute("aria-label", "Remove " + CHANNEL_LABEL[ch] + " row"); rBtn.title = "Remove this instrument row";
       rBtn.disabled = rows.length <= 1;                // a note must keep at least one channel
       rBtn.addEventListener("click", function () { requestRemoveRow(ch); });
-      label.appendChild(nameSpan); label.appendChild(mBtn); label.appendChild(sBtn); label.appendChild(rBtn);
+      label.appendChild(nameBtn); label.appendChild(mBtn); label.appendChild(sBtn); label.appendChild(rBtn);
       row.appendChild(label);
       stepEls[ch] = [];
       for (var s = 0; s < steps; s++) {
@@ -664,10 +684,11 @@ if (typeof document === "undefined") {           // node test harness
     });
     renderAddInstrument();
   }
-  // "Add instrument": the channels not shown yet (in the engine's order). The first option is the inert prompt. TWO controls offer the same
-  // menu — the grid's, under the rows, and the circle's, in its toolbar — and both go through onAddInstrument, i.e. ONE path.
+  // "Add instrument": the channels not shown yet (in the engine's order). The first option is the inert prompt. ONE control, first in the toolbar, in
+  // both views (it used to be two, one per view).
   var CIRCLE_FULL_MSG = "Circle shows up to 4 instruments \u2014 use Grid to add more.";
-  function fillAddSelect(sel) {
+  function renderAddInstrument() {
+    var sel = $("addInstrument");
     sel.innerHTML = "";
     var prompt = document.createElement("option"); prompt.value = ""; prompt.textContent = "Add instrument\u2026";
     sel.appendChild(prompt);
@@ -678,15 +699,10 @@ if (typeof document === "undefined") {           // node test harness
     });
     sel.value = "";
     sel.hidden = rows.length >= CHANNELS.length;
-  }
-  function renderAddInstrument() {
-    fillAddSelect($("addInstrument"));
-    var circ = $("addInstrumentCircle");
-    fillAddSelect(circ);
-    // At the ring limit the circle's control is DISABLED (and says why), not hidden and not a silent no-op; the grid's has no limit.
-    var full = rows.length >= CIRCLE_MAX_RINGS;
-    circ.disabled = full;
-    circ.title = full ? CIRCLE_FULL_MSG : "Add an instrument as a new ring (bell, claves, congas)";
+    // At the circle's ring limit the control is DISABLED IN CIRCLE (and says why), not hidden and not a silent no-op; the grid has no limit.
+    var full = viewMode === "circle" && rows.length >= CIRCLE_MAX_RINGS;
+    sel.disabled = full;
+    sel.title = full ? CIRCLE_FULL_MSG : "Add a row for another instrument (bell, claves, congas)";
   }
   buildGrid();
 
@@ -733,7 +749,6 @@ if (typeof document === "undefined") {           // node test harness
     renderAddInstrument();
   }
   $("addInstrument").addEventListener("change", function (e) { onAddInstrument(e.target); });
-  $("addInstrumentCircle").addEventListener("change", function (e) { onAddInstrument(e.target); });
   function renderMuteSolo() {
     rows.forEach(function (ch) {
       var row = gridEl.querySelector('[data-mute-btn-' + ch + ']');
@@ -764,7 +779,7 @@ if (typeof document === "undefined") {           // node test harness
   }
 
   // --- Circle view -------------------------------------------------------------------------------------------------------
-  // Drawing only: geometry comes from circleGeometry(), every edit goes through toggleStep() / rotate() and so through commitChange() —
+  // Drawing only: geometry comes from circleGeometry(), every edit goes through toggleStep() / runTransform() and so through commitChange() —
   // the single data-change path (confirm bars, "not saved" playground, autosave all unchanged). The circle posts nothing of its own.
   var SVGNS = "http://www.w3.org/2000/svg";
   function svgEl(name, attrs) {
@@ -774,7 +789,19 @@ if (typeof document === "undefined") {           // node test harness
   }
   var cellEls = [];                                // cellEls[ringIndex][step] -> the <g class="cell">
   var circleEl = $("circle");
-  function selectedRing() { return rows.indexOf(shapeRing) >= 0 ? shapeRing : rows[0]; }
+  // The selected instrument — ONE state for both views: a row's name in Grid, a ring chip in Circle. Falls back to the first row (selectedRowOf).
+  function selectedRow() { return selectedRowOf(rows, selectedChannel); }
+  function selectChannel(ch) {
+    selectedChannel = ch;
+    renderSelection();
+    if (viewMode === "circle") renderCircle();         // the shape follows the selection
+  }
+  // Selection is not data: nothing is posted, nothing is saved.
+  function renderSelection() {
+    var chosen = selectedRow();
+    Array.prototype.forEach.call(gridEl.querySelectorAll(".row-pick"), function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-row") === chosen ? "true" : "false"); });
+    syncTools();
+  }
   function renderCircle() {
     var g = circleGeometry(steps, rows.length, circleSizeFor(steps, rows.length));
     var hadFocus = !!(document.activeElement && circleEl.contains(document.activeElement));
@@ -804,7 +831,7 @@ if (typeof document === "undefined") {           // node test harness
       }
     }
     // the polygon through the selected ring's hits (under the dots)
-    var ringName = selectedRing(), ringIndex = rows.indexOf(ringName);
+    var ringName = selectedRow(), ringIndex = rows.indexOf(ringName);
     if (showShape && ringIndex >= 0) {
       var pts = polygonPoints(g, ringIndex, patterns[bank][ringName]);
       if (pts.length >= 2) {
@@ -873,17 +900,17 @@ if (typeof document === "undefined") {           // node test harness
   function renderRingLegend() {
     var legend = $("ringLegend");
     legend.innerHTML = "";
-    var chosen = selectedRing();
+    var chosen = selectedRow();
     rows.forEach(function (ch) {
       var b = document.createElement("button");
       b.type = "button"; b.className = "ring-pick"; b.setAttribute("data-ring", ch);
       b.textContent = CHANNEL_LABEL[ch];
       b.setAttribute("aria-pressed", ch === chosen ? "true" : "false");
       b.setAttribute("title", "Show the shape of the " + CHANNEL_LABEL[ch] + " ring");
-      b.addEventListener("click", function () { shapeRing = ch; renderCircle(); });
+      b.addEventListener("click", function () { selectChannel(ch); });
       legend.appendChild(b);
     });
-    syncRingTools();
+    syncTools();
   }
   // Keyboard inside the circle: arrows walk the ring / change ring, Space or Enter toggles the focused hit.
   circleEl.addEventListener("keydown", function (e) {
@@ -908,6 +935,7 @@ if (typeof document === "undefined") {           // node test harness
     var circle = viewMode === "circle";
     $("gridView").hidden = circle;
     $("circleView").hidden = !circle;
+    $("circleExtras").hidden = !circle;                  // Move ring / Shape / the chips: circle-only, AFTER the five, which are always there
     $("bViewGrid").setAttribute("aria-pressed", circle ? "false" : "true");
     $("bViewCircle").setAttribute("aria-pressed", circle ? "true" : "false");
     if (circle) {
@@ -915,6 +943,8 @@ if (typeof document === "undefined") {           // node test harness
       setHostMsg("viewMsg", rows.length >= CIRCLE_MAX_RINGS ? CIRCLE_FULL_MSG : "", false);
       renderCircle();
     }
+    renderAddInstrument();                               // its limit (and the reason it shows) depends on the view
+    renderSelection();
   }
   // Returns true if the view is now `next`. Circle is refused (Grid kept, with the inline message) when the note has more rings than are legible.
   function setView(next) {
@@ -940,57 +970,50 @@ if (typeof document === "undefined") {           // node test harness
     $("bShape").setAttribute("aria-pressed", showShape ? "true" : "false");
     if (viewMode === "circle") renderCircle();
   });
-  // Rotate: shifts EVERY shown channel by `by` steps (wrapping; negative = left). A normal edit — through commitChange() like a dot, no
-  // confirm bar. One step per press (the two ‹ › buttons).
-  function rotate(by) {
-    patterns[bank] = rotatePattern(patterns[bank], rows, steps, by);
-    renderGrid();
-    commitChange();
+  // The five transforms (TRANSFORM_TOOLS: shift left / right, mirror, rotate counter-clockwise / clockwise) are GENERATED from the one definition, into the
+  // one toolbar both views share, and all run through runTransform -> commitChange() like a dot (no confirm bar). Shift and mirror act on every instrument; rotate
+  // turns ONLY the selected one. Move ring out / in (circle-only) changes the ring's place in the ring order, which is the order of the note's `channels`
+  // keys (so a save rewrites that order — two swapped lines in the note — and the Score's staves do NOT follow it: the engine keeps its canonical order).
+  // The selection follows the ring it was on.
+  function buildTransformTools() {
+    var host = $("transformTools");
+    TRANSFORM_TOOLS.forEach(function (t) {
+      var b = document.createElement("button");
+      b.type = "button"; b.id = t.domId; b.textContent = t.icon;
+      b.addEventListener("click", function () { runTransform(t.id); });
+      host.appendChild(b);
+    });
   }
-  $("bRotLeft").addEventListener("click", function () { rotate(-1); });
-  $("bRotRight").addEventListener("click", function () { rotate(1); });
-  // Mirror: reverses EVERY shown channel in time within the bar. The same single data path (commitChange), no confirm bar; its own inverse.
-  // Two buttons, one handler: the circle toolbar's and the one beside the grid's Add instrument.
-  function mirror() {
-    patterns[bank] = mirrorPattern(patterns[bank], rows, steps);
-    renderGrid();
-    commitChange();
-  }
-  $("bMirror").addEventListener("click", mirror);
-  $("bMirrorGrid").addEventListener("click", mirror);
-  // Per-ring controls (circle view; the grid has no "selected row"): act on the SELECTED ring — the one whose shape is shown, picked in the ring
-  // legend. Both are ordinary data edits through commitChange(). Rotate turns ONLY that channel. Move changes the ring's place in the ring order,
-  // which is the order of the note's `channels` keys (so a save rewrites that order — two swapped lines in the note — and the Score's staves follow
-  // it). The selection follows the ring it was on.
-  function rotateRing(by) {
-    var ch = selectedRing();
-    if (rows.indexOf(ch) < 0) return;
-    patterns[bank] = rotatePattern(patterns[bank], [ch], steps, by);
+  function runTransform(id) {
+    var tool = TRANSFORM_TOOLS.filter(function (t) { return t.id === id; })[0];
+    if (!tool || (tool.scope === "selected" && rows.indexOf(selectedRow()) < 0)) return;
+    patterns[bank] = applyTransform(id, patterns[bank], rows, steps, selectedRow());
     renderGrid();
     commitChange();
   }
   function moveSelectedRing(dir) {
-    var ch = selectedRing(), next = moveRing(rows, ch, dir);
+    var ch = selectedRow(), next = moveRing(rows, ch, dir);
     if (next.join() === rows.join()) return;
-    shapeRing = ch; rows = next;
+    selectedChannel = ch; rows = next;
     buildGrid(); renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview(); syncView();
     commitChange();
   }
-  // Names the selected ring in the buttons' tooltips and labels, and disables a move that cannot happen (outermost cannot go out, innermost cannot
-  // go in, a lone ring neither).
-  function syncRingTools() {
-    var ch = selectedRing(), i = rows.indexOf(ch), who = CHANNEL_LABEL[ch] || "this";
-    [["bRingRotLeft", "Rotate the " + who + " ring one step earlier (only this ring)", "Rotate the " + who + " ring left one step"],
-     ["bRingRotRight", "Rotate the " + who + " ring one step later (only this ring)", "Rotate the " + who + " ring right one step"],
-     ["bRingOut", "Move the " + who + " ring outward (one place toward the outer edge)", "Move the " + who + " ring outward"],
-     ["bRingIn", "Move the " + who + " ring inward (one place toward the center)", "Move the " + who + " ring inward"]
+  // Names the selected instrument in the tools' tooltips and labels (the same words in both views), and disables a move that cannot happen (outermost
+  // cannot go out, innermost cannot go in, a lone ring neither).
+  function syncTools() {
+    var ch = selectedRow(), i = rows.indexOf(ch), who = CHANNEL_LABEL[ch];
+    TRANSFORM_TOOLS.forEach(function (t) {
+      var b = $(t.domId), x = transformToolText(t, who);
+      b.setAttribute("title", x.title); b.setAttribute("aria-label", x.label);
+      if (t.scope === "selected") b.disabled = i < 0;
+    });
+    [["bRingOut", "Move the " + (who || "this") + " ring outward (one place toward the outer edge)", "Move the " + (who || "this") + " ring outward"],
+     ["bRingIn", "Move the " + (who || "this") + " ring inward (one place toward the center)", "Move the " + (who || "this") + " ring inward"]
     ].forEach(function (t) { $(t[0]).setAttribute("title", t[1]); $(t[0]).setAttribute("aria-label", t[2]); });
-    $("bRingRotLeft").disabled = $("bRingRotRight").disabled = i < 0;
     $("bRingOut").disabled = i <= 0;
     $("bRingIn").disabled = i < 0 || i >= rows.length - 1;
   }
-  $("bRingRotLeft").addEventListener("click", function () { rotateRing(-1); });
-  $("bRingRotRight").addEventListener("click", function () { rotateRing(1); });
+  buildTransformTools();
   $("bRingOut").addEventListener("click", function () { moveSelectedRing(-1); });
   $("bRingIn").addEventListener("click", function () { moveSelectedRing(1); });
   // Swing preview: nudge the off-beat step cells sideways by swingVisualPx, independent of
@@ -1006,15 +1029,10 @@ if (typeof document === "undefined") {           // node test harness
 
   // --- transport / bpm / banks ---------------------------------------------------------------
   function setBpm(v) { bpm = clampBpm(v); $("bpmVal").textContent = Math.round(bpm) + " BPM"; }
-  // Tempo is pattern data: a button or tap that actually CHANGES it is committed (autosave); one at its limit is not.
+  // Tempo is pattern data: a button press that actually CHANGES it is committed (autosave); one at its limit is not.
   function changeBpm(v) { var before = bpm; setBpm(v); if (bpm !== before) commitChange(); }
   $("bBpmUp").addEventListener("click", function () { changeBpm(bpm + 1); });
   $("bBpmDown").addEventListener("click", function () { changeBpm(bpm - 1); });
-  $("bTap").addEventListener("click", function () {
-    tapHistory = pushTap(tapHistory, performance.now());
-    var t = bpmFromTapHistory(tapHistory);
-    if (t != null) changeBpm(t);
-  });
   $("swing").addEventListener("input", function (e) { swingPct = +e.target.value; $("swingVal").textContent = swingPct + "%"; renderSwingPreview(); commitChange(); });
   $("volume").addEventListener("input", function (e) { volume = (+e.target.value) / 100; $("volumeVal").textContent = e.target.value + "%"; });
   Array.prototype.forEach.call(document.querySelectorAll(".banks button"), function (b) {
@@ -1212,10 +1230,12 @@ if (typeof document === "undefined") {           // node test harness
   //
   // Phase 8 (the plugin's `forge-rhythm` embed) adds a second HOST MODE, chosen by the load message's `mode`: "playground". There the
   // widget is a toy over a COPY of the note's data: commitChange() posts `forge-rhythm-edited` (no data) and NEVER a save; a
-  // time-signature change applies at once; Reset puts the loaded data back (the host's toolbar owns "Open note"); playing /
-  // stopping is announced so the host can keep one sound at a time. Any `mode` other than the exact string "playground" is "edit".
+  // time-signature change applies at once; Reset puts the loaded data back (the host's toolbar owns "Open note", and — when the load says `resetInHost: true` —
+  // "Reset" and the "not saved" reminder too, so this page draws neither); playing / stopping is announced so the host can keep one sound at a time.
+  // Any `mode` other than the exact string "playground" is "edit".
   var hostNote = "", hostLoaded = false;
   var hostMode = "edit";             // "edit" | "playground"
+  var resetInHost = false;           // playground only, per load: the HOST's toolbar draws Reset and the "not saved" reminder, so this page draws neither (drain 2026-10-20-0900)
   var loadedData = null;             // playground: a private copy of the last loaded data, what Reset restores
   function hostWindow() { return window.parent && window.parent !== window ? window.parent : null; }
   function postToHost(msg) { var h = hostWindow(); if (h) { try { h.postMessage(msg, "*"); } catch (e) { /* host gone */ } } }
@@ -1229,11 +1249,15 @@ if (typeof document === "undefined") {           // node test harness
     if (hostMode === "playground" && hostLoaded) postToHost({ type: "forge-rhythm-playing", playing: !!on });
   }
   // The host bar shows exactly one of the two mode's sets of controls.
+  // `resetInHost` (the exact boolean true, in a playground load only): the host's own toolbar — one row with Open note, Score, Reset and "not saved" — owns those,
+  // so the label, Reset and the note name come off this page and the bar that held them goes with them: one row instead of two. Without the flag (an older
+  // plugin) everything is drawn here as it always was. A refused load still shows its message (applyLoad's error branch shows the bar by itself).
   function renderHostBar() {
     var pg = hostMode === "playground";
+    $("hostBar").hidden = resetInHost;
     $("hostEditing").hidden = pg;
-    $("playgroundLabel").hidden = !pg;
-    $("bReset").hidden = !pg;
+    $("playgroundLabel").hidden = !pg || resetInHost;
+    $("bReset").hidden = !pg || resetInHost;
     $("saveMsg").hidden = pg;
     if (pg) { $("bReload").hidden = true; setHostMsg("saveMsg", "", false); }
   }
@@ -1276,6 +1300,7 @@ if (typeof document === "undefined") {           // node test harness
     var r = parseRhythmLoad(msg.data);
     if (!r.ok) { hostLoaded = false; dismissConfirm(); $("hostBar").hidden = false; setHostMsg("loadMsg", "Could not load this note: " + r.message, true); return; }
     hostMode = msg.mode === "playground" ? "playground" : "edit";
+    resetInHost = hostMode === "playground" && msg.resetInHost === true;
     loadedData = hostMode === "playground" ? JSON.parse(JSON.stringify(msg.data)) : null;
     hostLoaded = true;                                // set BEFORE showLoaded so a stop() inside it is announced consistently
     showLoaded(r.state);
@@ -1351,6 +1376,7 @@ if (typeof document === "undefined") {           // node test harness
   renderMuteSolo();
   renderPlayhead();
   renderSwingPreview();
+  renderSelection();
   postToHost({ type: "forge-rhythm-ready" });
 })();
 }
