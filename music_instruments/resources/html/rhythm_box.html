@@ -55,8 +55,6 @@
   .banks { display: flex; gap: 4px; margin-bottom: 6px; align-items: center; }
   .banks[hidden] { display: none; }
   .banks button { min-width: 36px; min-height: 30px; padding: 3px 8px; }
-  .export-msg { font-size: 12px; color: var(--muted); min-height: 16px; }
-  .export-fallback { width: 100%; height: 150px; margin-top: 8px; font: 12px/1.4 ui-monospace, Menlo, Consolas, monospace; color: var(--ink); background: #fff; border: 1px solid var(--axis); border-radius: 6px; padding: 6px; }
   .banks button[hidden] { display: none; }
   .banks button.active { background: var(--highlight); border-color: var(--ink); font-weight: 600; }
   #timeSig {
@@ -104,12 +102,6 @@
      "on" against the paper background (7.27:1) and against the other two channels' on-colors. */
   .step[data-channel="kick"].on { background: var(--muted); border-color: var(--ink); }
   .step[data-channel="hihat"].on { background: var(--derived); border-color: #4b5a70; }
-  .bottom-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 0; align-items: center; }
-  /* Rare actions (Random, Clear, Export JSON) behind one "more" disclosure; the buttons stay real buttons in the document. */
-  .more-menu { margin-top: 4px; }
-  .more-menu > summary { display: inline-block; list-style: none; cursor: pointer; padding: 3px 12px; border: 1px solid var(--axis); border-radius: 6px; background: #fff; color: var(--ink); font-size: 15px; line-height: 1.2; }
-  .more-menu > summary::-webkit-details-marker { display: none; }
-  .more-menu > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   /* Beat-as-data Phase 5: a cell holding a velocity >= 100 (e.g. from accent_mask) is drawn with a double ring so the accents
      are visible. Shown on top of the channel colour, so it reads on kick, snare and hi-hat alike. */
   .step.on.accent { box-shadow: inset 0 0 0 2px #fff, inset 0 0 0 4px var(--ink); }
@@ -122,7 +114,7 @@
   .host-msg { font-size: 12px; color: var(--muted); min-height: 16px; }
   .host-msg.error { color: #B54A50; }
   .host-bar [hidden] { display: none; }
-  /* Phase 8, playground mode (the plugin's `forge-rhythm` embed): a label, Reset and Open note replace the autosave controls. */
+  /* Phase 8, playground mode (the plugin's `forge-rhythm` embed): a label and Reset replace the autosave controls (Open note is the host toolbar's). */
   .host-bar .playground-label { font-weight: 600; }
   /* Circle mode (rhythm necklace): a second drawing of the SAME data. Colours are the grid's own (kick = --muted, hi-hat = --derived,
      the rest = --right), so a channel reads the same in both views. */
@@ -171,7 +163,6 @@
   <span class="host-msg" id="saveMsg" role="status" aria-live="polite"></span>
   <button id="bReload" hidden title="Discard what is on screen and load the note as it is on disk now">Reload from note</button>
   <button id="bReset" hidden title="Put the rhythm back exactly as it is in the note">Reset</button>
-  <button id="bOpenNote" hidden title="Open this rhythm in its own tab, where changes are saved">Open note</button>
 </div>
 <div class="confirm-bar" id="confirmBar" role="alertdialog" aria-label="Confirm change to the note" hidden>
   <span id="confirmText"></span>
@@ -248,16 +239,6 @@
   <svg class="circle-svg" id="circle" role="group" aria-label="Rhythm circle" viewBox="0 0 460 460" tabindex="-1"></svg>
 </div>
 
-<details class="more-menu" id="moreMenu">
-  <summary title="More: Random, Clear, Export JSON" aria-label="More actions: Random, Clear, Export JSON">&#8943;</summary>
-  <div class="bottom-row">
-    <button id="bRandom" title="Fill the current pattern with a musically biased random beat">Random</button>
-    <button id="bClear" title="Empty the current pattern">Clear</button>
-    <button id="bExport" title="Copy this bank's pattern (plus time signature, swing and tempo) as JSON, ready to paste into a data note">Export JSON</button>
-    <span class="export-msg" id="exportMsg" role="status" aria-live="polite"></span>
-  </div>
-</details>
-<textarea id="exportFallback" class="export-fallback" readonly hidden aria-label="Pattern JSON (select all and copy)"></textarea>
 
 </div>
 <script>
@@ -348,43 +329,6 @@ function bpmFromTapHistory(history) {
   var avgMs = sum / (history.length - 1);
   if (avgMs <= 0) return null;
   return clampBpm(60000 / avgMs);
-}
-
-// Random-pattern bias: how likely each channel is to sound on a given step, so "Random" produces
-// a recognizable beat rather than noise. `groupSize` = 16th notes per beat (always 4 in this
-// ship, but read from the signature, not hardcoded): a DOWNBEAT is the first 16th of any beat
-// (step % groupSize === 0); a BACKBEAT generalizes "beat 2 and 4" to "every other beat starting
-// from the second one" (floor(step/groupSize) is odd) — for 4/4 that's beats 2 AND 4 (steps 4
-// and 12, exactly the original hardcoded pair); for 3/4 it's beat 2 only (step 4), the one
-// mid-bar accent a waltz actually wants. The hi-hat's density pattern doesn't depend on bar
-// length at all, so it's untouched. Kick's non-downbeat weight is likewise bar-length-independent.
-function channelStepWeight(channel, step, groupSize) {
-  groupSize = groupSize == null ? GROUP_SIZE : groupSize;
-  var onDownbeat = step % groupSize === 0;
-  var onBackbeat = onDownbeat && Math.floor(step / groupSize) % 2 === 1;
-  if (channel === "kick") return onDownbeat ? 0.85 : (step % 2 === 0 ? 0.25 : 0.08);
-  if (channel === "snare") return onBackbeat ? 0.9 : (step % groupSize === 2 ? 0.15 : 0.05);
-  if (channel === "hihat") return step % 2 === 0 ? 0.85 : 0.55;
-  // World-rhythm channels: sparse, beat-anchored, so Random reads as a pattern and not noise.
-  if (channel === "bell") return onDownbeat ? 0.6 : 0.2;
-  if (channel === "claves") return onDownbeat ? 0.45 : 0.15;
-  if (channel === "conga_high") return step % groupSize === groupSize - 1 || onBackbeat ? 0.45 : 0.15;
-  if (channel === "conga_low") return onDownbeat ? 0.5 : 0.1;
-  return 0;
-}
-// `rng` is injectable (defaults to Math.random) so this is deterministically testable: pass a
-// fixed sequence of "random" values and the resulting pattern is exactly predictable.
-// Only the `rows` shown are randomised (default: the three standalone rows); every other channel stays empty. The rng is consumed in row order.
-function randomizePattern(rng, steps, groupSize, rows) {
-  rng = rng || Math.random;
-  steps = steps == null ? STEPS : steps;
-  rows = rows || DEFAULT_ROWS;
-  var pattern = emptyPattern(steps);
-  rows.forEach(function (ch) {
-    pattern[ch] = [];
-    for (var s = 0; s < steps; s++) pattern[ch].push(rng() < channelStepWeight(ch, s, groupSize));
-  });
-  return pattern;
 }
 
 function emptyPattern(steps) {
@@ -561,22 +505,6 @@ function buildRhythmData(timeSigKey, swingPct, bpm, pattern, rows, grid) {
   return { time_signature: timeSigKey, steps: nSteps, group_size: group,
            swing_pct: swingPct, tempo_bpm: Math.round(bpm), channels: channels };
 }
-function rhythmDataJson(data) {
-  var lines = [
-    '  "time_signature": ' + JSON.stringify(data.time_signature) + ',',
-    '  "steps": ' + data.steps + ',',
-    '  "group_size": ' + data.group_size + ',',
-    '  "swing_pct": ' + data.swing_pct + ',',
-    '  "tempo_bpm": ' + data.tempo_bpm + ',',
-    '  "channels": {'
-  ];
-  var names = Object.keys(data.channels);
-  names.forEach(function (ch, i) {
-    lines.push('    ' + JSON.stringify(ch) + ': ' + JSON.stringify(data.channels[ch]).replace(/,/g, ', ') + (i < names.length - 1 ? ',' : ''));
-  });
-  lines.push('  }');
-  return '{\n' + lines.join('\n') + '\n}';
-}
 // Validate rhythm data arriving from the host (the plugin's "Edit rhythm in Rhythm Box"). Anything this widget could not SAVE BACK
 // unchanged is refused here with a message, rather than loaded and silently altered on the next Save: an unsupported time
 // signature / grid, a tempo or swing it cannot represent exactly, an unknown channel, a step that is not false/0/true/int 1-127.
@@ -649,9 +577,9 @@ if (typeof document === "undefined") {           // node test harness
     CHANNELS: CHANNELS, DEFAULT_ROWS: DEFAULT_ROWS, BANKS: BANKS, MIN_BPM: MIN_BPM, MAX_BPM: MAX_BPM,
     clampBpm: clampBpm, stepSeconds: stepSeconds, swingOffsetSeconds: swingOffsetSeconds, swingVisualPx: swingVisualPx,
     pushTap: pushTap, bpmFromTapHistory: bpmFromTapHistory,
-    channelStepWeight: channelStepWeight, randomizePattern: randomizePattern, emptyPattern: emptyPattern,
+    emptyPattern: emptyPattern,
     isChannelAudible: isChannelAudible, advanceScheduler: advanceScheduler,
-    buildRhythmData: buildRhythmData, rhythmDataJson: rhythmDataJson,
+    buildRhythmData: buildRhythmData,
     ACCENT_THRESHOLD: ACCENT_THRESHOLD, normalizeCell: normalizeCell, cellOn: cellOn, toggleCell: toggleCell,
     isAccentedCell: isAccentedCell, parseRhythmLoad: parseRhythmLoad,
     EIGHTH_GRIDS: EIGHTH_GRIDS, MENU_GRIDS: MENU_GRIDS, resolveGrid: resolveGrid, menuKeyFor: menuKeyFor,
@@ -1097,32 +1025,6 @@ if (typeof document === "undefined") {           // node test harness
       renderGrid();                                        // the scheduler keeps reading `patterns[bank]` from the next step it schedules
     });
   });
-  // Random and Clear rewrite the whole pattern. Standalone they apply at once; hosted they ask first (the ONE confirm bar, below).
-  $("bRandom").addEventListener("click", function () { requestWholePatternChange({ kind: "random" }); });
-  $("bClear").addEventListener("click", function () { requestWholePatternChange({ kind: "clear" }); });
-  // Export: clipboard first; if the host denies clipboard-write (iframe permissions vary by embedder),
-  // fall back to execCommand("copy") on a hidden-then-selected textarea, and as a last resort show the
-  // JSON in a read-only textarea for a manual select-all/copy. The user always ends with the JSON.
-  var exportMsgTimer = null;
-  function exportMsg(text) {
-    $("exportMsg").textContent = text;
-    clearTimeout(exportMsgTimer);
-    exportMsgTimer = setTimeout(function () { $("exportMsg").textContent = ""; }, 2500);
-  }
-  $("bExport").addEventListener("click", function () {
-    var json = rhythmDataJson(buildRhythmData(timeSig, swingPct, bpm, patterns[bank], rows, { steps: steps, groupSize: groupSize }));
-    var ta = $("exportFallback");
-    function showManual() { ta.hidden = false; ta.value = json; ta.focus(); ta.select(); exportMsg("Copy blocked here - JSON shown below, press Cmd/Ctrl+C"); }
-    function legacyCopy() {
-      ta.hidden = false; ta.value = json; ta.focus(); ta.select();
-      var ok = false;
-      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
-      if (ok) { ta.hidden = true; exportMsg("Copied"); } else { showManual(); }
-    }
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(json).then(function () { ta.hidden = true; exportMsg("Copied"); }, legacyCopy);
-    } else { legacyCopy(); }
-  });
   // Time signature: applies GLOBALLY (one signature for the whole widget, not per-bank — nothing
   // in the request implies mixed meters across banks). Switching stops playback (a mid-flight
   // scheduler tied to the OLD step count would either desync from the new grid or need to survive
@@ -1140,8 +1042,8 @@ if (typeof document === "undefined") {           // node test harness
     buildGrid();
     renderGrid(); renderMuteSolo(); renderPlayhead(); renderSwingPreview(); syncView();
   }
-  // Hosted (editing a note), a time-signature change, Random and Clear rewrite the pattern IN THE NOTE and autosave would write it, so each
-  // asks first — with ONE inline bar shared by all three (the iframe sandbox blocks the native confirm dialog). Standalone keeps the
+  // Hosted (editing a note), a time-signature change (and removing a row that has hits) rewrites the pattern IN THE NOTE and autosave would write it,
+  // so it asks first — with ONE inline bar (the iframe sandbox blocks the native confirm dialog). Standalone keeps the
   // immediate behaviour (nothing is written anywhere). Only one question is open at a time: a new one REPLACES the old; any other data
   // edit (cell, tempo, swing — everything that goes through commitChange) DISMISSES it without applying it; playback actions neither
   // open nor dismiss it.
@@ -1154,10 +1056,8 @@ if (typeof document === "undefined") {           // node test harness
     $("confirmBar").hidden = false;
   }
   function applyWholePatternChange(action) {
-    if (action.kind === "random") { patterns[bank] = randomizePattern(null, steps, groupSize, rows); renderGrid(); }
-    else if (action.kind === "removerow") { if (!removeRow(action.channel)) return; }
+    if (action.kind === "removerow") { if (!removeRow(action.channel)) return; }
     else if (action.kind === "addrow") { if (!addRow(action.channel)) return; }
-    else if (action.kind === "clear") { patterns[bank] = emptyPattern(steps); renderGrid(); }
     else if (action.kind === "timesig" && MENU_GRIDS[action.next]) { $("timeSig").value = action.next; applyTimeSig(action.next); }
     else return;
     commitChange();
@@ -1166,9 +1066,7 @@ if (typeof document === "undefined") {           // node test harness
   function confirmsFirst() { return !!(hostWindow() && hostLoaded && hostMode !== "playground"); }
   function requestWholePatternChange(action) {
     if (!confirmsFirst()) { applyWholePatternChange(action); return; }
-    if (action.kind === "random") askConfirm(action, "Randomize the pattern? This replaces the pattern in the note.", "Continue");
-    else if (action.kind === "clear") askConfirm(action, "Clear the pattern? This empties the pattern in the note.", "Continue");
-    else askConfirm(action, "This clears the pattern in the note. Change to " + MENU_GRIDS[action.next].label + "?", "Change");
+    askConfirm(action, "This clears the pattern in the note. Change to " + MENU_GRIDS[action.next].label + "?", "Change");
   }
   $("timeSig").addEventListener("change", function (e) {
     var next = e.target.value;
@@ -1313,8 +1211,8 @@ if (typeof document === "undefined") {           // node test harness
   // from the embedding window (e.source === window.parent); the plugin makes the mirror check on its side.
   //
   // Phase 8 (the plugin's `forge-rhythm` embed) adds a second HOST MODE, chosen by the load message's `mode`: "playground". There the
-  // widget is a toy over a COPY of the note's data: commitChange() posts `forge-rhythm-edited` (no data) and NEVER a save; Random, Clear
-  // and a time-signature change apply at once; Reset puts the loaded data back; Open note asks the host to open the note; playing /
+  // widget is a toy over a COPY of the note's data: commitChange() posts `forge-rhythm-edited` (no data) and NEVER a save; a
+  // time-signature change applies at once; Reset puts the loaded data back (the host's toolbar owns "Open note"); playing /
   // stopping is announced so the host can keep one sound at a time. Any `mode` other than the exact string "playground" is "edit".
   var hostNote = "", hostLoaded = false;
   var hostMode = "edit";             // "edit" | "playground"
@@ -1322,7 +1220,7 @@ if (typeof document === "undefined") {           // node test harness
   function hostWindow() { return window.parent && window.parent !== window ? window.parent : null; }
   function postToHost(msg) { var h = hostWindow(); if (h) { try { h.postMessage(msg, "*"); } catch (e) { /* host gone */ } } }
   function commitChange() {
-    dismissConfirm();                              // any data edit ends a pending Random / Clear / time-signature question (without applying it)
+    dismissConfirm();                              // any data edit ends a pending time-signature / remove-row question (without applying it)
     if (!hostWindow() || !hostLoaded) return;      // standalone, or a note that has not loaded (or was refused): never write
     if (hostMode === "playground") { postToHost({ type: "forge-rhythm-edited" }); return; }   // a playground NEVER saves
     postToHost({ type: "forge-rhythm-save", data: buildRhythmData(timeSig, swingPct, bpm, patterns[bank], rows, { steps: steps, groupSize: groupSize }) });   // hosted: `bank` is always "A" — the note's one pattern
@@ -1336,7 +1234,6 @@ if (typeof document === "undefined") {           // node test harness
     $("hostEditing").hidden = pg;
     $("playgroundLabel").hidden = !pg;
     $("bReset").hidden = !pg;
-    $("bOpenNote").hidden = !pg;
     $("saveMsg").hidden = pg;
     if (pg) { $("bReload").hidden = true; setHostMsg("saveMsg", "", false); }
   }
@@ -1441,7 +1338,6 @@ if (typeof document === "undefined") {           // node test harness
     if (r.ok) showLoaded(r.state);
     postToHost({ type: "forge-rhythm-reset" });         // the host re-reads the note and answers with a fresh load (picks up a changed note)
   });
-  $("bOpenNote").addEventListener("click", function () { postToHost({ type: "forge-rhythm-open-note" }); });
   $("bReload").addEventListener("click", function () { postToHost({ type: "forge-rhythm-reload" }); });
   // Hosted (editing a note) there are no banks: the note holds one pattern, and a variation is another note. The bank buttons are hidden
   // from the first paint (before any load) and their handler is inert while hosted. Standalone keeps all four banks, as always.
