@@ -42,5 +42,4 @@ Return Call [[rhythmic_line]] with pattern=pattern.
 def compute(context, pattern_choice):
   pattern = {"swing": ["q", "e", "e", "q", "e", "e"], "waltz": ["q", "q", "q"], "even_eighths": ["e", "e", "e", "e", "e", "e", "e", "e"], "syncopated": ["e", "q", "e", "q", "e", "q", "e"]}[pattern_choice]
   return rhythmic_line(pattern=pattern)
-
 ```

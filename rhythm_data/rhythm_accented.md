@@ -31,5 +31,4 @@ def compute(context):
   mask = rhythm_pattern_syncopated()
   accented = accent_mask(base=base, mask=mask)
   return rhythm_data_to_stream(data=accented)
-
 ```

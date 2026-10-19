@@ -33,5 +33,4 @@ def compute(context):
   a = rhythm_data_to_stream(data=pattern_a)
   b = rhythm_data_to_stream(data=pattern_b)
   return sequence_list(sections=[a, b])
-
 ```

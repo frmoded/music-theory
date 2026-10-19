@@ -29,5 +29,4 @@ def compute(context):
   base = rhythm_pattern_straight_rock()
   bars = extend_rhythm(data=base, bars=4, style='building')
   return rhythm_bars_to_stream(bars=bars)
-
 ```

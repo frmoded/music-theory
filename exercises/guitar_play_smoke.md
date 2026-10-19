@@ -31,5 +31,4 @@ Return Call [[play_pitches]] with pitches=notes.
 ```python
 def compute(context):
   return play_pitches(pitches=notes)
-
 ```

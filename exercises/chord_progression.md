@@ -34,5 +34,4 @@ Return Call [[form]] with key_name=key_name, mode_name=mode_name, progression=pr
 ```python
 def compute(context):
   return form(key_name=key_name, mode_name=mode_name, progression=progression, ts_str='4/4', tempo_bpm=90)
-
 ```

@@ -32,5 +32,4 @@ Return {{ ("Correct — " + guess + " is one octave above " + start + ": same le
 def compute(context, guess):
   start = 'C4'
   return ("Correct — " + guess + " is one octave above " + start + ": same letter, octave number +1, frequency doubled.") if music21.pitch.Pitch(guess).midi == music21.pitch.Pitch(start).midi + 12 else ("Not quite. From " + start + ", one octave up keeps the letter and raises the octave number by 1 — and doubles the frequency (" + str(round(music21.pitch.Pitch(start).frequency)) + " Hz to " + str(round(music21.pitch.Pitch(start).frequency * 2)) + " Hz). You entered " + guess + "; try again.")
-
 ```

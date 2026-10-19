@@ -140,5 +140,4 @@ def compute(context):
   s8 = voices_canonical(kp=s8_kp)
   full = sequence_list(sections=[s1, s2, s3, s4, s5, s6, s7, s8])
   return full
-
 ```
