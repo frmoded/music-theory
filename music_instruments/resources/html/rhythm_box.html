@@ -94,6 +94,9 @@
   }
   .step:hover { border-color: var(--axis); }
   .step:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  /* Hover-link (drain 2026-10-21-1230): only ever present when the host asked for it (`hoverLink: true`) — an outline, so it never moves anything. */
+  .step.link-hot { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .cell.link-hot .dot { stroke: var(--accent); stroke-width: 3; }
   .step.on { background: var(--right); border-color: var(--right-text); }
   .step.beat-start { border-left: 2px solid var(--zero); }
   .step.playing::after {
@@ -1295,15 +1298,54 @@ if (typeof document === "undefined") {           // node test harness
       scheduleHeight();
     } else if (autoHeightObserver) { autoHeightObserver.disconnect(); autoHeightObserver = null; }
   }
+  // Hover-link (drain 2026-10-21-1230, score_first M3). A host that says `hoverLink: true` on the load message gets two things: (1) `forge-rhythm-hover`
+  // {channel, step} when the pointer is over a grid step or ring cell, and {channel: null} when it leaves; (2) `forge-rhythm-highlight` {channel, step} from the
+  // host lights that step (an outline, never a layout change), {channel: null} clears it. Without the flag NOTHING here runs: no listener acts, no message is
+  // posted, a highlight message is ignored. (Every other vault's host never sends it.)
+  var hoverLink = false, lastHover = "", linkHot = [];
+  function stepTarget(t) {
+    var el = t && t.closest ? t.closest(".step, .cell") : null;
+    if (!el) return null;
+    var ch = el.getAttribute("data-channel"), st = el.getAttribute("data-step");
+    return ch === null || st === null ? null : { channel: ch, step: Number(st) };
+  }
+  function reportHover(t) {
+    if (!hoverLink) return;
+    var x = stepTarget(t), key = x ? x.channel + ":" + x.step : "";
+    if (key === lastHover) return;
+    lastHover = key;
+    postToHost({ type: "forge-rhythm-hover", channel: x ? x.channel : null, step: x ? x.step : null });
+  }
+  function clearHighlight() {
+    linkHot.forEach(function (el) { el.classList.remove("link-hot"); });
+    linkHot = [];
+  }
+  function applyHighlight(channel, step) {
+    clearHighlight();
+    if (typeof channel !== "string" || typeof step !== "number") return;
+    Array.prototype.forEach.call(document.querySelectorAll(".step, .cell"), function (el) {
+      if (el.getAttribute("data-channel") === channel && Number(el.getAttribute("data-step")) === step) { el.classList.add("link-hot"); linkHot.push(el); }
+    });
+  }
+  function setHoverLink(on) {
+    if (on === hoverLink) return;
+    hoverLink = on;
+    lastHover = "";
+    if (!on) clearHighlight();
+  }
+  document.addEventListener("mouseover", function (e) { reportHover(e.target); });
+  document.addEventListener("mouseout", function (e) { if (!e.relatedTarget) reportHover(null); else reportHover(e.relatedTarget); });
   function applyLoad(msg) {
     setAutoHeight(msg.autoHeight === true);          // only the exact true; a later load without it switches it off again. BEFORE the parse: a refused note's message needs room too
     var r = parseRhythmLoad(msg.data);
     if (!r.ok) { hostLoaded = false; dismissConfirm(); $("hostBar").hidden = false; setHostMsg("loadMsg", "Could not load this note: " + r.message, true); return; }
     hostMode = msg.mode === "playground" ? "playground" : "edit";
     resetInHost = hostMode === "playground" && msg.resetInHost === true;
+    setHoverLink(msg.hoverLink === true);              // only the exact true; a load without it switches the link off again
     loadedData = hostMode === "playground" ? JSON.parse(JSON.stringify(msg.data)) : null;
     hostLoaded = true;                                // set BEFORE showLoaded so a stop() inside it is announced consistently
     showLoaded(r.state);
+    clearHighlight();                                  // a (re)load rebuilds the grid: nothing stays lit
     // The host may suggest the FIRST view (`view: circle` on a forge-rhythm block). Only the exact strings count, and only once: a later
     // load (Reset, the note changed on disk) must not undo what the student chose since. Never written to the note.
     if (!viewInit) {
@@ -1356,6 +1398,7 @@ if (typeof document === "undefined") {           // node test harness
       postToHost({ type: "forge-rhythm-current-data", data: hostLoaded ? buildRhythmData(timeSig, swingPct, bpm, patterns[bank], rows, { steps: steps, groupSize: groupSize }) : null });
     }
     else if (m.type === "forge-rhythm-stop") { if (playing) stop(); }
+    else if (m.type === "forge-rhythm-highlight") { if (hoverLink) applyHighlight(m.channel, m.step); }   // ignored unless the load asked for hover-link
   });
   $("bReset").addEventListener("click", function () {
     if (hostMode !== "playground" || !hostLoaded || !loadedData) return;
