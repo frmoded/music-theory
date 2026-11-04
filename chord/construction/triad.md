@@ -10,9 +10,11 @@ Here is the C major scale. Counting C as 1, the 1st, 3rd and 5th notes are C, E 
 
 ![[scales/resources/audio/c_major_scale.mp3]]
 
+**Figure 1 — The C major scale.** *Take the 1st, 3rd and 5th notes and you have the three notes of the triad.*
+
 ![[chord/construction/resources/images/c_major_triad.svg]]
 
-Played together, the same three notes are the C major triad.
+**Figure 2 — The C major triad.** *Played together, the same three notes are the C major triad.*
 
 Here is the C major triad on a keyboard. C, E and G are held; press **Play together** to hear all three at once, or **Play ascending** to hear them one at a time, then click other keys to try a different stack.
 
