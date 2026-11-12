@@ -10,11 +10,11 @@ To count an interval, start on the lower note and count up. Every key you pass, 
 
 Why start here? Every scale, chord and key you will meet later is just a pattern of intervals. Once you can count them, the rest is a matter of knowing which patterns to look for.
 
-Try it: click a key to hold it, then another one a few keys away, and count the half steps between them out loud before you press Play together.
+Try it: in the Explore tab, click a key to be the starting note, then click another key a few steps away and read the number of half steps; count them out loud first.
 
 ```html-embed
-music_instruments/resources/html/piano_keyboard.html
-300
+music_instruments/resources/html/interval_widget.html
+475
 ```
 
 <div style="
