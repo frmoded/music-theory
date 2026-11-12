@@ -2,7 +2,7 @@
 
 This page puts the names from [[naming_intervals]] into one table, with a song to hum for each one you can.
 
-An interactive chart is planned; for now this table is the reference. The songs go up from the first note to the second, and the sound words are only tendencies: they will feel a little different to everyone.
+Prefer to hear them? Choose the Chart tab below: every row has a small keyboard you can click to see the span and hear it. The songs go up from the first note to the second, and the sound words are only tendencies: they will feel a little different to everyone.
 
 | Half steps | Name | Symbol | Example | Tends to sound |
 |---|---|---|---|---|
@@ -16,9 +16,14 @@ An interactive chart is planned; for now this table is the reference. The songs 
 | 7 | perfect 5th | P5 | Twinkle Twinkle Little Star | open and stable |
 | 8 | minor 6th | m6 | — | wistful |
 | 9 | major 6th | M6 | My Bonnie Lies Over the Ocean | warm, sweet |
-| 10 | minor 7th | m7 | Somewhere (West Side Story) | bluesy, wanting to move on |
+| 10 | minor 7th | m7 | Somewhere (West Side Story) | wanting to move on |
 | 11 | major 7th | M7 | — | dreamy, a little tense |
 | 12 | octave | P8 | Somewhere Over the Rainbow | the same note, higher |
+
+```html-embed
+music_instruments/resources/html/interval_widget.html
+635
+```
 
 <div style="
   display:flex;
