@@ -20,6 +20,8 @@ Here is the whole list, from 0 to 12 half steps:
 - 11: major 7th (M7)
 - 12: octave (P8)
 
+In the Explore tab of the widget on the first page you can pick any of these names and see where it lands above and below a note.
+
 You do not need all of them at once. The perfect fifth (7) and the minor and major thirds (3 and 4) are the ones the next chapters lean on most, so learn those first. See [[thirds_and_fifths]] for how they sit on the staff.
 
 > [!note]- Structural formula
