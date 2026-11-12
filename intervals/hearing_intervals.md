@@ -12,14 +12,14 @@ A simple drill:
 
 You are done when you can name any interval from 0 to 12 half steps, both by ear and by counting.
 
-Try it: hold two keys, play them together, up and down, and say the interval's name before you count the half steps to check.
+Try it: choose the Trainer tab, listen to the interval it plays, and pick its name before you count the half steps to check.
 
 ```html-embed
-music_instruments/resources/html/piano_keyboard.html
-300
+music_instruments/resources/html/interval_widget.html
+490
 ```
 
-A practice tool with scoring is planned.
+Choose the Trainer tab: it plays an interval, you pick its name, and a streak counter tracks how many you get right in a row. Start on the easy set, then widen to all 13. Ten in a row on all of them means you have it.
 
 <div style="
   display:flex;
