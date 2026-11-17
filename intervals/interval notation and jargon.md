@@ -30,6 +30,13 @@ A half step is the next key on the piano, black keys count. Call it H. A whole s
 
 A small gadget below lets you play two notes and see the gap as W and H.
 
+Try it: click two keys and watch the gap show up as whole and half steps. Click the same key twice and you get zero steps.
+
+```html-embed
+music_instruments/resources/html/whole_half_steps.html
+252
+```
+
 ## Words you will meet
 
 - **Half step** (also semitone): the next key on the piano, black keys included, or the next fret.
