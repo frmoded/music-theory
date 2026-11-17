@@ -13,8 +13,8 @@ Major is the parent scale. Later keys and chords get measured against it, so get
 Try it: pick a different tonic in the player, leave the scale on major, and watch the same pattern slide to a new home.
 
 ```html-embed
-scales/resources/html/scale_player.html
-371
+scales/resources/html/scale_player_basic.html
+341
 ```
 
 <div style="
