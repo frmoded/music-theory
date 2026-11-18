@@ -21,4 +21,5 @@ You are done when you can build any scale of this chapter from any note.
 ">
 <span>&larr; <a class="internal-link" data-href="hearing scales" href="hearing scales" style="color:#1963D1;">hearing scales</a></span>
 <span>&uarr; <a class="internal-link" data-href="Scales" href="Scales" style="color:#1963D1;">Scales</a></span>
+<span><a class="internal-link" data-href="Circle of fifths" href="Circle of fifths" style="color:#1963D1;">Circle of fifths</a> &rarr;</span>
 </div>
