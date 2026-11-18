@@ -20,6 +20,19 @@ Now start on G and follow the same recipe: W to A, W to B, H to C, W to D, W to 
 
 Major is the parent scale. Later keys and chords get measured against it, so get friendly.
 
+## Sharp or flat?
+
+Here's the rule that settles every spelling fight: a scale uses each letter from A to G once, in order. Not twice, not skipped. Call the seventh note of G major G♭ and you've got two Gs and no F. So it's F♯. Done.
+
+That's why a key signature is all sharps or all flats, never a mix.
+
+G major has one sharp, the F♯ above. F major has one flat, and it's the fourth note: B♭, not A♯, because the letters have to run F G A B C D E.
+
+Keys a fifth up from C (G, D, A, E, B) collect sharps. Keys a fourth up from C (F, B♭, E♭, A♭) collect flats. A few keys can be spelled two ways: D♭ major and C♯ major sound identical. Usual pick: the spelling with fewer sharps or flats, so D♭ (five flats) beats C♯ (seven sharps). A later chapter shows why the sharp keys arrive in the order they do.
+
+![[scales/resources/images/f_major_scale.svg]]
+*F major: the same recipe from F; the fourth note is B-flat, shown as a flat sign on the staff.*
+
 ## Time to work
 
 Two checks, every time. Count the half steps against the recipe. Then read the letters: seven notes, seven different letters, none twice, none skipped. G A B C D E F♯ passes. G A B C D E G♭ fails: two Gs, no F.
