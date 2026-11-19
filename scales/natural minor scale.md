@@ -6,11 +6,11 @@ Whole, half, whole, whole, half, whole, whole: W-H-W-W-H-W-W. Set it next to maj
 
 ## Build it from A
 
-Start on A and you never touch a black key: W to B, H to C, W to D, W to E, H to F, W to G, W to A. A B C D E F G A, the white keys.
+Start on A and you never touch a black key: W to B, H to C, W to D, and so forth. A B C D E F G A, the white keys.
 
 ## Build it from C
 
-Same recipe, different home: W to D, H to E♭, W to F, W to G, H to A♭, W to B♭, W to C. That gives C D E♭ F G A♭ B♭ C. Why E♭ and not D♯? A scale uses each letter once, and D is already taken. Same story for A♭ and B♭. [[scales jargon]] has the rule.
+Same recipe, different tonic: W to D, H to E♭, W to F, and so forth. That gives C D E♭ F G A♭ B♭ C. Why E♭ and not D♯? A scale uses each letter once, and D is already taken. Same story for A♭ and B♭. [[scales jargon]] has the rule.
 
 ## Same notes as major
 
@@ -32,6 +32,7 @@ To see any scale on a keyboard and a staff, use the player on [[Scales]].
 scales/resources/html/scale_build_natural_minor.html
 454
 ```
+*Exercise: choose a home note and tap the keys of the scale; the staff fills in as you find the notes. Easy, medium and hard allow 5, 3 or 1 wrong taps. At the end you see the whole scale and can press Play.*
 
 <div style="
   display:flex;
