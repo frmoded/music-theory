@@ -1,6 +1,4 @@
-Intervals gave you distances; a scale lines a few of them up in a fixed order and turns them into a sound.
-
-A scale is a recipe of steps from a home note, the **tonic**. Change the home note and the recipe stays. That's the whole idea.
+A scale is a recipe of steps that starts on a home note, the **tonic**, the lowest note of the scale. Intervals gave you distances; a scale lines a few of them up in a fixed order and turns them into a sound. Change the tonic and the recipe stays. That's the whole idea.
 
 ## Major
 
@@ -8,13 +6,15 @@ Major is the one everybody knows, the "do re mi" scale. Whole, whole, half, whol
 
 W and H look like code? They're not: [[interval notation and jargon]] explains them.
 
-Build it from C and you never touch a black key. W to D, W to E, H to F, W to G, W to A, W to B, H to C: C D E F G A B C.
+Build it from C and you never touch a black key: W to D, W to E, H to F, and so forth, and you land on C D E F G A B C.
 
 ![[scales/resources/images/c_major_scale.svg]]
+*C major: the white keys from C to C, no sharps or flats.*
 
-Now start on G, same recipe: W to A, W to B, H to C, W to D, W to E, W to F♯, H back to G. The white keys fail you at the seventh step: F is a whole step under G, and the recipe wants a half. So you take the black key and spell it F♯, not G♭, because a scale uses each letter once and G is already home. [[scales jargon]] has the rule.
+Now start on G with the same recipe. Everything fits until the seventh note: the recipe wants a half step below G, and the white key F is a whole step away. So a black key joins the scale, and it's spelled F♯, not G♭, because a scale uses each letter once and G is already home. [[scales jargon]] has the rule. Different tonic, same skeleton, one sharp.
 
 ![[scales/resources/images/g_major_scale.svg]]
+*G major: the same recipe from G; the seventh note is F-sharp, shown here as a sharp sign on the staff.*
 
 ## Sharp or flat?
 
@@ -27,6 +27,7 @@ G major has one sharp, the F♯ above. F major has one flat, and it's the fourth
 Keys a fifth up from C (G, D, A, E, B) collect sharps; keys a fourth up (F, B♭, E♭, A♭) collect flats. Some keys have two spellings: D♭ major and C♯ major sound identical, and the usual pick is fewer sharps or flats, so D♭ (five flats) beats C♯ (seven sharps). A later chapter shows why the sharp keys arrive in the order they do.
 
 ![[scales/resources/images/f_major_scale.svg]]
+*F major: the same recipe from F; the fourth note is B-flat, shown as a flat sign on the staff.*
 
 ## Time to work
 
@@ -42,6 +43,7 @@ To see any scale, use the player on [[Scales]].
 scales/resources/html/scale_build_major.html
 454
 ```
+*Exercise: choose a home note and tap the keys of the scale; the staff fills in as you find the notes. Easy, medium and hard allow 5, 3 or 1 wrong taps. At the end you see the whole scale and can press Play.*
 
 Natural minor is next: [[natural minor scale]].
 
