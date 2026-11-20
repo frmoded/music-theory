@@ -1,5 +1,8 @@
 # music-theory
 
+> "All musicians are subconsciously mathematicians."
+> Thelonious Monk
+
 A Forge vault for composing music with music21 in your Obsidian-based snippet workflow. (Renamed from `forge-music` in the Phase 5 two-vault split, 2026-08-06; sibling vault [music-core](https://github.com/frmoded/music-core) is the composition-primitive authoring surface.)
 
 ## What's inside
@@ -110,4 +113,4 @@ Apache License 2.0 — see [LICENSE](LICENSE) and [NOTICE](NOTICE) for details.
 
 - Main engine: https://github.com/frmoded/forge
 - Plugin (the bundled distribution path): https://github.com/frmoded/forge-client-obsidian
-- Sibling vaults: https://github.com/frmoded/music-core (composition-primitive authoring), https://github.com/frmoded/forge-moda
+- Sibling vaults: https://github.com/frmoded/music-core (composition-primitive authoring surface), https://github.com/frmoded/forge-moda
