@@ -113,4 +113,4 @@ Apache License 2.0 — see [LICENSE](LICENSE) and [NOTICE](NOTICE) for details.
 
 - Main engine: https://github.com/frmoded/forge
 - Plugin (the bundled distribution path): https://github.com/frmoded/forge-client-obsidian
-- Sibling vaults: https://github.com/frmoded/music-core (composition-primitive authoring surface), https://github.com/frmoded/forge-moda
+- Sibling vaults: https://github.com/frmoded/music-core (composition-primitive authoring), https://github.com/frmoded/forge-moda
