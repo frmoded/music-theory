@@ -5,7 +5,7 @@ Pick a note. Count five letters up, counting the one you start on: C D E F G. Th
 
 Start on C and go up a fifth. You land on G. Go up another from G and you're on D. Keep climbing and something odd happens: you never run out of new keys, and then, suddenly, you're home.
 
-Stack them and you get C, G, D, A, E, B, F♯, then D♭, A♭, E♭, B♭, F, and the next fifth up from F is C again. Twelve steps, twelve keys, one loop.
+Stack those fifths and you get C, G, D, A, E, B, F♯, then D♭, A♭, E♭, B♭, F, and the next fifth up from F is C again. Twelve steps, twelve keys, one loop.
 
 Now fold that line onto a clock face. C sits at twelve o'clock, G at one, D at two, and so on clockwise. Every neighbour is a fifth away. At six o'clock you hit F♯ and G♭, the same key under two names. That's the hand-off: the sharp keys end there and the flat keys begin, which is why the major keys on this wheel never need a double sharp.
 
