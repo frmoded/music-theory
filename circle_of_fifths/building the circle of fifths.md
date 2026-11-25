@@ -1,13 +1,13 @@
 ---
 description: "See why twelve stacked fifths close into a ring that brings you back to C, and where the sharp keys hand off to the flat keys."
 ---
-Pick a note. Count five letters up, counting the one you start on: C D E F G. That distance, C to G, is a fifth. It's seven half steps, and it's the same distance whatever note you start on.
+Pick a note. Count five letters up, counting the one you start on: C D E F G. That's a fifth. But the letters are only the name. The real rule is the sound: a fifth is seven half steps, the same distance whatever note you start on. C to G is five letters and seven half steps, so the two agree. Not every start is so tidy. Hold that thought.
 
 ![[circle_of_fifths/resources/images/fifths_on_a_line.svg]]
 
 Here are all the notes in a line, two octaves of them, black keys too. The first arrow goes from C up to G. Count it: seven half steps. A fifth.
 
-The second arrow starts on B and climbs the same seven half steps. It lands on F♯, in the second octave. That is why the line runs two octaves: past B in one octave there is nothing, and the arrow would have to double back. The notes don't stop at B. They start over, same names, higher up.
+The second arrow starts on B and climbs the same seven half steps: C, C♯, D, D♯, E, F, F♯. It lands on F♯, not F. Count five letters up from B and you get F, but F is only six half steps away, one short. Seven half steps is the rule, so the fifth above B is F♯. Among the white keys, B is the odd one out. That's why the line runs two octaves: past B in one octave there is nothing, and the arrow would have to double back. The notes don't stop at B. They start over, same names, higher up.
 
 Start on C and go up a fifth. You land on G. Go up another from G and you're on D. Keep climbing and something odd happens: you never run out of new keys, and then, suddenly, you're home.
 
