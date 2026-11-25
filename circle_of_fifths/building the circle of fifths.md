@@ -3,6 +3,8 @@ description: "See why twelve stacked fifths close into a ring that brings you ba
 ---
 Pick a note. Count five letters up, counting the one you start on: C D E F G. That distance, C to G, is a fifth. It's seven half steps, and it's the same distance whatever note you start on.
 
+![[circle_of_fifths/resources/images/fifths_on_a_line.svg]]
+
 Here are all the notes in a line, two octaves of them, black keys too. The first arrow goes from C up to G. Count it: seven half steps. A fifth.
 
 The second arrow starts on B and climbs the same seven half steps. It lands on F♯, in the second octave. That is why the line runs two octaves: past B in one octave there is nothing, and the arrow would have to double back. The notes don't stop at B. They start over, same names, higher up.
@@ -46,7 +48,7 @@ Try it: tap any key on the wheel and watch its signature, its scale and its neig
 
 ```html-embed
 circle_of_fifths/resources/html/circle_of_fifths.html
-692
+674
 ```
 
 <div style="
