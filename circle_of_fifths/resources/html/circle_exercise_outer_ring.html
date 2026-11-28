@@ -65,13 +65,20 @@
   input:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
   #bank { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin: 3px 0 0; min-height: 64px; align-content: start; }
   #bank button { padding: 4px 0; min-width: 0; font-size: 13px; }
+  #notestrip { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2px; margin: 3px 0 0; user-select: none; -webkit-user-select: none; }   /* 2026-11-27-1051: the twelve note names, a counting aid: nothing to tap */
+  #notestrip span { background: var(--chip); border: 1px solid transparent; border-radius: 2px; padding: 3px 0; font-size: 11px; line-height: 16px; text-align: center; white-space: nowrap; color: var(--ink); }   /* flat: it must not look like the keys below, which are buttons */
+  #notestrip span.now { background: #BFE6CD; border: 2px solid var(--ink); padding: 2px 0; font-weight: 700; }                 /* the key tapped last: the green of a placed key (yellow on the wheel means the slot to fill) */
+  #wrapnote { margin: 1px 0 0; font-size: 11px; line-height: 14px; color: var(--muted); }
+  @media (max-width: 459px) { #notestrip { grid-template-columns: repeat(6, minmax(0, 1fr)); } }                              /* narrower than the page's full width: two rows of six */
 </style>
 </head>
 <body>
 <div class="wrap">
 <div id="prompt" aria-live="off"></div>
 <div class="wheelbox"><svg id="wheel" role="group" aria-label="The circle of fifths: twelve slots on the outer ring for the major keys, twelve on the inner ring for their relative minors"></svg></div>
-<div id="bank" role="group" aria-label="The twelve major keys: tap the one that goes in the lit slot"></div>
+<div id="notestrip" role="img"></div>
+<div id="wrapnote">After G♯ comes A again.</div>
+<div id="bank" role="group" aria-label="The twelve major keys: count seven half steps up and tap the one that goes in the lit slot"></div>
 <div class="row"><button type="button" id="startover">Start over</button></div>
 <span id="sr" class="sr" role="status" aria-live="polite"></span>
 </div>
@@ -81,13 +88,13 @@
   .fig-cap .t { font-size: 15px; line-height: 19px; font-weight: 600; color: #2B2B2B; }
   .fig-cap .l { font-size: 12px; line-height: 17px; margin-top: 2px; color: #555555; }
 </style>
-<div class="fig-cap"><div class="t">Exercise: build the outer ring</div><div class="l">Tap the keys a fifth apart, clockwise from C, to fill the outer ring</div></div>
+<div class="fig-cap"><div class="t">Exercise: build the outer ring</div><div class="l">From each key, count seven half steps up and tap that key, clockwise from C</div></div>
 <!-- caption END -->
 <script>
 (function () {
   "use strict";
   // 2026-11-23-1025 - the CIRCLE EXERCISE "build the outer ring"; 2026-11-24-1038: ONE level, the only goal is to build the circle of fifths. An empty wheel and a bank of the twelve major keys, shuffled. C is given at the top; the next slot clockwise is lit, and you tap the key
-  // a fifth above the last one. A wrong key says in words why ("D is a whole step above C, not a fifth") and costs nothing: there is no limit and no way to give up. F-sharp and G-flat are one tile at six o'clock. The exercise ends when the ring is built, and then the ring is said in words.
+  // seven half steps above the last one (2026-11-27-1051: the words count half steps, and a strip of the twelve note names from A helps the counting). A wrong key says in words why ("D is two half steps above C, not seven") and costs nothing: there is no limit and no way to give up. F-sharp and G-flat are one tile at six o'clock. The exercise ends when the ring is built, and then the ring is said in words.
   // Start over clears the ring and shuffles the tiles again. It shares its blocks with the other circle gadgets, byte for byte (pinned by a test): the scale core, the circle core and the wheel; the ring core and the ring page are shared with the other two ring exercises. Memory only; no sound.
   // ---- pure functions (no DOM; the node harness exports them) ------------------------------------------------------------------------------------------
     var BASE = 60, LOW = 60, HIGH = 84, A4_HZ = 440, STEP_SECONDS = 0.45, NOTE_LEN = 0.7;                 // the strip is C4..C6; a scale sits on the tonic's pitch class in the octave from C4 (so the staff and the strip agree)
@@ -278,8 +285,8 @@
   function o1Next(s) { var i; for (i = 1; i < 12; i++) if (!s.placed[i]) return i; return -1; }
   function o1Used(s, tile) { return s.placed[tile]; }
   function o1TileName(tile) { return tile === 6 ? rgSlotName(6) : ciName(tile, false); }
-  function o1LastName(c) { return o1TileName(c - 1); }                                                              // the key a fifth is measured from: the one placed just before
-  function o1WrongWords(s, tile) { var c = o1Next(s); return o1TileName(tile) + " is " + rgIntervalWords(rgUp(c - 1, tile)) + " above " + o1LastName(c) + ", not a fifth."; }
+  function o1LastName(c) { return o1TileName(c - 1); }                                                              // the key the half steps are counted from: the one placed just before
+  function o1WrongWords(s, tile) { var c = o1Next(s); return o1TileName(tile) + " is " + rgHalfSteps(rgUp(c - 1, tile)) + " above " + o1LastName(c) + ", not seven."; }
   function o1Tap(s, tile) {
     if (s.phase !== "playing" || o1Used(s, tile) || s.wrong.indexOf(tile) >= 0) return { state: s, event: "ignored" };
     var c = o1Next(s);
@@ -290,26 +297,34 @@
     }
     return { state: rgCopy(s, { wrong: s.wrong.concat([tile]), note: o1WrongWords(s, tile) }), event: "wrong" };
   }
-  function o1Answer() { var all = [], k; for (k = 0; k < 12; k++) all.push(rgSlotName(k)); return "The outer ring, clockwise from C: " + all.join(", ") + ". Each key is a fifth above the one before it, and " + ciName(6, false) + " and " + ciName(6, true) + " are one key under two names."; }
+  function o1Answer() { var all = [], k; for (k = 0; k < 12; k++) all.push(rgSlotName(k)); return "The outer ring, clockwise from C: " + all.join(", ") + ". Each key is seven half steps above the one before it, and " + ciName(6, false) + " and " + ciName(6, true) + " are one key under two names."; }
   function o1Prompt(s) {
     if (s.phase === "done") return "Exercise done. " + o1Answer();
-    return "Exercise: build the outer ring. " + (s.mine === 0 ? "C is given at the top. " : "") + "Tap the key a fifth above " + o1LastName(o1Next(s)) + "." + (s.note ? " " + s.note : "");
+    return "Exercise: build the outer ring. " + (s.mine === 0 ? "C is given at the top. " : "") + "Count seven half steps up from " + o1LastName(o1Next(s)) + " and tap that key." + (s.note ? " " + s.note : "");
   }
   function o1Announce(s, event) {
-    var start = "Build the outer ring. C is given at the top. Tap the key a fifth above C.";
+    var start = "Build the outer ring. C is given at the top. Count seven half steps up from C and tap that key.";
     if (event === "start") return start;
     if (event === "again") return "Started over. " + start;
-    if (event === "right") return "Right. Next: the key a fifth above " + o1LastName(o1Next(s)) + ".";
+    if (event === "right") return "Right. Next: count seven half steps up from " + o1LastName(o1Next(s)) + ".";
     if (event === "wrong") return "Not that one. " + s.note;
     if (event === "built") return "Done. " + o1Answer();
     return "";
   }
   // ==== outer ring core END =========================================================================================================================
+  // ==== outer ring strip BEGIN (2026-11-27-1051) ====================================================================================================
+  // The twelve note names in chromatic order from A, for counting half steps by eye. A counting aid only: it is never tapped and shows no answer; the one tile it marks is the key tapped last (C, given, at the start). A black key carries both names. Pure: no DOM.
+  var O1_STRIP = ["A", "A♯/B♭", "B", "C", "C♯/D♭", "D", "D♯/E♭", "E", "F", "F♯/G♭", "G", "G♯/A♭"];
+  function o1StripNames() { return O1_STRIP.slice(); }
+  function o1StripIndex(s) { var c = o1Next(s), last = c < 0 ? 11 : c - 1; return scMod(ciPc(last) - 9, 12); }        // the sector placed last, as a tile: tile 0 is A (pitch class 9)
+  function o1StripLabel() { return "The twelve note names, a half step apart: " + O1_STRIP.map(function (n) { return n.replace("/", " or ").replace(/♯/g, " sharp").replace(/♭/g, " flat"); }).join(", ") + ". After G sharp comes A again."; }
+  // ==== outer ring strip END ========================================================================================================================
   if (typeof document === "undefined") {           // node test harness
     module.exports = { BASE: BASE, SC_SCALES: SC_SCALES, scaleNotes: scaleNotes, spellScale: spellScale, scHeptatonic: scHeptatonic, noteName: noteName, noteWords: noteWords,
       CIRCLE_TONICS: CIRCLE_TONICS, ciPc: ciPc, ciMinorPc: ciMinorPc, ciTonic: ciTonic, ciScale: ciScale, ciSigned: ciSigned, ciSignature: ciSignature, ciName: ciName, ciKeyTitle: ciKeyTitle, ciKeyWords: ciKeyWords,
       rgShuffle: rgShuffle, rgUp: rgUp, rgIntervalWords: rgIntervalWords, rgSlotName: rgSlotName, rgMinorSlotName: rgMinorSlotName,
-      o1Start: o1Start, o1Next: o1Next, o1Used: o1Used, o1TileName: o1TileName, o1Tap: o1Tap, o1Answer: o1Answer, o1Prompt: o1Prompt, o1Announce: o1Announce };
+      o1Start: o1Start, o1Next: o1Next, o1Used: o1Used, o1TileName: o1TileName, o1Tap: o1Tap, o1Answer: o1Answer, o1Prompt: o1Prompt, o1Announce: o1Announce,
+      o1StripNames: o1StripNames, o1StripIndex: o1StripIndex, o1StripLabel: o1StripLabel };
     return;
   }
   // ---- the page ---------------------------------------------------------------------------------------------------------------------------------------
@@ -379,6 +394,8 @@
   }
   // ==== circle ring page END ======================================================================================================================
   var segs = buildWheel($("wheel"), { counts: false, onPick: function () {} }); rgInert(segs); var labels = rgLabels(segs);
+  $("notestrip").setAttribute("aria-label", o1StripLabel());
+  var tiles = o1StripNames().map(function (n) { var t = document.createElement("span"); t.textContent = n; $("notestrip").appendChild(t); return t; });
   function drawBank() {
     var bank = $("bank"); bank.textContent = "";
     state.bank.forEach(function (id) {
@@ -397,6 +414,7 @@
       segs.minor[k].setAttribute("class", "seg minor empty"); segs.minor[k].setAttribute("aria-label", "Inner ring, empty");
     }
     state.bank.forEach(function (id) { var b = $("tile-" + id); b.disabled = done || o1Used(state, id); b.setAttribute("class", state.wrong.indexOf(id) >= 0 ? "wrongbtn" : ""); });
+    var now = o1StripIndex(state); tiles.forEach(function (t, i) { if (i === now) t.setAttribute("class", "now"); else t.removeAttribute("class"); });
     $("prompt").textContent = o1Prompt(state);
     if (announce !== undefined) $("sr").textContent = announce;
   }
